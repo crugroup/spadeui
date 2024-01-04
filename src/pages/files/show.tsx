@@ -1,5 +1,5 @@
 import { IResourceComponentsProps, useShow } from "@refinedev/core";
-import { Show, NumberField, TagField, TextField, DateField } from "@refinedev/antd";
+import { Show, NumberField, TextField, DateField } from "@refinedev/antd";
 import { Button, Typography, Upload, notification } from "antd";
 import { UploadProps } from "antd/lib";
 import { ACCESS_TOKEN_KEY, API_URL } from "../../authProvider";
@@ -15,6 +15,8 @@ const FileShow: React.FC<IResourceComponentsProps> = () => {
   const props: UploadProps = {
     name: "file",
     action: `${API_URL}/files/${record?.id}/upload/`,
+    accept: "image/*,.pdf",
+    maxCount: 1,
     headers: {
       authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN_KEY)}`,
     },
@@ -22,15 +24,13 @@ const FileShow: React.FC<IResourceComponentsProps> = () => {
       filename: "testname",
     },
     onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
       if (info.file.status === "done") {
-        console.log(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        console.log(`${info.file.name} file upload failed.`);
         notification.error({
-          message: "Upload failed",
+          message: "Upload successfully.",
+        });
+      } else if (info.file.status === "error") {
+        notification.error({
+          message: "Upload failed.",
         });
       }
     },

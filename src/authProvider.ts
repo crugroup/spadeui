@@ -9,17 +9,7 @@ export const authProvider: AuthBindings = {
   login: async ({ username, email, password }) => {
     if ((username || email) && password) {
       try {
-        const res = await axios.post(
-          `${API_URL}/token/`,
-          { email, password },
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        );
+        const res = await axios.post(`${API_URL}/token/`, { email, password });
 
         if (res.status === 200) {
           localStorage.setItem(ACCESS_TOKEN_KEY, res.data.access);
@@ -51,6 +41,8 @@ export const authProvider: AuthBindings = {
   },
   logout: async () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
+
     return {
       success: true,
       redirectTo: "/login",
@@ -58,6 +50,7 @@ export const authProvider: AuthBindings = {
   },
   check: async () => {
     const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+
     if (token) {
       return {
         authenticated: true,
@@ -72,6 +65,7 @@ export const authProvider: AuthBindings = {
   getPermissions: async () => null,
   getIdentity: async () => {
     const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+
     if (token) {
       return {
         id: 1,
