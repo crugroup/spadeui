@@ -20,7 +20,6 @@ import { ColorModeContextProvider } from "./contexts/color-mode";
 import { CategoryCreate, CategoryEdit, CategoryList, CategoryShow } from "./pages/files";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
-import { Register } from "./pages/register";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 import axios from "axios";
 
@@ -140,7 +139,6 @@ function App() {
                     }
                   >
                     <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                   </Route>
                 </Routes>
