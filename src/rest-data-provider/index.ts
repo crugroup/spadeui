@@ -87,7 +87,7 @@ export const dataProvider = (
   },
 
   update: async ({ resource, id, variables, meta }) => {
-    const url = `${apiUrl}/${resource}/${id}`;
+    const url = `${apiUrl}/${resource}/${id}/`;
 
     const { headers, method } = meta ?? {};
     const requestMethod = (method as MethodTypesWithBody) ?? "patch";
