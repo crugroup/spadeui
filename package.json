@@ -14,7 +14,9 @@
     "@refinedev/react-router-v6": "^4.1.0",
     "@refinedev/simple-rest": "^5.0.0",
     "antd": "^5.0.5",
+    "axios": "1.6.2",
     "axios-auth-refresh": "^3.3.6",
+    "query-string": "7.1.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.8.1"
