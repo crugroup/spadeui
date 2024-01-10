@@ -19,6 +19,7 @@ import { ColorModeContextProvider } from "./contexts/color-mode";
 import { FileCreate, FileEdit, FileList, FileShow } from "./pages/files";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
+import { FileFormatCreate, FileFormatEdit, FileFormatList, FileFormatShow } from "./pages/fileformats";
 
 axiosHelper.setAxiosTokenInterceptor();
 
@@ -43,6 +44,17 @@ function App() {
                     show: "/files/show/:id",
                     meta: {
                       canDelete: true,
+                    },
+                  },
+                  {
+                    name: "fileformats",
+                    list: "/fileformats",
+                    create: "/fileformats/create",
+                    edit: "/fileformats/edit/:id",
+                    show: "/fileformats/show/:id",
+                    meta: {
+                      canDelete: true,
+                      label: "File formats"
                     },
                   },
                 ]}
@@ -77,6 +89,13 @@ function App() {
                       <Route path="create" element={<FileCreate />} />
                       <Route path="edit/:id" element={<FileEdit />} />
                       <Route path="show/:id" element={<FileShow />} />
+                    </Route>
+                    <Route index element={<NavigateToResource resource="fileformats" />} />
+                    <Route path="/fileformats">
+                      <Route index element={<FileFormatList />} />
+                      <Route path="create" element={<FileFormatCreate />} />
+                      <Route path="edit/:id" element={<FileFormatEdit />} />
+                      <Route path="show/:id" element={<FileFormatShow />} />
                     </Route>
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
