@@ -20,6 +20,7 @@ import { FileCreate, FileEdit, FileList, FileShow } from "./pages/files";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { FileFormatCreate, FileFormatEdit, FileFormatList, FileFormatShow } from "./pages/fileformats";
+import { FileProcessorCreate, FileProcessorEdit, FileProcessorList, FileProcessorShow } from "./pages/fileprocessors";
 
 axiosHelper.setAxiosTokenInterceptor();
 
@@ -55,6 +56,17 @@ function App() {
                     meta: {
                       canDelete: true,
                       label: "File formats"
+                    },
+                  },
+                  {
+                    name: "fileprocessors",
+                    list: "/fileprocessors",
+                    create: "/fileprocessors/create",
+                    edit: "/fileprocessors/edit/:id",
+                    show: "/fileprocessors/show/:id",
+                    meta: {
+                      canDelete: true,
+                      label: "File processors"
                     },
                   },
                 ]}
@@ -96,6 +108,12 @@ function App() {
                       <Route path="create" element={<FileFormatCreate />} />
                       <Route path="edit/:id" element={<FileFormatEdit />} />
                       <Route path="show/:id" element={<FileFormatShow />} />
+                    </Route>
+                    <Route path="/fileprocessors">
+                      <Route index element={<FileProcessorList />} />
+                      <Route path="show/:id" element={<FileProcessorShow />} />
+                      <Route path="edit/:id" element={<FileProcessorEdit />} />
+                      <Route path="create" element={<FileProcessorCreate />} />
                     </Route>
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
