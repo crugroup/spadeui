@@ -6,7 +6,7 @@ import { ACCESS_TOKEN_KEY, API_URL } from "../../authProvider";
 
 const { Title } = Typography;
 
-const FileShow: React.FC<IResourceComponentsProps> = () => {
+export const FileShow: React.FC<IResourceComponentsProps> = () => {
   const { queryResult } = useShow();
   const { data, isLoading } = queryResult;
 
@@ -51,19 +51,21 @@ const FileShow: React.FC<IResourceComponentsProps> = () => {
       <Title level={5}>Id</Title>
       <NumberField value={record?.id ?? ""} />
       <Title level={5}>Code</Title>
-      <NumberField value={record?.code ?? ""} />
+      <TextField value={record?.code ?? ""} />
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
       <Title level={5}>Created At</Title>
       <DateField value={record?.created_at} />
       <Title level={5}>Format</Title>
-      <NumberField value={record?.format ?? ""} />
+      <TextField value={record?.format_label ?? ""} />
       <Title level={5}>Processor</Title>
-      <NumberField value={record?.processor ?? ""} />
+      <TextField value={record?.processor_label ?? ""} />
+      <Title level={5}>User params</Title>
+      <TextField value={record?.user_params ?? ""} />
+      <Title level={5}>System params</Title>
+      <TextField value={record?.system_params ?? ""} />
+      <Title level={5}>Linked process</Title>
+      <TextField value={record?.linked_process ?? ""} />
     </Show>
   );
-};
-
-export const CategoryShow: React.FC<IResourceComponentsProps> = () => {
-  return <FileShow />;
 };
