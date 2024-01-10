@@ -1,5 +1,5 @@
 import "@refinedev/antd/dist/reset.css";
-import dataProvider from "@refinedev/simple-rest";
+import { dataProvider } from "./rest-data-provider";
 import axiosHelper from "./helpers/axios-token-interceptor";
 import { Authenticated, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
@@ -16,7 +16,7 @@ import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
 import { API_URL, authProvider } from "./authProvider";
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
-import { CategoryCreate, CategoryEdit, CategoryList, CategoryShow } from "./pages/files";
+import { FileCreate, FileEdit, FileList, FileShow } from "./pages/files";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 
@@ -73,10 +73,10 @@ function App() {
                   >
                     <Route index element={<NavigateToResource resource="files" />} />
                     <Route path="/files">
-                      <Route index element={<CategoryList />} />
-                      <Route path="create" element={<CategoryCreate />} />
-                      <Route path="edit/:id" element={<CategoryEdit />} />
-                      <Route path="show/:id" element={<CategoryShow />} />
+                      <Route index element={<FileList />} />
+                      <Route path="create" element={<FileCreate />} />
+                      <Route path="edit/:id" element={<FileEdit />} />
+                      <Route path="show/:id" element={<FileShow />} />
                     </Route>
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>

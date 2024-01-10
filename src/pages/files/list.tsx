@@ -3,13 +3,13 @@ import { IResourceComponentsProps, BaseRecord } from "@refinedev/core";
 import { useTable, List, EditButton, ShowButton, DeleteButton, DateField } from "@refinedev/antd";
 import { Table, Space } from "antd";
 
-const FileList: React.FC<IResourceComponentsProps> = () => {
+export const FileList: React.FC<IResourceComponentsProps> = () => {
   const { tableProps } = useTable({
     syncWithLocation: true,
   });
 
   return (
-    <List canCreate={false}>
+    <List canCreate={true}>
       <Table {...tableProps} rowKey="id">
         <Table.Column dataIndex="id" title="Id" />
         <Table.Column dataIndex="code" title="Code" />
@@ -19,8 +19,8 @@ const FileList: React.FC<IResourceComponentsProps> = () => {
           title="Created At"
           render={(value: any) => <DateField value={value} />}
         />
-        <Table.Column dataIndex="format" title="Format" />
-        <Table.Column dataIndex="processor" title="Processor" />
+        <Table.Column dataIndex="format_label" title="Format" />
+        <Table.Column dataIndex="processor_label" title="Processor" />
         <Table.Column
           title="Actions"
           dataIndex="actions"
@@ -35,8 +35,4 @@ const FileList: React.FC<IResourceComponentsProps> = () => {
       </Table>
     </List>
   );
-};
-
-export const CategoryList: React.FC<IResourceComponentsProps> = () => {
-  return <FileList />;
 };
