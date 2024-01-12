@@ -1,7 +1,7 @@
-import React from "react";
+import { NumberField, Show, TextField } from "@refinedev/antd";
 import { IResourceComponentsProps, useShow } from "@refinedev/core";
-import { Show, NumberField, TextField } from "@refinedev/antd";
 import { Typography } from "antd";
+import React from "react";
 
 const { Title } = Typography;
 

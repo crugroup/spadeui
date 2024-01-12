@@ -1,13 +1,13 @@
-import React from "react";
-import { IResourceComponentsProps, BaseRecord } from "@refinedev/core";
 import {
-    useTable,
-    List,
-    EditButton,
-    ShowButton,
     DeleteButton,
+    EditButton,
+    List,
+    ShowButton,
+    useTable,
 } from "@refinedev/antd";
-import { Table, Space } from "antd";
+import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
+import { Space, Table } from "antd";
+import React from "react";
 
 export const FileProcessorList: React.FC<IResourceComponentsProps> = () => {
     const { tableProps } = useTable({

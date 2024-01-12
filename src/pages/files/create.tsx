@@ -1,8 +1,7 @@
-import React from "react";
-import { IResourceComponentsProps } from "@refinedev/core";
 import { Create, useForm, useSelect } from "@refinedev/antd";
-import { Form, Input, DatePicker, Select } from "antd";
-import dayjs from "dayjs";
+import { IResourceComponentsProps } from "@refinedev/core";
+import { Form, Input, Select } from "antd";
+import React from "react";
 
 export const FileCreate: React.FC<IResourceComponentsProps> = () => {
     const { formProps, saveButtonProps, queryResult } = useForm();

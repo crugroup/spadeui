@@ -1,10 +1,8 @@
+import { ErrorComponent, ThemedLayoutV2, ThemedSiderV2, useNotificationProvider } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
-import { dataProvider } from "./rest-data-provider";
-import axiosHelper from "./helpers/axios-token-interceptor";
 import { Authenticated, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
-import { ErrorComponent, ThemedLayoutV2, ThemedSiderV2, useNotificationProvider } from "@refinedev/antd";
 import routerBindings, {
   CatchAllNavigate,
   DocumentTitleHandler,
@@ -16,11 +14,13 @@ import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
 import { API_URL, authProvider } from "./authProvider";
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
+import axiosHelper from "./helpers/axios-token-interceptor";
+import { FileFormatCreate, FileFormatEdit, FileFormatList, FileFormatShow } from "./pages/fileformats";
+import { FileProcessorCreate, FileProcessorEdit, FileProcessorList, FileProcessorShow } from "./pages/fileprocessors";
 import { FileCreate, FileEdit, FileList, FileShow } from "./pages/files";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
-import { FileFormatCreate, FileFormatEdit, FileFormatList, FileFormatShow } from "./pages/fileformats";
-import { FileProcessorCreate, FileProcessorEdit, FileProcessorList, FileProcessorShow } from "./pages/fileprocessors";
+import { dataProvider } from "./rest-data-provider";
 
 axiosHelper.setAxiosTokenInterceptor();
 
