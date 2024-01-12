@@ -15,6 +15,7 @@ import { API_URL, authProvider } from "./authProvider";
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import axiosHelper from "./helpers/axios-token-interceptor";
+import { ExecutorCreate, ExecutorEdit, ExecutorList, ExecutorShow } from "./pages/executors";
 import { FileFormatCreate, FileFormatEdit, FileFormatList, FileFormatShow } from "./pages/fileformats";
 import { FileProcessorCreate, FileProcessorEdit, FileProcessorList, FileProcessorShow } from "./pages/fileprocessors";
 import { FileCreate, FileEdit, FileList, FileShow } from "./pages/files";
@@ -69,6 +70,16 @@ function App() {
                       label: "File processors"
                     },
                   },
+                  {
+                    name: "executors",
+                    list: "/executors",
+                    create: "/executors/create",
+                    edit: "/executors/edit/:id",
+                    show: "/executors/show/:id",
+                    meta: {
+                      canDelete: true
+                    },
+                  },
                 ]}
                 options={{
                   syncWithLocation: true,
@@ -114,6 +125,12 @@ function App() {
                       <Route path="show/:id" element={<FileProcessorShow />} />
                       <Route path="edit/:id" element={<FileProcessorEdit />} />
                       <Route path="create" element={<FileProcessorCreate />} />
+                    </Route>
+                    <Route path="/executors">
+                      <Route index element={<ExecutorList />} />
+                      <Route path="show/:id" element={<ExecutorShow />} />
+                      <Route path="edit/:id" element={<ExecutorEdit />} />
+                      <Route path="create" element={<ExecutorCreate />} />
                     </Route>
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
