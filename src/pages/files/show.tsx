@@ -19,6 +19,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     maxCount: 1,
     headers: {
       authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN_KEY)}`,
+      "Content-Disposition": 'attachment; filename="testname"',
     },
     data: {
       filename: "testname",
