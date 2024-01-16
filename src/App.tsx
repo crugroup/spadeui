@@ -1,4 +1,9 @@
-import { ErrorComponent, ThemedLayoutV2, ThemedSiderV2, useNotificationProvider } from "@refinedev/antd";
+import {
+  ErrorComponent,
+  ThemedLayoutV2,
+  ThemedSiderV2,
+  useNotificationProvider,
+} from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 import { Authenticated, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
@@ -15,12 +20,33 @@ import { API_URL, authProvider } from "./authProvider";
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import axiosHelper from "./helpers/axios-token-interceptor";
-import { ExecutorCreate, ExecutorEdit, ExecutorList, ExecutorShow } from "./pages/executors";
-import { FileFormatCreate, FileFormatEdit, FileFormatList, FileFormatShow } from "./pages/fileformats";
-import { FileProcessorCreate, FileProcessorEdit, FileProcessorList, FileProcessorShow } from "./pages/fileprocessors";
+import {
+  ExecutorCreate,
+  ExecutorEdit,
+  ExecutorList,
+  ExecutorShow,
+} from "./pages/executors";
+import {
+  FileFormatCreate,
+  FileFormatEdit,
+  FileFormatList,
+  FileFormatShow,
+} from "./pages/fileformats";
+import {
+  FileProcessorCreate,
+  FileProcessorEdit,
+  FileProcessorList,
+  FileProcessorShow,
+} from "./pages/fileprocessors";
 import { FileCreate, FileEdit, FileList, FileShow } from "./pages/files";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
+import {
+  ProcessCreate,
+  ProcessEdit,
+  ProcessList,
+  ProcessShow,
+} from "./pages/processes";
 import { dataProvider } from "./rest-data-provider";
 
 axiosHelper.setAxiosTokenInterceptor();
@@ -56,7 +82,7 @@ function App() {
                     show: "/fileformats/show/:id",
                     meta: {
                       canDelete: true,
-                      label: "File formats"
+                      label: "File formats",
                     },
                   },
                   {
@@ -67,7 +93,7 @@ function App() {
                     show: "/fileprocessors/show/:id",
                     meta: {
                       canDelete: true,
-                      label: "File processors"
+                      label: "File processors",
                     },
                   },
                   {
@@ -77,7 +103,17 @@ function App() {
                     edit: "/executors/edit/:id",
                     show: "/executors/show/:id",
                     meta: {
-                      canDelete: true
+                      canDelete: true,
+                    },
+                  },
+                  {
+                    name: "processes",
+                    list: "/processes",
+                    create: "/processes/create",
+                    edit: "/processes/edit/:id",
+                    show: "/processes/show/:id",
+                    meta: {
+                      canDelete: true,
                     },
                   },
                 ]}
@@ -91,7 +127,10 @@ function App() {
                 <Routes>
                   <Route
                     element={
-                      <Authenticated key="authenticated-inner" fallback={<CatchAllNavigate to="/login" />}>
+                      <Authenticated
+                        key="authenticated-inner"
+                        fallback={<CatchAllNavigate to="/login" />}
+                      >
                         <ThemedLayoutV2
                           Header={() => <Header sticky />}
                           Sider={(props) => <ThemedSiderV2 {...props} fixed />}
@@ -106,14 +145,20 @@ function App() {
                       </Authenticated>
                     }
                   >
-                    <Route index element={<NavigateToResource resource="files" />} />
+                    <Route
+                      index
+                      element={<NavigateToResource resource="files" />}
+                    />
                     <Route path="/files">
                       <Route index element={<FileList />} />
                       <Route path="create" element={<FileCreate />} />
                       <Route path="edit/:id" element={<FileEdit />} />
                       <Route path="show/:id" element={<FileShow />} />
                     </Route>
-                    <Route index element={<NavigateToResource resource="fileformats" />} />
+                    <Route
+                      index
+                      element={<NavigateToResource resource="fileformats" />}
+                    />
                     <Route path="/fileformats">
                       <Route index element={<FileFormatList />} />
                       <Route path="create" element={<FileFormatCreate />} />
@@ -132,17 +177,29 @@ function App() {
                       <Route path="edit/:id" element={<ExecutorEdit />} />
                       <Route path="create" element={<ExecutorCreate />} />
                     </Route>
+                    <Route path="/processes">
+                      <Route index element={<ProcessList />} />
+                      <Route path="show/:id" element={<ProcessShow />} />
+                      <Route path="edit/:id" element={<ProcessEdit />} />
+                      <Route path="create" element={<ProcessCreate />} />
+                    </Route>
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
                   <Route
                     element={
-                      <Authenticated key="authenticated-outer" fallback={<Outlet />}>
+                      <Authenticated
+                        key="authenticated-outer"
+                        fallback={<Outlet />}
+                      >
                         <NavigateToResource />
                       </Authenticated>
                     }
                   >
                     <Route path="/login" element={<Login />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route
+                      path="/forgot-password"
+                      element={<ForgotPassword />}
+                    />
                   </Route>
                 </Routes>
 
