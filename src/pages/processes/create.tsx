@@ -56,7 +56,7 @@ export const ProcessCreate: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Input.TextArea disabled />
+          <Input.TextArea />
         </Form.Item>
         <Form.Item
           label="User params"

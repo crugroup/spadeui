@@ -18,17 +18,6 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
     <Edit saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
         <Form.Item
-          label="Id"
-          name={["id"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input readOnly disabled />
-        </Form.Item>
-        <Form.Item
           label="Code"
           name={["code"]}
           rules={[
@@ -70,7 +59,7 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Input.TextArea disabled />
+          <Input.TextArea />
         </Form.Item>
         <Form.Item
           label="User params"

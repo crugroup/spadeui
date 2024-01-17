@@ -1,8 +1,8 @@
-import { DateField, NumberField, Show, TextField } from "@refinedev/antd";
+import { DateField, List, Show, TextField, useTable } from "@refinedev/antd";
 import { IResourceComponentsProps, useShow } from "@refinedev/core";
-import { Button, Typography, Upload, notification } from "antd";
-import { UploadProps } from "antd/lib";
-import { ACCESS_TOKEN_KEY, API_URL } from "../../authProvider";
+import { Table, Typography } from "antd";
+import prettyBytes from "pretty-bytes";
+import { FileUploadButton } from "../../components";
 
 const { Title } = Typography;
 
@@ -12,51 +12,25 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
 
   const record = data?.data;
 
-  const props: UploadProps = {
-    name: "file",
-    action: `${API_URL}/files/${record?.id}/upload/`,
-    accept: "image/*,.pdf",
-    maxCount: 1,
-    headers: {
-      authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN_KEY)}`,
-      "Content-Disposition": 'attachment; filename="testname"',
-    },
-    data: {
-      filename: "testname",
-    },
-    onChange(info) {
-      if (info.file.status === "done") {
-        notification.error({
-          message: "Upload successfully.",
-        });
-      } else if (info.file.status === "error") {
-        notification.error({
-          message: "Upload failed.",
-        });
-      }
-    },
-  };
+  const { tableProps: uploadTableProps } = useTable({
+    syncWithLocation: true,
+    resource: "fileuploads",
+  });
 
   return (
     <Show
       isLoading={isLoading}
       headerButtons={({ defaultButtons }) => (
         <>
-          {/* {defaultButtons} */}
-          <Upload {...props}>
-            <Button type="primary">Upload the file</Button>
-          </Upload>
+          {defaultButtons}
+          <FileUploadButton buttonProps={{ type: "primary" }} />
         </>
       )}
     >
-      <Title level={5}>Id</Title>
-      <NumberField value={record?.id ?? ""} />
       <Title level={5}>Code</Title>
       <TextField value={record?.code ?? ""} />
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
-      <Title level={5}>Created At</Title>
-      <DateField value={record?.created_at} />
       <Title level={5}>Format</Title>
       <TextField value={record?.format_label ?? ""} />
       <Title level={5}>Processor</Title>
@@ -67,6 +41,26 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       <TextField value={record?.system_params ?? ""} />
       <Title level={5}>Linked process</Title>
       <TextField value={record?.linked_process ?? ""} />
+      <List
+        title="Uploads"
+        breadcrumb={false}
+        canCreate={false}
+        resource="fileuploads"
+      >
+        <Table {...uploadTableProps} rowKey="id">
+          <Table.Column dataIndex="name" title="Name" />
+          <Table.Column
+            dataIndex="size"
+            title="Size"
+            render={(value) => prettyBytes(value)}
+          />
+          <Table.Column
+            dataIndex="created_at"
+            title="Created At"
+            render={(value) => <DateField value={value} format="LLL" />}
+          />
+        </Table>
+      </List>
     </Show>
   );
 };

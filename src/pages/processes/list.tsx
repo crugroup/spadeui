@@ -1,5 +1,4 @@
 import {
-  DateField,
   DeleteButton,
   EditButton,
   List,
@@ -26,14 +25,8 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
   return (
     <List>
       <Table {...tableProps} rowKey="id">
-        <Table.Column dataIndex="id" title="Id" />
         <Table.Column dataIndex="code" title="Code" />
         <Table.Column dataIndex="description" title="Description" />
-        <Table.Column
-          dataIndex={["created_at"]}
-          title="Created At"
-          render={(value: any) => <DateField value={value} />}
-        />
         <Table.Column
           dataIndex={["executor"]}
           title="Executor"

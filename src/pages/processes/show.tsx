@@ -1,4 +1,4 @@
-import { DateField, NumberField, Show, TextField } from "@refinedev/antd";
+import { NumberField, Show, TextField } from "@refinedev/antd";
 import { IResourceComponentsProps, useOne, useShow } from "@refinedev/core";
 import { Typography } from "antd";
 import React from "react";
@@ -27,8 +27,6 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       <TextField value={record?.code} />
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
-      <Title level={5}>Created At</Title>
-      <DateField value={record?.created_at} />
       <Title level={5}>Executor</Title>
       {executorIsLoading ? <>Loading...</> : <>{executorData?.data?.name}</>}
       <Title level={5}>User params</Title>
