@@ -1,5 +1,5 @@
 import { DateField, List, Show, TextField, useTable } from "@refinedev/antd";
-import { IResourceComponentsProps, useShow } from "@refinedev/core";
+import { IResourceComponentsProps, useOne, useShow } from "@refinedev/core";
 import { Table, Typography } from "antd";
 import prettyBytes from "pretty-bytes";
 import { FileUploadButton } from "../../components";
@@ -17,6 +17,30 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     resource: "fileuploads",
   });
 
+  const { data: formatData, isLoading: formatIsLoading } = useOne({
+    resource: "fileformats",
+    id: record?.format ?? "",
+    queryOptions: {
+      enabled: !!record,
+    },
+  });
+
+  const { data: processorData, isLoading: processorIsLoading } = useOne({
+    resource: "fileprocessors",
+    id: record?.processor ?? "",
+    queryOptions: {
+      enabled: !!record,
+    },
+  });
+
+  const { data: processData, isLoading: processIsLoading } = useOne({
+    resource: "processes",
+    id: record?.linked_process ?? "",
+    queryOptions: {
+      enabled: !!record,
+    },
+  });
+
   return (
     <Show
       isLoading={isLoading}
@@ -32,15 +56,15 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
       <Title level={5}>Format</Title>
-      <TextField value={record?.format_label ?? ""} />
+      {formatIsLoading ? <>Loading...</> : <>{formatData?.data?.format}</>}
       <Title level={5}>Processor</Title>
-      <TextField value={record?.processor_label ?? ""} />
+      {processorIsLoading ? <>Loading...</> : <>{processorData?.data?.name}</>}
       <Title level={5}>User params</Title>
       <TextField value={record?.user_params ?? ""} />
       <Title level={5}>System params</Title>
       <TextField value={record?.system_params ?? ""} />
       <Title level={5}>Linked process</Title>
-      <TextField value={record?.linked_process ?? ""} />
+      {processIsLoading ? <>Loading...</> : <>{processData?.data?.code}</>}
       <List
         title="Uploads"
         breadcrumb={false}
