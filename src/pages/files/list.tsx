@@ -4,10 +4,11 @@ import {
   FilterDropdown,
   List,
   ShowButton,
+  useSelect,
   useTable,
 } from "@refinedev/antd";
 import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
-import { Input, Space, Table, Tag } from "antd";
+import { Input, Select, Space, Table, Tag } from "antd";
 import React from "react";
 import { FileUploadButton } from "../../components";
 import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
@@ -18,6 +19,12 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE
     }
+  });
+
+  const { selectProps: tagsSelectProps } = useSelect({
+    resource: "tags",
+    optionLabel: "name",
+    optionValue: "name",
   });
 
   return (
@@ -40,7 +47,7 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
           render={(tags: string[]) => tags.map((tag) => <Tag>{tag}</Tag>)}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
-              <Input placeholder="Search by tag" />
+              <Select allowClear style={{ minWidth: 200 }} {...tagsSelectProps} />
             </FilterDropdown>
           )}
         />

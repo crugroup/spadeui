@@ -23,6 +23,12 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
     optionLabel: "code",
   });
 
+  const { selectProps: tagsSelectProps } = useSelect({
+    resource: "tags",
+    optionLabel: "name",
+    optionValue: "name"
+  });
+
   return (
     <Edit saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
@@ -57,7 +63,7 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Select mode="tags" style={{ width: "100%" }} placeholder="Tags" />
+          <Select {...tagsSelectProps} mode="tags" style={{ width: "100%" }} placeholder="Tags" />
         </Form.Item>
         <Form.Item
           label="Format"
