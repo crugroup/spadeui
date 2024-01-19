@@ -9,10 +9,14 @@ import {
 import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
 import { Input, Space, Table } from "antd";
 import React from "react";
+import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
 
 export const FileProcessorList: React.FC<IResourceComponentsProps> = () => {
   const { tableProps } = useTable({
     syncWithLocation: true,
+    pagination: {
+      pageSize: DEFAULT_PAGE_SIZE
+    }
   });
 
   return (
