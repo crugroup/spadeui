@@ -6,6 +6,8 @@ import { axiosInstance, generateFilter, generateSort } from "./utils";
 type MethodTypes = "get" | "delete" | "head" | "options";
 type MethodTypesWithBody = "post" | "put" | "patch";
 
+export const DEFAULT_PAGE_SIZE = 100;
+
 export const dataProvider = (
   apiUrl: string,
   httpClient: AxiosInstance = axiosInstance
@@ -16,7 +18,7 @@ export const dataProvider = (
   getList: async ({ resource, pagination, filters, sorters, meta }) => {
     const url = `${apiUrl}/${resource}`;
 
-    const { current = 1, pageSize = 10, mode = "server" } = pagination ?? {};
+    const { current = 1, pageSize = DEFAULT_PAGE_SIZE, mode = "server" } = pagination ?? {};
 
     const { headers: headersFromMeta, method } = meta ?? {};
     const requestMethod = (method as MethodTypes) ?? "get";
@@ -24,14 +26,12 @@ export const dataProvider = (
     const queryFilters = generateFilter(filters);
 
     const query: {
-      _start?: number;
-      _end?: number;
+      page?: number;
       ordering?: string;
     } = {};
 
     if (mode === "server") {
-      query._start = (current - 1) * pageSize;
-      query._end = current * pageSize;
+      query.page = current;
     }
 
     const generatedSort = generateSort(sorters);
@@ -46,10 +46,10 @@ export const dataProvider = (
       }
     );
 
-    const total = +headers["x-total-count"];
+    const total = data.count ?? +headers["x-total-count"] ?? data.length;
 
     return {
-      data,
+      data: data.results,
       total: total || data.length,
     };
   },
@@ -64,7 +64,7 @@ export const dataProvider = (
     );
 
     return {
-      data,
+      data: data.results,
     };
   },
 
