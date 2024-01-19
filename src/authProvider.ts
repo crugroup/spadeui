@@ -9,7 +9,7 @@ export const authProvider: AuthBindings = {
   login: async ({ username, email, password }) => {
     if ((username || email) && password) {
       try {
-        const res = await axios.post(`${API_URL}/token/`, { email, password });
+        const res = await axios.post(`${API_URL}/token`, { email, password });
 
         if (res.status === 200) {
           localStorage.setItem(ACCESS_TOKEN_KEY, res.data.access);

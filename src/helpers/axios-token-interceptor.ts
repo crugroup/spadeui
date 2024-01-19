@@ -24,7 +24,7 @@ axiosInstance.interceptors.request.use(
 
 const refreshAuthLogic = (failedRequest: { response: AxiosResponse }) =>
   axiosInstance
-    .post(`${API_URL}/token/refresh/`, {
+    .post(`${API_URL}/token/refresh`, {
       refresh: localStorage.getItem(REFRESH_TOKEN_KEY),
     })
     .then((tokenRefreshResponse) => {
