@@ -3,6 +3,7 @@ import { IResourceComponentsProps, useOne, useShow } from "@refinedev/core";
 import { Table, Tag, Typography } from "antd";
 import prettyBytes from "pretty-bytes";
 import { FileUploadButton } from "../../components";
+import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
 
 const { Title } = Typography;
 
@@ -15,6 +16,9 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
   const { tableProps: uploadTableProps } = useTable({
     syncWithLocation: true,
     resource: "fileuploads",
+    pagination: {
+      pageSize: DEFAULT_PAGE_SIZE
+    }
   });
 
   const { data: formatData, isLoading: formatIsLoading } = useOne({
