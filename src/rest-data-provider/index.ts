@@ -26,8 +26,7 @@ export const dataProvider = (
     const query: {
       _start?: number;
       _end?: number;
-      _sort?: string;
-      _order?: string;
+      ordering?: string;
     } = {};
 
     if (mode === "server") {
@@ -37,9 +36,7 @@ export const dataProvider = (
 
     const generatedSort = generateSort(sorters);
     if (generatedSort) {
-      const { _sort, _order } = generatedSort;
-      query._sort = _sort.join(",");
-      query._order = _order.join(",");
+      query.ordering = generatedSort;
     }
 
     const { data, headers } = await httpClient[requestMethod](
@@ -148,10 +145,8 @@ export const dataProvider = (
     if (sorters) {
       const generatedSort = generateSort(sorters);
       if (generatedSort) {
-        const { _sort, _order } = generatedSort;
         const sortQuery = {
-          _sort: _sort.join(","),
-          _order: _order.join(","),
+          ordering: generatedSort,
         };
         requestUrl = `${requestUrl}&${stringify(sortQuery)}`;
       }
