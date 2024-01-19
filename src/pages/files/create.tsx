@@ -4,7 +4,7 @@ import { Form, Input, Select } from "antd";
 import React from "react";
 
 export const FileCreate: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm();
+  const { formProps, saveButtonProps } = useForm();
 
   const { selectProps: formatSelectProps } = useSelect({
     resource: "fileformats",
@@ -19,6 +19,12 @@ export const FileCreate: React.FC<IResourceComponentsProps> = () => {
   const { selectProps: linkedProcessSelectProps } = useSelect({
     resource: "processes",
     optionLabel: "code",
+  });
+
+  const { selectProps: tagsSelectProps } = useSelect({
+    resource: "tags",
+    optionLabel: "name",
+    optionValue: "name"
   });
 
   return (
@@ -55,7 +61,7 @@ export const FileCreate: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Select mode="tags" style={{ width: "100%" }} placeholder="Tags" />
+          <Select {...tagsSelectProps} mode="tags" style={{ width: "100%" }} placeholder="Tags" />
         </Form.Item>
         <Form.Item
           label="Format"
