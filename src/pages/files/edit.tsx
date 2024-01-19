@@ -49,6 +49,17 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
           <Input.TextArea />
         </Form.Item>
         <Form.Item
+          label="Tags"
+          name={["tags"]}
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Select mode="tags" style={{ width: "100%" }} placeholder="Tags" />
+        </Form.Item>
+        <Form.Item
           label="Format"
           name={"format"}
           rules={[
