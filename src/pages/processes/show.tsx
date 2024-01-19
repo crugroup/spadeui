@@ -15,7 +15,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     resource: "executors",
     id: record?.executor || "",
     queryOptions: {
-      enabled: !!record,
+      enabled: !!record?.executor,
     },
   });
 
@@ -28,7 +28,8 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
       <Title level={5}>Executor</Title>
-      {executorIsLoading ? <>Loading...</> : <>{executorData?.data?.name}</>}
+      {record?.executor &&
+        (executorIsLoading ? <>Loading...</> : <>{executorData?.data?.name}</>)}
       <Title level={5}>User params</Title>
       <TextField value={record?.user_params ?? ""} />
       <Title level={5}>System params</Title>

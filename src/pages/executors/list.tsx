@@ -1,12 +1,13 @@
 import {
   DeleteButton,
   EditButton,
+  FilterDropdown,
   List,
   ShowButton,
   useTable,
 } from "@refinedev/antd";
 import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
-import { Space, Table } from "antd";
+import { Input, Space, Table } from "antd";
 import React from "react";
 
 export const ExecutorList: React.FC<IResourceComponentsProps> = () => {
@@ -17,12 +18,45 @@ export const ExecutorList: React.FC<IResourceComponentsProps> = () => {
   return (
     <List>
       <Table {...tableProps} rowKey="id">
-        <Table.Column dataIndex="name" title="Name" />
-        <Table.Column dataIndex="description" title="Description" />
-        <Table.Column dataIndex="callable" title="Callable" />
+        <Table.Column
+          dataIndex="name"
+          title="Name"
+          sorter
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input placeholder="Search by name" />
+            </FilterDropdown>
+          )}
+        />
+        <Table.Column
+          dataIndex="description"
+          title="Description"
+          sorter
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input placeholder="Search by description" />
+            </FilterDropdown>
+          )}
+        />
+        <Table.Column
+          dataIndex="callable"
+          title="Callable"
+          sorter
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input placeholder="Search by callable" />
+            </FilterDropdown>
+          )}
+        />
         <Table.Column
           dataIndex="history_provider_callable"
           title="History Provider Callable"
+          sorter
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input placeholder="Search by history provider callable" />
+            </FilterDropdown>
+          )}
         />
         <Table.Column
           title="Actions"

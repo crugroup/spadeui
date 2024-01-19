@@ -1,12 +1,14 @@
 import {
   DeleteButton,
   EditButton,
+  FilterDropdown,
   List,
   ShowButton,
+  useSelect,
   useTable,
 } from "@refinedev/antd";
 import { BaseRecord, IResourceComponentsProps, useMany } from "@refinedev/core";
-import { Space, Table } from "antd";
+import { Input, Select, Space, Table } from "antd";
 import React from "react";
 
 export const ProcessList: React.FC<IResourceComponentsProps> = () => {
@@ -22,11 +24,34 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
+  const { selectProps: executorSelectProps } = useSelect({
+    resource: "executors",
+    optionLabel: "name",
+  });
+
   return (
     <List>
       <Table {...tableProps} rowKey="id">
-        <Table.Column dataIndex="code" title="Code" />
-        <Table.Column dataIndex="description" title="Description" />
+        <Table.Column
+          dataIndex="code"
+          title="Code"
+          sorter
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input placeholder="Search by code" />
+            </FilterDropdown>
+          )}
+        />
+        <Table.Column
+          dataIndex="description"
+          title="Description"
+          sorter
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input placeholder="Search by description" />
+            </FilterDropdown>
+          )}
+        />
         <Table.Column
           dataIndex={["executor"]}
           title="Executor"
@@ -37,6 +62,12 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
               executorData?.data?.find((item) => item.id === value)?.name
             )
           }
+          sorter
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Select style={{ minWidth: 200 }} {...executorSelectProps} />
+            </FilterDropdown>
+          )}
         />
         <Table.Column
           title="Actions"

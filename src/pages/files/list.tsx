@@ -1,12 +1,13 @@
 import {
   DeleteButton,
   EditButton,
+  FilterDropdown,
   List,
   ShowButton,
   useTable,
 } from "@refinedev/antd";
 import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
-import { Space, Table } from "antd";
+import { Input, Space, Table } from "antd";
 import React from "react";
 import { FileUploadButton } from "../../components";
 
@@ -18,8 +19,17 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
   return (
     <List canCreate={true}>
       <Table {...tableProps} rowKey="id">
-        <Table.Column dataIndex="code" title="Code" />
-        <Table.Column dataIndex="description" title="Description" />
+        <Table.Column
+          dataIndex="code"
+          title="Code"
+          sorter
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input placeholder="Search by title" />
+            </FilterDropdown>
+          )}
+        />
+        <Table.Column dataIndex="description" title="Description" sorter />
         <Table.Column
           title="Actions"
           dataIndex="actions"
@@ -30,7 +40,7 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
               <DeleteButton hideText size="small" recordItemId={record.id} />
               <FileUploadButton
                 hideText
-                buttonProps={{ size: "small" }}
+                buttonProps={{ size: "small", type: "primary" }}
                 recordItemId={record.id}
               />
             </Space>

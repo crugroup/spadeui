@@ -21,7 +21,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     resource: "fileformats",
     id: record?.format ?? "",
     queryOptions: {
-      enabled: !!record,
+      enabled: !!record?.format,
     },
   });
 
@@ -29,7 +29,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     resource: "fileprocessors",
     id: record?.processor ?? "",
     queryOptions: {
-      enabled: !!record,
+      enabled: !!record?.processor,
     },
   });
 
@@ -37,7 +37,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     resource: "processes",
     id: record?.linked_process ?? "",
     queryOptions: {
-      enabled: !!record,
+      enabled: !!record?.linked_process,
     },
   });
 
@@ -56,15 +56,22 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
       <Title level={5}>Format</Title>
-      {formatIsLoading ? <>Loading...</> : <>{formatData?.data?.format}</>}
+      {record?.format &&
+        (formatIsLoading ? <>Loading...</> : <>{formatData?.data?.format}</>)}
       <Title level={5}>Processor</Title>
-      {processorIsLoading ? <>Loading...</> : <>{processorData?.data?.name}</>}
+      {record?.processor &&
+        (processorIsLoading ? (
+          <>Loading...</>
+        ) : (
+          <>{processorData?.data?.name}</>
+        ))}
       <Title level={5}>User params</Title>
       <TextField value={record?.user_params ?? ""} />
       <Title level={5}>System params</Title>
       <TextField value={record?.system_params ?? ""} />
       <Title level={5}>Linked process</Title>
-      {processIsLoading ? <>Loading...</> : <>{processData?.data?.code}</>}
+      {record?.linked_process &&
+        (processIsLoading ? <>Loading...</> : <>{processData?.data?.code}</>)}
       <List
         title="Uploads"
         breadcrumb={false}
