@@ -7,7 +7,7 @@ import {
   useTable,
 } from "@refinedev/antd";
 import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
-import { Input, Space, Table } from "antd";
+import { Input, Space, Table, Tag } from "antd";
 import React from "react";
 import { FileUploadButton } from "../../components";
 
@@ -29,7 +29,17 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
             </FilterDropdown>
           )}
         />
-        <Table.Column dataIndex="description" title="Description" sorter />
+        <Table.Column dataIndex="description" title="Description" sorter />{" "}
+        <Table.Column
+          dataIndex="tags"
+          title="Tags"
+          render={(tags: string[]) => tags.map((tag) => <Tag>{tag}</Tag>)}
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input placeholder="Search by tag" />
+            </FilterDropdown>
+          )}
+        />
         <Table.Column
           title="Actions"
           dataIndex="actions"
