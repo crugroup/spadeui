@@ -1,6 +1,6 @@
 import { DateField, List, Show, TextField, useTable } from "@refinedev/antd";
 import { IResourceComponentsProps, useOne, useShow } from "@refinedev/core";
-import { Table, Typography } from "antd";
+import { Table, Tag, Typography } from "antd";
 import prettyBytes from "pretty-bytes";
 import { FileUploadButton } from "../../components";
 
@@ -55,6 +55,12 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       <TextField value={record?.code ?? ""} />
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
+      <Title level={5}>Tags</Title>
+      <Typography.Paragraph>
+        {record?.tags?.map((tag: string[]) => (
+          <Tag>{tag}</Tag>
+        ))}
+      </Typography.Paragraph>
       <Title level={5}>Format</Title>
       {record?.format &&
         (formatIsLoading ? <>Loading...</> : <>{formatData?.data?.format}</>)}
