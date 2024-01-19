@@ -10,10 +10,14 @@ import {
 import { BaseRecord, IResourceComponentsProps, useMany } from "@refinedev/core";
 import { Input, Select, Space, Table } from "antd";
 import React from "react";
+import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
 
 export const ProcessList: React.FC<IResourceComponentsProps> = () => {
   const { tableProps } = useTable({
     syncWithLocation: true,
+    pagination: {
+      pageSize: DEFAULT_PAGE_SIZE
+    }
   });
 
   const { data: executorData, isLoading: executorIsLoading } = useMany({
