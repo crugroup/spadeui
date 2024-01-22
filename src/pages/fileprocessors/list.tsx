@@ -15,13 +15,17 @@ export const FileProcessorList: React.FC<IResourceComponentsProps> = () => {
   const { tableProps } = useTable({
     syncWithLocation: true,
     pagination: {
-      pageSize: DEFAULT_PAGE_SIZE
-    }
+      pageSize: DEFAULT_PAGE_SIZE,
+    },
   });
 
   return (
     <List>
-      <Table {...tableProps} rowKey="id">
+      <Table
+        {...tableProps}
+        pagination={{ ...tableProps.pagination, showSizeChanger: false }}
+        rowKey="id"
+      >
         <Table.Column
           dataIndex="name"
           title="Name"
