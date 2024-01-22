@@ -101,7 +101,14 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
         canCreate={false}
         resource="fileuploads"
       >
-        <Table {...uploadTableProps} rowKey="id">
+        <Table
+          {...uploadTableProps}
+          pagination={{
+            ...uploadTableProps.pagination,
+            showSizeChanger: false,
+          }}
+          rowKey="id"
+        >
           <Table.Column dataIndex="name" title="Name" />
           <Table.Column
             dataIndex="size"
