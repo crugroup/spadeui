@@ -1,4 +1,11 @@
 import {
+  FileJpgOutlined,
+  FileOutlined,
+  FileSyncOutlined,
+  NodeIndexOutlined,
+  PlayCircleOutlined,
+} from "@ant-design/icons";
+import {
   ErrorComponent,
   ThemedLayoutV2,
   ThemedSiderV2,
@@ -72,6 +79,7 @@ function App() {
                     show: "/files/show/:id",
                     meta: {
                       canDelete: true,
+                      icon: <FileOutlined />,
                     },
                   },
                   {
@@ -83,6 +91,7 @@ function App() {
                     meta: {
                       canDelete: true,
                       label: "File formats",
+                      icon: <FileJpgOutlined />,
                     },
                   },
                   {
@@ -94,6 +103,7 @@ function App() {
                     meta: {
                       canDelete: true,
                       label: "File processors",
+                      icon: <FileSyncOutlined />,
                     },
                   },
                   {
@@ -104,6 +114,7 @@ function App() {
                     show: "/executors/show/:id",
                     meta: {
                       canDelete: true,
+                      icon: <PlayCircleOutlined />,
                     },
                   },
                   {
@@ -114,6 +125,7 @@ function App() {
                     show: "/processes/show/:id",
                     meta: {
                       canDelete: true,
+                      icon: <NodeIndexOutlined />,
                     },
                   },
                 ]}
