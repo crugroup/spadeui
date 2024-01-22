@@ -1,7 +1,20 @@
-import { NumberField, Show, TextField } from "@refinedev/antd";
-import { IResourceComponentsProps, useOne, useShow } from "@refinedev/core";
-import { Typography } from "antd";
+import {
+  DateField,
+  List,
+  NumberField,
+  Show,
+  TextField,
+  useTable,
+} from "@refinedev/antd";
+import {
+  IResourceComponentsProps,
+  useMany,
+  useOne,
+  useShow,
+} from "@refinedev/core";
+import { Table, Typography } from "antd";
 import React from "react";
+import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
 
 const { Title } = Typography;
 
@@ -16,6 +29,22 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     id: record?.executor || "",
     queryOptions: {
       enabled: !!record?.executor,
+    },
+  });
+
+  const { tableProps: processRunsTableProps } = useTable({
+    syncWithLocation: true,
+    resource: "processruns",
+    pagination: {
+      pageSize: DEFAULT_PAGE_SIZE,
+    },
+  });
+
+  const { data: userData, isLoading: userIsLoading } = useMany({
+    resource: "users",
+    ids: processRunsTableProps?.dataSource?.map((item) => item?.user) ?? [],
+    queryOptions: {
+      enabled: !!processRunsTableProps?.dataSource,
     },
   });
 
@@ -34,6 +63,33 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       <TextField value={record?.user_params ?? ""} />
       <Title level={5}>System params</Title>
       <TextField value={record?.system_params ?? ""} />
+      <List
+        title="Process runs"
+        breadcrumb={false}
+        canCreate={false}
+        resource="processruns"
+      >
+        <Table {...processRunsTableProps} rowKey="id">
+          <Table.Column
+            dataIndex="created_at"
+            title="Started At"
+            render={(value) => <DateField value={value} format="LLL" />}
+          />
+          <Table.Column dataIndex="status" title="Status" />
+          <Table.Column dataIndex="result" title="Result" />
+          <Table.Column
+            dataIndex={["user"]}
+            title="User"
+            render={(value) =>
+              userIsLoading ? (
+                <>Loading...</>
+              ) : (
+                userData?.data?.find((item) => item.id === value)?.email
+              )
+            }
+          />
+        </Table>
+      </List>
     </Show>
   );
 };
