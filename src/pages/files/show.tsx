@@ -1,5 +1,6 @@
 import { DateField, List, Show, TextField, useTable } from "@refinedev/antd";
 import {
+  CanAccess,
   IResourceComponentsProps,
   useMany,
   useOne,
@@ -95,44 +96,46 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       <Title level={5}>Linked process</Title>
       {record?.linked_process &&
         (processIsLoading ? <>Loading...</> : <>{processData?.data?.code}</>)}
-      <List
-        title="Uploads"
-        breadcrumb={false}
-        canCreate={false}
-        resource="fileuploads"
-      >
-        <Table
-          {...uploadTableProps}
-          pagination={{
-            ...uploadTableProps.pagination,
-            showSizeChanger: false,
-          }}
-          rowKey="id"
+      <CanAccess resource="fileuploads" action="show">
+        <List
+          title="Uploads"
+          breadcrumb={false}
+          canCreate={false}
+          resource="fileuploads"
         >
-          <Table.Column dataIndex="name" title="Name" />
-          <Table.Column
-            dataIndex="size"
-            title="Size"
-            render={(value) => prettyBytes(value)}
-          />
-          <Table.Column
-            dataIndex="created_at"
-            title="Created At"
-            render={(value) => <DateField value={value} format="LLL" />}
-          />
-          <Table.Column
-            dataIndex={["user"]}
-            title="User"
-            render={(value) =>
-              userIsLoading ? (
-                <>Loading...</>
-              ) : (
-                userData?.data?.find((item) => item.id === value)?.email
-              )
-            }
-          />
-        </Table>
-      </List>
+          <Table
+            {...uploadTableProps}
+            pagination={{
+              ...uploadTableProps.pagination,
+              showSizeChanger: false,
+            }}
+            rowKey="id"
+          >
+            <Table.Column dataIndex="name" title="Name" />
+            <Table.Column
+              dataIndex="size"
+              title="Size"
+              render={(value) => prettyBytes(value)}
+            />
+            <Table.Column
+              dataIndex="created_at"
+              title="Created At"
+              render={(value) => <DateField value={value} format="LLL" />}
+            />
+            <Table.Column
+              dataIndex={["user"]}
+              title="User"
+              render={(value) =>
+                userIsLoading ? (
+                  <>Loading...</>
+                ) : (
+                  userData?.data?.find((item) => item.id === value)?.email
+                )
+              }
+            />
+          </Table>
+        </List>
+      </CanAccess>
     </Show>
   );
 };

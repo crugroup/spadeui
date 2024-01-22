@@ -3,7 +3,8 @@ import axios from "axios";
 
 export const ACCESS_TOKEN_KEY = "access";
 export const REFRESH_TOKEN_KEY = "refresh";
-export const API_URL = "http://0.0.0.0:8000/api/v1";
+export const USER_PERMISSIONS_KEY = "userPermissions";
+export const API_URL = "http://localhost:8000/api/v1";
 
 export const authProvider: AuthBindings = {
   login: async ({ username, email, password }) => {
@@ -14,6 +15,20 @@ export const authProvider: AuthBindings = {
         if (res.status === 200) {
           localStorage.setItem(ACCESS_TOKEN_KEY, res.data.access);
           localStorage.setItem(REFRESH_TOKEN_KEY, res.data.refresh);
+
+          // Update permissions list on login
+          const resPermissions = await axios.get(`${API_URL}/permissions`, {
+            headers: {
+              authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN_KEY)}`,
+            },
+          });
+
+          if (resPermissions.status === 200) {
+            localStorage.setItem(
+              USER_PERMISSIONS_KEY,
+              JSON.stringify(resPermissions.data)
+            );
+          }
 
           return {
             success: true,
@@ -42,6 +57,7 @@ export const authProvider: AuthBindings = {
   logout: async () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
+    localStorage.removeItem(USER_PERMISSIONS_KEY);
 
     return {
       success: true,

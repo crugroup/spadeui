@@ -1,6 +1,11 @@
 import axios, { AxiosResponse } from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
-import { ACCESS_TOKEN_KEY, API_URL, REFRESH_TOKEN_KEY } from "../authProvider";
+import {
+  ACCESS_TOKEN_KEY,
+  API_URL,
+  REFRESH_TOKEN_KEY,
+  USER_PERMISSIONS_KEY,
+} from "../authProvider";
 
 const axiosInstance = axios.create();
 const axiosRefreshInstance = axios.create();
@@ -38,6 +43,7 @@ const refreshAuthLogic = (failedRequest: { response: AxiosResponse }) =>
     .catch(() => {
       localStorage.removeItem(ACCESS_TOKEN_KEY);
       localStorage.removeItem(REFRESH_TOKEN_KEY);
+      localStorage.removeItem(USER_PERMISSIONS_KEY);
       window.location.href = "/login";
     });
 

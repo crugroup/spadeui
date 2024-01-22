@@ -22,8 +22,9 @@ import routerBindings, {
   UnsavedChangesNotifier,
 } from "@refinedev/react-router-v6";
 import { App as AntdApp } from "antd";
+import { singular } from "pluralize";
 import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
-import { API_URL, authProvider } from "./authProvider";
+import { API_URL, USER_PERMISSIONS_KEY, authProvider } from "./authProvider";
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import axiosHelper from "./helpers/axios-token-interceptor";
@@ -58,6 +59,14 @@ import { dataProvider } from "./rest-data-provider";
 
 axiosHelper.setAxiosTokenInterceptor();
 
+const ACTIONS_MAPPING = {
+  create: "add",
+  show: "view",
+  list: "view",
+  edit: "change",
+  delete: "delete",
+};
+
 function App() {
   return (
     <BrowserRouter>
@@ -66,6 +75,35 @@ function App() {
           <AntdApp>
             <DevtoolsProvider>
               <Refine
+                accessControlProvider={{
+                  can: async ({ resource, action }) => {
+                    if (!resource) {
+                      return { can: true };
+                    }
+
+                    // Permissions are stored as a stringified JSON response from /api/permissions in local storage
+                    const permissions: { name: string; codename: string }[] =
+                      JSON.parse(
+                        localStorage.getItem(USER_PERMISSIONS_KEY) ?? "[]"
+                      );
+
+                    // Superuser has access to all resources and actions
+                    if (permissions.some((p) => p.codename === "*")) {
+                      return { can: true };
+                    }
+
+                    // Action names used by Refine are different from the ones used by Django
+                    const actionMapped =
+                      ACTIONS_MAPPING[action as keyof typeof ACTIONS_MAPPING];
+
+                    return {
+                      can: permissions.some(
+                        (p) =>
+                          p.codename === `${actionMapped}_${singular(resource)}`
+                      ),
+                    };
+                  },
+                }}
                 dataProvider={dataProvider(API_URL, axiosHelper.axiosInstance)}
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerBindings}
