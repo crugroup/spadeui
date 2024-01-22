@@ -69,7 +69,14 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
         canCreate={false}
         resource="processruns"
       >
-        <Table {...processRunsTableProps} rowKey="id">
+        <Table
+          {...processRunsTableProps}
+          pagination={{
+            ...processRunsTableProps.pagination,
+            showSizeChanger: false,
+          }}
+          rowKey="id"
+        >
           <Table.Column
             dataIndex="created_at"
             title="Started At"
