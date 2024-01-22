@@ -20,7 +20,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({
   const invalidate = useInvalidate();
 
   const fileUploadProps: UploadProps = {
-    action: `${API_URL}/files/${recordItemId ?? id}/upload/`,
+    action: `${API_URL}/files/${recordItemId ?? id}/upload`,
     accept: "image/*,.pdf",
     maxCount: 1,
     headers: {
