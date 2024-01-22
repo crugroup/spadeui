@@ -1,5 +1,10 @@
 import { DateField, List, Show, TextField, useTable } from "@refinedev/antd";
-import { IResourceComponentsProps, useOne, useShow } from "@refinedev/core";
+import {
+  IResourceComponentsProps,
+  useMany,
+  useOne,
+  useShow,
+} from "@refinedev/core";
 import { Table, Tag, Typography } from "antd";
 import prettyBytes from "pretty-bytes";
 import { FileUploadButton } from "../../components";
@@ -17,8 +22,8 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     syncWithLocation: true,
     resource: "fileuploads",
     pagination: {
-      pageSize: DEFAULT_PAGE_SIZE
-    }
+      pageSize: DEFAULT_PAGE_SIZE,
+    },
   });
 
   const { data: formatData, isLoading: formatIsLoading } = useOne({
@@ -42,6 +47,14 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     id: record?.linked_process ?? "",
     queryOptions: {
       enabled: !!record?.linked_process,
+    },
+  });
+
+  const { data: userData, isLoading: userIsLoading } = useMany({
+    resource: "users",
+    ids: uploadTableProps?.dataSource?.map((item) => item?.user) ?? [],
+    queryOptions: {
+      enabled: !!uploadTableProps?.dataSource,
     },
   });
 
@@ -99,6 +112,17 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             dataIndex="created_at"
             title="Created At"
             render={(value) => <DateField value={value} format="LLL" />}
+          />
+          <Table.Column
+            dataIndex={["user"]}
+            title="User"
+            render={(value) =>
+              userIsLoading ? (
+                <>Loading...</>
+              ) : (
+                userData?.data?.find((item) => item.id === value)?.email
+              )
+            }
           />
         </Table>
       </List>
