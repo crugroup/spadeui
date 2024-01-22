@@ -1,5 +1,5 @@
 import { DataProvider } from "@refinedev/core";
-import { AxiosInstance } from "axios";
+import { AxiosInstance, isAxiosError } from "axios";
 import { stringify } from "query-string";
 import { axiosInstance, generateFilter, generateSort } from "./utils";
 
@@ -74,13 +74,22 @@ export const dataProvider = (
     const { headers, method } = meta ?? {};
     const requestMethod = (method as MethodTypesWithBody) ?? "post";
 
-    const { data } = await httpClient[requestMethod](url, variables, {
-      headers,
-    });
+    try {
+      const { data } = await httpClient[requestMethod](url, variables, {
+        headers,
+      });
 
-    return {
-      data,
-    };
+      return {
+        data,
+      };
+    } catch (err) {
+      if (isAxiosError(err) && err.response) {
+        return Promise.reject({ errors: err.response.data, statusCode: err.status })
+      } else {
+        return Promise.reject(err)
+      }
+    }
+
   },
 
   update: async ({ resource, id, variables, meta }) => {
@@ -89,13 +98,21 @@ export const dataProvider = (
     const { headers, method } = meta ?? {};
     const requestMethod = (method as MethodTypesWithBody) ?? "patch";
 
-    const { data } = await httpClient[requestMethod](url, variables, {
-      headers,
-    });
+    try {
+      const { data } = await httpClient[requestMethod](url, variables, {
+        headers,
+      });
 
-    return {
-      data,
-    };
+      return {
+        data,
+      };
+    } catch (err) {
+      if (isAxiosError(err) && err.response) {
+        return Promise.reject({ errors: err.response.data, statusCode: err.status })
+      } else {
+        return Promise.reject(err)
+      }
+    }
   },
 
   getOne: async ({ resource, id, meta }) => {
