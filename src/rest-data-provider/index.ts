@@ -18,7 +18,7 @@ export const dataProvider = (
   getList: async ({ resource, pagination, filters, sorters, meta }) => {
     const url = `${apiUrl}/${resource}`;
 
-    const { current = 1, pageSize = DEFAULT_PAGE_SIZE, mode = "server" } = pagination ?? {};
+    const { current = 1, mode = "server" } = pagination ?? {};
 
     const { headers: headersFromMeta, method } = meta ?? {};
     const requestMethod = (method as MethodTypes) ?? "get";
@@ -84,12 +84,14 @@ export const dataProvider = (
       };
     } catch (err) {
       if (isAxiosError(err) && err.response) {
-        return Promise.reject({ errors: err.response.data, statusCode: err.status })
+        return Promise.reject({
+          errors: err.response.data,
+          statusCode: err.code,
+        });
       } else {
-        return Promise.reject(err)
+        return Promise.reject(err);
       }
     }
-
   },
 
   update: async ({ resource, id, variables, meta }) => {
@@ -108,9 +110,12 @@ export const dataProvider = (
       };
     } catch (err) {
       if (isAxiosError(err) && err.response) {
-        return Promise.reject({ errors: err.response.data, statusCode: err.status })
+        return Promise.reject({
+          errors: err.response.data,
+          statusCode: err.code,
+        });
       } else {
-        return Promise.reject(err)
+        return Promise.reject(err);
       }
     }
   },
