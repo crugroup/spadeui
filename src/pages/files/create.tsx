@@ -2,6 +2,7 @@ import { Create, useForm, useSelect } from "@refinedev/antd";
 import { IResourceComponentsProps } from "@refinedev/core";
 import { Form, Input, Select } from "antd";
 import React from "react";
+import { ErrorNotifications } from "../../components/error-notifications";
 
 export const FileCreate: React.FC<IResourceComponentsProps> = () => {
   const { formProps, saveButtonProps } = useForm();
@@ -24,12 +25,13 @@ export const FileCreate: React.FC<IResourceComponentsProps> = () => {
   const { selectProps: tagsSelectProps } = useSelect({
     resource: "tags",
     optionLabel: "name",
-    optionValue: "name"
+    optionValue: "name",
   });
 
   return (
     <Create saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
+        <ErrorNotifications formProps={formProps} />
         <Form.Item
           label="Code"
           name={["code"]}
@@ -61,7 +63,12 @@ export const FileCreate: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Select {...tagsSelectProps} mode="tags" style={{ width: "100%" }} placeholder="Tags" />
+          <Select
+            {...tagsSelectProps}
+            mode="tags"
+            style={{ width: "100%" }}
+            placeholder="Tags"
+          />
         </Form.Item>
         <Form.Item
           label="Format"
