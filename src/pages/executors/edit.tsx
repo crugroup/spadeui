@@ -2,15 +2,15 @@ import { Edit, useForm } from "@refinedev/antd";
 import { IResourceComponentsProps } from "@refinedev/core";
 import { Form, Input } from "antd";
 import React from "react";
+import { ErrorNotifications } from "../../components/error-notifications";
 
 export const ExecutorEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm();
-
-  const executorsData = queryResult?.data?.data;
+  const { formProps, saveButtonProps } = useForm();
 
   return (
     <Edit saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
+        <ErrorNotifications formProps={formProps} />
         <Form.Item
           label="Name"
           name={["name"]}

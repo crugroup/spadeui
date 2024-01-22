@@ -2,6 +2,7 @@ import { Edit, useForm } from "@refinedev/antd";
 import { IResourceComponentsProps } from "@refinedev/core";
 import { Form, Input } from "antd";
 import React from "react";
+import { ErrorNotifications } from "../../components/error-notifications";
 
 export const FileFormatEdit: React.FC<IResourceComponentsProps> = () => {
   const { formProps, saveButtonProps } = useForm();
@@ -9,6 +10,7 @@ export const FileFormatEdit: React.FC<IResourceComponentsProps> = () => {
   return (
     <Edit saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
+        <ErrorNotifications formProps={formProps} />
         <Form.Item
           label="Format"
           name={["format"]}
