@@ -1,5 +1,5 @@
 import { ImportButton } from "@refinedev/antd";
-import { BaseKey, useInvalidate, useResource } from "@refinedev/core";
+import { BaseKey, useCan, useInvalidate, useResource } from "@refinedev/core";
 import { UploadProps, notification } from "antd";
 import { ButtonProps } from "antd/lib";
 import { FC } from "react";
@@ -18,6 +18,11 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({
 }) => {
   const { id } = useResource();
   const invalidate = useInvalidate();
+
+  const { data } = useCan({
+    action: "create",
+    resource: "fileuploads",
+  });
 
   const fileUploadProps: UploadProps = {
     action: `${API_URL}/files/${recordItemId ?? id}/upload`,
@@ -54,7 +59,11 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({
     <ImportButton
       hideText={hideText}
       uploadProps={fileUploadProps}
-      buttonProps={buttonProps}
+      buttonProps={{
+        ...buttonProps,
+        disabled: !data?.can,
+        title: data?.can ? undefined : "You don't have permissions to access",
+      }}
     >
       Upload
     </ImportButton>

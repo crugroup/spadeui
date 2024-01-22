@@ -7,6 +7,7 @@ import {
   useTable,
 } from "@refinedev/antd";
 import {
+  CanAccess,
   IResourceComponentsProps,
   useMany,
   useOne,
@@ -63,40 +64,42 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       <TextField value={record?.user_params ?? ""} />
       <Title level={5}>System params</Title>
       <TextField value={record?.system_params ?? ""} />
-      <List
-        title="Process runs"
-        breadcrumb={false}
-        canCreate={false}
-        resource="processruns"
-      >
-        <Table
-          {...processRunsTableProps}
-          pagination={{
-            ...processRunsTableProps.pagination,
-            showSizeChanger: false,
-          }}
-          rowKey="id"
+      <CanAccess resource="processruns" action="show">
+        <List
+          title="Process runs"
+          breadcrumb={false}
+          canCreate={false}
+          resource="processruns"
         >
-          <Table.Column
-            dataIndex="created_at"
-            title="Started At"
-            render={(value) => <DateField value={value} format="LLL" />}
-          />
-          <Table.Column dataIndex="status" title="Status" />
-          <Table.Column dataIndex="result" title="Result" />
-          <Table.Column
-            dataIndex={["user"]}
-            title="User"
-            render={(value) =>
-              userIsLoading ? (
-                <>Loading...</>
-              ) : (
-                userData?.data?.find((item) => item.id === value)?.email
-              )
-            }
-          />
-        </Table>
-      </List>
+          <Table
+            {...processRunsTableProps}
+            pagination={{
+              ...processRunsTableProps.pagination,
+              showSizeChanger: false,
+            }}
+            rowKey="id"
+          >
+            <Table.Column
+              dataIndex="created_at"
+              title="Started At"
+              render={(value) => <DateField value={value} format="LLL" />}
+            />
+            <Table.Column dataIndex="status" title="Status" />
+            <Table.Column dataIndex="result" title="Result" />
+            <Table.Column
+              dataIndex={["user"]}
+              title="User"
+              render={(value) =>
+                userIsLoading ? (
+                  <>Loading...</>
+                ) : (
+                  userData?.data?.find((item) => item.id === value)?.email
+                )
+              }
+            />
+          </Table>
+        </List>
+      </CanAccess>
     </Show>
   );
 };
