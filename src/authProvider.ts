@@ -1,4 +1,5 @@
 import { AuthBindings } from "@refinedev/core";
+import { notification } from "antd";
 import axios from "axios";
 
 export const ACCESS_TOKEN_KEY = "access";
@@ -62,6 +63,53 @@ export const authProvider: AuthBindings = {
     return {
       success: true,
       redirectTo: "/login",
+    };
+  },
+  forgotPassword: async ({ email }) => {
+    try {
+      const res = await axios.post(`${API_URL}/password/reset`, { email });
+
+      if (res.status === 200) {
+        notification.success({
+          message: "Password reset email sent",
+          description: "Please check your email for further instructions",
+        });
+        return {
+          success: true,
+        };
+      }
+    } catch {
+      /* empty */
+    }
+
+    return {
+      success: false,
+    };
+  },
+  updatePassword: async (params) => {
+    try {
+      const res = await axios.post(`${API_URL}/password/reset/confirm`, {
+        new_password1: params.password,
+        new_password2: params.password,
+        uid: params.uid,
+        token: params.token,
+      });
+
+      if (res.status === 200) {
+        notification.success({
+          message: "Password updated successfully",
+          description: "Login to your account using updated credentials",
+        });
+        return {
+          success: true,
+          redirectTo: "/login",
+        };
+      }
+    } catch {
+      /* empty */
+    }
+    return {
+      success: false,
     };
   },
   check: async () => {
