@@ -55,6 +55,7 @@ import {
   ProcessList,
   ProcessShow,
 } from "./pages/processes";
+import { UpdatePassword } from "./pages/updatePassword";
 import { dataProvider } from "./rest-data-provider";
 
 axiosHelper.setAxiosTokenInterceptor();
@@ -186,7 +187,7 @@ function App() {
                           Sider={(props) => <ThemedSiderV2 {...props} fixed />}
                           Title={() => (
                             <Link to="/">
-                              <h1>SpadeShaft</h1>
+                              <h1>Spadeshaft</h1>
                             </Link>
                           )}
                         >
@@ -249,6 +250,10 @@ function App() {
                     <Route
                       path="/forgot-password"
                       element={<ForgotPassword />}
+                    />
+                    <Route
+                      path="/update-password"
+                      element={<UpdatePassword />}
                     />
                   </Route>
                 </Routes>
