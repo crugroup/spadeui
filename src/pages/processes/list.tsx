@@ -10,6 +10,7 @@ import {
 import { BaseRecord, IResourceComponentsProps, useMany } from "@refinedev/core";
 import { Input, Select, Space, Table } from "antd";
 import React from "react";
+import { ProcessRunButton } from "../../components/process-run-button";
 import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
 
 export const ProcessList: React.FC<IResourceComponentsProps> = () => {
@@ -85,6 +86,11 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
               <EditButton hideText size="small" recordItemId={record.id} />
               <ShowButton hideText size="small" recordItemId={record.id} />
               <DeleteButton hideText size="small" recordItemId={record.id} />
+              <ProcessRunButton
+                hideText
+                buttonProps={{ size: "small", type: "primary" }}
+                recordItemId={record.id}
+              />
             </Space>
           )}
         />

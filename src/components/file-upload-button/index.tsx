@@ -68,22 +68,18 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({
     form.append("filename", uploadFileName);
     form.append("params", JSON.stringify(formData));
 
-    const fileUploadResponse = await axios.post(
-      `${API_URL}/files/${recordItemId ?? id}/upload`,
-      form,
-      {
+    try {
+      await axios.post(`${API_URL}/files/${recordItemId ?? id}/upload`, form, {
         headers: {
           authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN_KEY)}`,
           "Content-Disposition": `attachment; filename="${uploadFileName}"`,
         },
-      }
-    );
+      });
 
-    if (fileUploadResponse.status === 200) {
       notification.success({ message: "File uploaded successfully" });
       setSelectedFile(undefined);
       setIsModalOpen(false);
-    } else {
+    } catch {
       notification.error({ message: "File upload failed" });
       setSelectedFile(undefined);
     }
@@ -150,6 +146,12 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({
           onSubmit={onSubmit}
         >
           <Space align="start">
+            {!fileData?.data?.user_params && (
+              <Typography.Paragraph>
+                Form is empty. Set it up in file's user params or upload the
+                file now without passing any params.
+              </Typography.Paragraph>
+            )}
             <Button htmlType="submit" type="primary">
               Submit
             </Button>

@@ -18,6 +18,7 @@ import {
 import { Input, Table, Typography } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
+import { ProcessRunButton } from "../../components/process-run-button";
 import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
 
 const { Title } = Typography;
@@ -56,7 +57,15 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
   const executorResource = useResource("executors").resource;
 
   return (
-    <Show isLoading={isLoading}>
+    <Show
+      isLoading={isLoading}
+      headerButtons={({ defaultButtons }) => (
+        <>
+          {defaultButtons}
+          <ProcessRunButton buttonProps={{ type: "primary" }} />
+        </>
+      )}
+    >
       <Title level={5}>Id</Title>
       <NumberField value={record?.id ?? ""} />
       <Title level={5}>Code</Title>
