@@ -103,7 +103,7 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Input.TextArea />
+          <Input.TextArea rows={8} style={{ fontFamily: "monospace" }} />
         </Form.Item>
         <Form.Item
           label="User params"
@@ -114,7 +114,7 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Input.TextArea />
+          <Input.TextArea rows={8} style={{ fontFamily: "monospace" }} />
         </Form.Item>
         <Form.Item
           label="Linked process"
