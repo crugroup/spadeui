@@ -5,6 +5,10 @@ import axios from "axios";
 export const ACCESS_TOKEN_KEY = "access";
 export const REFRESH_TOKEN_KEY = "refresh";
 export const USER_PERMISSIONS_KEY = "userPermissions";
+export const USER_FIRST_NAME_KEY = "userFirstName";
+export const USER_LAST_NAME_KEY = "userLastName";
+export const USER_ID_KEY = "userId";
+export const USER_EMAIL_KEY = "userEmail";
 export const API_URL = "http://localhost:8000/api/v1";
 
 export const authProvider: AuthBindings = {
@@ -16,6 +20,20 @@ export const authProvider: AuthBindings = {
         if (res.status === 200) {
           localStorage.setItem(ACCESS_TOKEN_KEY, res.data.access);
           localStorage.setItem(REFRESH_TOKEN_KEY, res.data.refresh);
+
+          // Update user data on login
+          const resUser = await axios.get(`${API_URL}/users/me`, {
+            headers: {
+              authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN_KEY)}`,
+            },
+          });
+
+          if (resUser.status === 200) {
+            localStorage.setItem(USER_FIRST_NAME_KEY, resUser.data.first_name);
+            localStorage.setItem(USER_LAST_NAME_KEY, resUser.data.last_name);
+            localStorage.setItem(USER_ID_KEY, resUser.data.id);
+            localStorage.setItem(USER_EMAIL_KEY, resUser.data.email);
+          }
 
           // Update permissions list on login
           const resPermissions = await axios.get(`${API_URL}/permissions`, {
@@ -132,9 +150,14 @@ export const authProvider: AuthBindings = {
 
     if (token) {
       return {
-        id: 1,
-        name: "John Doe",
-        avatar: "https://i.pravatar.cc/300",
+        id: localStorage.getItem(USER_ID_KEY),
+        name: [
+          localStorage.getItem(USER_FIRST_NAME_KEY),
+          localStorage.getItem(USER_LAST_NAME_KEY),
+        ]
+          .filter(Boolean)
+          .join(" "),
+        email: localStorage.getItem(USER_EMAIL_KEY),
       };
     }
     return null;
