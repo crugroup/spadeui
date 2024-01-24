@@ -21,7 +21,8 @@ import routerBindings, {
   NavigateToResource,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router-v6";
-import { App as AntdApp } from "antd";
+import { App as AntdApp, Image, Space } from "antd";
+import { Footer } from "antd/lib/layout/layout";
 import { singular } from "pluralize";
 import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
 import { API_URL, USER_PERMISSIONS_KEY, authProvider } from "./authProvider";
@@ -57,6 +58,10 @@ import {
 } from "./pages/processes";
 import { UpdatePassword } from "./pages/updatePassword";
 import { dataProvider } from "./rest-data-provider";
+
+import cruLogo from "./assets/cru.jpg";
+import exlabsLogo from "./assets/exlabs.png";
+import githubLogo from "./assets/github.png";
 
 axiosHelper.setAxiosTokenInterceptor();
 
@@ -189,6 +194,36 @@ function App() {
                             <Link to="/">
                               <h1>Spadeshaft</h1>
                             </Link>
+                          )}
+                          Footer={() => (
+                            <Footer style={{ position: "sticky", bottom: 0 }}>
+                              <Space size="middle" style={{ float: "right" }}>
+                                <a href="https://exlabs.com" target="_blank">
+                                  <Image
+                                    height={24}
+                                    preview={false}
+                                    src={exlabsLogo}
+                                  />
+                                </a>
+                                <a href="https://crugroup.com" target="_blank">
+                                  <Image
+                                    height={24}
+                                    preview={false}
+                                    src={cruLogo}
+                                  />
+                                </a>
+                                <a
+                                  href="https://github.com/crugroup/spadeshaft"
+                                  target="_blank"
+                                >
+                                  <Image
+                                    height={24}
+                                    preview={false}
+                                    src={githubLogo}
+                                  />
+                                </a>
+                              </Space>
+                            </Footer>
                           )}
                         >
                           <Outlet />
