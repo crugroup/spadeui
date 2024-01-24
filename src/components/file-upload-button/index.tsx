@@ -132,9 +132,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({
           <Space style={{ minHeight: 60 }}>
             <Typography.Title level={5}>
               {selectedFile
-                ? `${selectedFile.name} (${prettyBytes(
-                    selectedFile.size ?? 0
-                  )})`
+                ? `${selectedFile.name} (${prettyBytes(selectedFile.size ?? 0)})`
                 : "Select file for upload"}
             </Typography.Title>
           </Space>

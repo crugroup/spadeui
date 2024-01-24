@@ -84,9 +84,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       <TextField value={record?.description} />
       <Title level={5}>Tags</Title>
       <Typography.Paragraph>
-        {record?.tags?.map((tag: string) => (
-          <Tag key={tag}>{tag}</Tag>
-        ))}
+        {record?.tags?.map((tag: string) => <Tag key={tag}>{tag}</Tag>)}
       </Typography.Paragraph>
       <Title level={5}>Format</Title>
       <Typography.Paragraph>
