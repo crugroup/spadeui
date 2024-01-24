@@ -2,12 +2,15 @@ import { DateField, List, Show, TextField, useTable } from "@refinedev/antd";
 import {
   CanAccess,
   IResourceComponentsProps,
+  useGetToPath,
   useMany,
   useOne,
+  useResource,
   useShow,
 } from "@refinedev/core";
-import { Table, Tag, Typography } from "antd";
+import { Input, Table, Tag, Typography } from "antd";
 import prettyBytes from "pretty-bytes";
+import { Link } from "react-router-dom";
 import { FileUploadButton } from "../../components";
 import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
 
@@ -59,6 +62,12 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
+  const getToPath = useGetToPath();
+
+  const fileFormatResource = useResource("fileformats").resource;
+  const processResource = useResource("processes").resource;
+  const fileProcessorResource = useResource("fileprocessors").resource;
+
   return (
     <Show
       isLoading={isLoading}
@@ -75,27 +84,85 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       <TextField value={record?.description} />
       <Title level={5}>Tags</Title>
       <Typography.Paragraph>
-        {record?.tags?.map((tag: string[]) => (
-          <Tag>{tag}</Tag>
+        {record?.tags?.map((tag: string) => (
+          <Tag key={tag}>{tag}</Tag>
         ))}
       </Typography.Paragraph>
       <Title level={5}>Format</Title>
-      {record?.format &&
-        (formatIsLoading ? <>Loading...</> : <>{formatData?.data?.format}</>)}
+      <Typography.Paragraph>
+        {record?.format &&
+          (formatIsLoading ? (
+            <>Loading...</>
+          ) : (
+            <Link
+              to={
+                getToPath({
+                  resource: fileFormatResource,
+                  action: "show",
+                  meta: { id: record?.format },
+                }) ?? "#"
+              }
+            >
+              {formatData?.data?.format}
+            </Link>
+          ))}
+      </Typography.Paragraph>
       <Title level={5}>Processor</Title>
-      {record?.processor &&
-        (processorIsLoading ? (
-          <>Loading...</>
-        ) : (
-          <>{processorData?.data?.name}</>
-        ))}
+      <Typography.Paragraph>
+        {record?.processor &&
+          (processorIsLoading ? (
+            <>Loading...</>
+          ) : (
+            <Link
+              to={
+                getToPath({
+                  resource: fileProcessorResource,
+                  action: "show",
+                  meta: { id: record?.processor },
+                }) ?? "#"
+              }
+            >
+              {processorData?.data?.name}
+            </Link>
+          ))}
+      </Typography.Paragraph>
       <Title level={5}>User params</Title>
-      <TextField value={record?.user_params ?? ""} />
+      <Typography.Paragraph>
+        <Input.TextArea
+          value={record?.user_params ?? ""}
+          readOnly
+          rows={8}
+          style={{ fontFamily: "monospace" }}
+        />
+      </Typography.Paragraph>
       <Title level={5}>System params</Title>
-      <TextField value={record?.system_params ?? ""} />
+      <Typography.Paragraph>
+        <Input.TextArea
+          value={record?.system_params ?? ""}
+          readOnly
+          rows={8}
+          style={{ fontFamily: "monospace" }}
+        />
+      </Typography.Paragraph>
       <Title level={5}>Linked process</Title>
-      {record?.linked_process &&
-        (processIsLoading ? <>Loading...</> : <>{processData?.data?.code}</>)}
+      <Typography.Paragraph>
+        {record?.linked_process &&
+          (processIsLoading ? (
+            <>Loading...</>
+          ) : (
+            <Link
+              to={
+                getToPath({
+                  resource: processResource,
+                  action: "show",
+                  meta: { id: record?.linked_process },
+                }) ?? "#"
+              }
+            >
+              {processData?.data?.code}
+            </Link>
+          ))}
+      </Typography.Paragraph>
       <CanAccess resource="fileuploads" action="show">
         <List
           title="Uploads"

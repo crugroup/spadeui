@@ -101,7 +101,7 @@ export const FileCreate: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Input.TextArea />
+          <Input.TextArea rows={8} style={{ fontFamily: "monospace" }} />
         </Form.Item>
         <Form.Item
           label="User params"
@@ -112,7 +112,7 @@ export const FileCreate: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Input.TextArea />
+          <Input.TextArea rows={8} style={{ fontFamily: "monospace" }} />
         </Form.Item>
         <Form.Item
           label="Linked process"

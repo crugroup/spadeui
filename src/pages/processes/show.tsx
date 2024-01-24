@@ -9,12 +9,15 @@ import {
 import {
   CanAccess,
   IResourceComponentsProps,
+  useGetToPath,
   useMany,
   useOne,
+  useResource,
   useShow,
 } from "@refinedev/core";
-import { Table, Typography } from "antd";
+import { Input, Table, Typography } from "antd";
 import React from "react";
+import { Link } from "react-router-dom";
 import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
 
 const { Title } = Typography;
@@ -49,6 +52,9 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
+  const getToPath = useGetToPath();
+  const executorResource = useResource("executors").resource;
+
   return (
     <Show isLoading={isLoading}>
       <Title level={5}>Id</Title>
@@ -58,12 +64,42 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
       <Title level={5}>Executor</Title>
-      {record?.executor &&
-        (executorIsLoading ? <>Loading...</> : <>{executorData?.data?.name}</>)}
+      <Typography.Paragraph>
+        {record?.executor &&
+          (executorIsLoading ? (
+            <>Loading...</>
+          ) : (
+            <Link
+              to={
+                getToPath({
+                  resource: executorResource,
+                  action: "show",
+                  meta: { id: record?.executor },
+                }) ?? "#"
+              }
+            >
+              {executorData?.data?.name}
+            </Link>
+          ))}
+      </Typography.Paragraph>
       <Title level={5}>User params</Title>
-      <TextField value={record?.user_params ?? ""} />
+      <Typography.Paragraph>
+        <Input.TextArea
+          value={record?.user_params ?? ""}
+          readOnly
+          rows={8}
+          style={{ fontFamily: "monospace" }}
+        />
+      </Typography.Paragraph>
       <Title level={5}>System params</Title>
-      <TextField value={record?.system_params ?? ""} />
+      <Typography.Paragraph>
+        <Input.TextArea
+          value={record?.system_params ?? ""}
+          readOnly
+          rows={8}
+          style={{ fontFamily: "monospace" }}
+        />
+      </Typography.Paragraph>
       <CanAccess resource="processruns" action="show">
         <List
           title="Process runs"
