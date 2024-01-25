@@ -1,11 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
-import {
-  ACCESS_TOKEN_KEY,
-  API_URL,
-  REFRESH_TOKEN_KEY,
-  USER_PERMISSIONS_KEY,
-} from "../authProvider";
+import { ACCESS_TOKEN_KEY, API_URL, REFRESH_TOKEN_KEY, USER_PERMISSIONS_KEY } from "../authProvider";
 
 const axiosInstance = axios.create();
 const axiosRefreshInstance = axios.create();
@@ -35,8 +30,7 @@ const refreshAuthLogic = (failedRequest: { response: AxiosResponse }) =>
     })
     .then((tokenRefreshResponse) => {
       localStorage.setItem(ACCESS_TOKEN_KEY, tokenRefreshResponse.data.access);
-      failedRequest.response.config.headers["Authorization"] =
-        "Bearer " + tokenRefreshResponse.data.access;
+      failedRequest.response.config.headers["Authorization"] = "Bearer " + tokenRefreshResponse.data.access;
 
       return Promise.resolve();
     })

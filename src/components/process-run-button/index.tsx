@@ -1,12 +1,5 @@
 import { PlayCircleOutlined } from "@ant-design/icons";
-import {
-  BaseKey,
-  useCan,
-  useDataProvider,
-  useInvalidate,
-  useOne,
-  useResource,
-} from "@refinedev/core";
+import { BaseKey, useCan, useDataProvider, useInvalidate, useOne, useResource } from "@refinedev/core";
 import Form from "@rjsf/antd";
 import validator from "@rjsf/validator-ajv8";
 import { Button, Modal, Space, notification } from "antd";
@@ -21,11 +14,7 @@ type ProcessRunButtonProps = {
   hideText?: boolean;
 };
 
-const ProcessRunButton: FC<ProcessRunButtonProps> = ({
-  buttonProps,
-  recordItemId,
-  hideText,
-}) => {
+const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId, hideText }) => {
   const { id } = useResource();
   const invalidate = useInvalidate();
 
@@ -74,11 +63,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({
         {...buttonProps}
         onClick={() => setIsModalOpen(true)}
         disabled={!permissionData?.can}
-        title={
-          permissionData?.can
-            ? undefined
-            : "You don't have permissions to access"
-        }
+        title={permissionData?.can ? undefined : "You don't have permissions to access"}
         icon={<PlayCircleOutlined />}
       >
         {!hideText && "Run process"}
@@ -92,15 +77,10 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({
         }}
         footer={<></>}
       >
-        <Form
-          schema={JSON.parse(processData?.data?.user_params ?? "{}")}
-          validator={validator}
-          onSubmit={onSubmit}
-        >
+        <Form schema={JSON.parse(processData?.data?.user_params ?? "{}")} validator={validator} onSubmit={onSubmit}>
           {!processData?.data?.user_params && (
             <Paragraph>
-              Form is empty. Set it up in process' user params or run the
-              process now without passing any params.
+              Form is empty. Set it up in process' user params or run the process now without passing any params.
             </Paragraph>
           )}
           <Space align="start">

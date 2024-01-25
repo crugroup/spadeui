@@ -1,12 +1,4 @@
-import {
-  DeleteButton,
-  EditButton,
-  FilterDropdown,
-  List,
-  ShowButton,
-  useSelect,
-  useTable,
-} from "@refinedev/antd";
+import { DeleteButton, EditButton, FilterDropdown, List, ShowButton, useSelect, useTable } from "@refinedev/antd";
 import { BaseRecord, IResourceComponentsProps, useMany } from "@refinedev/core";
 import { Input, Select, Space, Table } from "antd";
 import React from "react";
@@ -36,11 +28,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
 
   return (
     <List>
-      <Table
-        {...tableProps}
-        pagination={{ ...tableProps.pagination, showSizeChanger: false }}
-        rowKey="id"
-      >
+      <Table {...tableProps} pagination={{ ...tableProps.pagination, showSizeChanger: false }} rowKey="id">
         <Table.Column
           dataIndex="code"
           title="Code"
@@ -65,11 +53,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
           dataIndex={["executor"]}
           title="Executor"
           render={(value) =>
-            executorIsLoading ? (
-              <>Loading...</>
-            ) : (
-              executorData?.data?.find((item) => item.id === value)?.name
-            )
+            executorIsLoading ? <>Loading...</> : executorData?.data?.find((item) => item.id === value)?.name
           }
           sorter
           filterDropdown={(props) => (
@@ -86,11 +70,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
               <EditButton hideText size="small" recordItemId={record.id} />
               <ShowButton hideText size="small" recordItemId={record.id} />
               <DeleteButton hideText size="small" recordItemId={record.id} />
-              <ProcessRunButton
-                hideText
-                buttonProps={{ size: "small", type: "primary" }}
-                recordItemId={record.id}
-              />
+              <ProcessRunButton hideText buttonProps={{ size: "small", type: "primary" }} recordItemId={record.id} />
             </Space>
           )}
         />

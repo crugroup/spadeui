@@ -63,12 +63,7 @@ export const FileCreate: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Select
-            {...tagsSelectProps}
-            mode="tags"
-            style={{ width: "100%" }}
-            placeholder="Tags"
-          />
+          <Select {...tagsSelectProps} mode="tags" style={{ width: "100%" }} placeholder="Tags" />
         </Form.Item>
         <Form.Item
           label="Format"
