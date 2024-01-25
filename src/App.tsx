@@ -59,9 +59,9 @@ import {
 import { UpdatePassword } from "./pages/updatePassword";
 import { dataProvider } from "./rest-data-provider";
 
-import cruLogo from "./assets/cru.jpg";
+import cruLogo from "./assets/cru.svg";
 import exlabsLogo from "./assets/exlabs.png";
-import githubLogo from "./assets/github.png";
+import githubLogo from "./assets/github.svg";
 
 axiosHelper.setAxiosTokenInterceptor();
 
@@ -198,18 +198,18 @@ function App() {
                           Footer={() => (
                             <Footer style={{ position: "sticky", bottom: 0 }}>
                               <Space size="middle" style={{ float: "right" }}>
-                                <a href="https://exlabs.com" target="_blank">
-                                  <Image
-                                    height={24}
-                                    preview={false}
-                                    src={exlabsLogo}
-                                  />
-                                </a>
                                 <a href="https://crugroup.com" target="_blank">
                                   <Image
                                     height={24}
                                     preview={false}
                                     src={cruLogo}
+                                  />
+                                </a>
+                                <a href="https://exlabs.com" target="_blank">
+                                  <Image
+                                    height={24}
+                                    preview={false}
+                                    src={exlabsLogo}
                                   />
                                 </a>
                                 <a
