@@ -5,12 +5,7 @@ import {
   NodeIndexOutlined,
   PlayCircleOutlined,
 } from "@ant-design/icons";
-import {
-  ErrorComponent,
-  ThemedLayoutV2,
-  ThemedSiderV2,
-  useNotificationProvider,
-} from "@refinedev/antd";
+import { ErrorComponent, ThemedLayoutV2, ThemedSiderV2, useNotificationProvider } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 import { Authenticated, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
@@ -29,33 +24,13 @@ import { API_URL, USER_PERMISSIONS_KEY, authProvider } from "./authProvider";
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import axiosHelper from "./helpers/axios-token-interceptor";
-import {
-  ExecutorCreate,
-  ExecutorEdit,
-  ExecutorList,
-  ExecutorShow,
-} from "./pages/executors";
-import {
-  FileFormatCreate,
-  FileFormatEdit,
-  FileFormatList,
-  FileFormatShow,
-} from "./pages/fileformats";
-import {
-  FileProcessorCreate,
-  FileProcessorEdit,
-  FileProcessorList,
-  FileProcessorShow,
-} from "./pages/fileprocessors";
+import { ExecutorCreate, ExecutorEdit, ExecutorList, ExecutorShow } from "./pages/executors";
+import { FileFormatCreate, FileFormatEdit, FileFormatList, FileFormatShow } from "./pages/fileformats";
+import { FileProcessorCreate, FileProcessorEdit, FileProcessorList, FileProcessorShow } from "./pages/fileprocessors";
 import { FileCreate, FileEdit, FileList, FileShow } from "./pages/files";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
-import {
-  ProcessCreate,
-  ProcessEdit,
-  ProcessList,
-  ProcessShow,
-} from "./pages/processes";
+import { ProcessCreate, ProcessEdit, ProcessList, ProcessShow } from "./pages/processes";
 import { UpdatePassword } from "./pages/updatePassword";
 import { dataProvider } from "./rest-data-provider";
 
@@ -88,10 +63,9 @@ function App() {
                     }
 
                     // Permissions are stored as a stringified JSON response from /api/permissions in local storage
-                    const permissions: { name: string; codename: string }[] =
-                      JSON.parse(
-                        localStorage.getItem(USER_PERMISSIONS_KEY) ?? "[]"
-                      );
+                    const permissions: { name: string; codename: string }[] = JSON.parse(
+                      localStorage.getItem(USER_PERMISSIONS_KEY) ?? "[]"
+                    );
 
                     // Superuser has access to all resources and actions
                     if (permissions.some((p) => p.codename === "*")) {
@@ -99,14 +73,10 @@ function App() {
                     }
 
                     // Action names used by Refine are different from the ones used by Django
-                    const actionMapped =
-                      ACTIONS_MAPPING[action as keyof typeof ACTIONS_MAPPING];
+                    const actionMapped = ACTIONS_MAPPING[action as keyof typeof ACTIONS_MAPPING];
 
                     return {
-                      can: permissions.some(
-                        (p) =>
-                          p.codename === `${actionMapped}_${singular(resource)}`
-                      ),
+                      can: permissions.some((p) => p.codename === `${actionMapped}_${singular(resource)}`),
                     };
                   },
                 }}
@@ -183,10 +153,7 @@ function App() {
                 <Routes>
                   <Route
                     element={
-                      <Authenticated
-                        key="authenticated-inner"
-                        fallback={<CatchAllNavigate to="/login" />}
-                      >
+                      <Authenticated key="authenticated-inner" fallback={<CatchAllNavigate to="/login" />}>
                         <ThemedLayoutV2
                           Header={() => <Header sticky />}
                           Sider={(props) => <ThemedSiderV2 {...props} fixed />}
@@ -199,28 +166,13 @@ function App() {
                             <Footer style={{ position: "sticky", bottom: 0 }}>
                               <Space size="middle" style={{ float: "right" }}>
                                 <a href="https://crugroup.com" target="_blank">
-                                  <Image
-                                    height={24}
-                                    preview={false}
-                                    src={cruLogo}
-                                  />
+                                  <Image height={24} preview={false} src={cruLogo} />
                                 </a>
                                 <a href="https://exlabs.com" target="_blank">
-                                  <Image
-                                    height={24}
-                                    preview={false}
-                                    src={exlabsLogo}
-                                  />
+                                  <Image height={24} preview={false} src={exlabsLogo} />
                                 </a>
-                                <a
-                                  href="https://github.com/crugroup/spadeshaft"
-                                  target="_blank"
-                                >
-                                  <Image
-                                    height={24}
-                                    preview={false}
-                                    src={githubLogo}
-                                  />
+                                <a href="https://github.com/crugroup/spadeshaft" target="_blank">
+                                  <Image height={24} preview={false} src={githubLogo} />
                                 </a>
                               </Space>
                             </Footer>
@@ -231,20 +183,14 @@ function App() {
                       </Authenticated>
                     }
                   >
-                    <Route
-                      index
-                      element={<NavigateToResource resource="files" />}
-                    />
+                    <Route index element={<NavigateToResource resource="files" />} />
                     <Route path="/files">
                       <Route index element={<FileList />} />
                       <Route path="create" element={<FileCreate />} />
                       <Route path="edit/:id" element={<FileEdit />} />
                       <Route path="show/:id" element={<FileShow />} />
                     </Route>
-                    <Route
-                      index
-                      element={<NavigateToResource resource="fileformats" />}
-                    />
+                    <Route index element={<NavigateToResource resource="fileformats" />} />
                     <Route path="/fileformats">
                       <Route index element={<FileFormatList />} />
                       <Route path="create" element={<FileFormatCreate />} />
@@ -273,23 +219,14 @@ function App() {
                   </Route>
                   <Route
                     element={
-                      <Authenticated
-                        key="authenticated-outer"
-                        fallback={<Outlet />}
-                      >
+                      <Authenticated key="authenticated-outer" fallback={<Outlet />}>
                         <NavigateToResource />
                       </Authenticated>
                     }
                   >
                     <Route path="/login" element={<Login />} />
-                    <Route
-                      path="/forgot-password"
-                      element={<ForgotPassword />}
-                    />
-                    <Route
-                      path="/update-password"
-                      element={<UpdatePassword />}
-                    />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/update-password" element={<UpdatePassword />} />
                   </Route>
                 </Routes>
 

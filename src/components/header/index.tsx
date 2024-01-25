@@ -12,9 +12,7 @@ type IUser = {
   email: string;
 };
 
-export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
-  sticky,
-}) => {
+export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
   const { token } = useToken();
   const { data: user } = useGetIdentity<IUser>();
 
@@ -37,11 +35,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
     <AntdLayout.Header style={headerStyles}>
       <Space>
         <Space style={{ marginLeft: "8px" }} size="middle">
-          {user?.name ? (
-            <Text strong>{user.name}</Text>
-          ) : (
-            <Text strong>{user?.email}</Text>
-          )}
+          {user?.name ? <Text strong>{user.name}</Text> : <Text strong>{user?.email}</Text>}
         </Space>
       </Space>
     </AntdLayout.Header>

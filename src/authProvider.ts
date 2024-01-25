@@ -43,10 +43,7 @@ export const authProvider: AuthBindings = {
           });
 
           if (resPermissions.status === 200) {
-            localStorage.setItem(
-              USER_PERMISSIONS_KEY,
-              JSON.stringify(resPermissions.data)
-            );
+            localStorage.setItem(USER_PERMISSIONS_KEY, JSON.stringify(resPermissions.data));
           }
 
           return {
@@ -151,10 +148,7 @@ export const authProvider: AuthBindings = {
     if (token) {
       return {
         id: localStorage.getItem(USER_ID_KEY),
-        name: [
-          localStorage.getItem(USER_FIRST_NAME_KEY),
-          localStorage.getItem(USER_LAST_NAME_KEY),
-        ]
+        name: [localStorage.getItem(USER_FIRST_NAME_KEY), localStorage.getItem(USER_LAST_NAME_KEY)]
           .filter(Boolean)
           .join(" "),
         email: localStorage.getItem(USER_EMAIL_KEY),
