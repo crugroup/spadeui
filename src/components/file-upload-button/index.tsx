@@ -22,7 +22,7 @@ import {
 import { ButtonProps } from "antd/lib";
 import axios from "axios";
 import prettyBytes from "pretty-bytes";
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { ACCESS_TOKEN_KEY, API_URL } from "../../authProvider";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
@@ -56,11 +56,16 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({
     undefined
   );
 
+  const uploadFileName = useMemo(
+    () => selectedFile?.name ?? `File uploaded at ${new Date().toISOString()}`,
+    [selectedFile?.name]
+  );
+
   const onSubmit = async ({ formData }: { formData?: FormData }) => {
     // Upload the file
     const form = new FormData();
     form.append("file", selectedFile as FileType);
-    form.append("filename", selectedFile?.name ?? "");
+    form.append("filename", uploadFileName);
     form.append("params", JSON.stringify(formData));
 
     const fileUploadResponse = await axios.post(
@@ -69,7 +74,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({
       {
         headers: {
           authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN_KEY)}`,
-          "Content-Disposition": `attachment; filename="${selectedFile?.name}"`,
+          "Content-Disposition": `attachment; filename="${uploadFileName}"`,
         },
       }
     );
