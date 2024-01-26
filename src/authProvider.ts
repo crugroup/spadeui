@@ -2,10 +2,16 @@ import { AuthBindings } from "@refinedev/core";
 import { notification } from "antd";
 import axios from "axios";
 
+export const API_URL = "http://localhost:8000/api/v1";
 export const ACCESS_TOKEN_KEY = "access";
 export const REFRESH_TOKEN_KEY = "refresh";
 export const USER_PERMISSIONS_KEY = "userPermissions";
-export const API_URL = "http://localhost:8000/api/v1";
+export const USER_DATA_KEY = "userFullName";
+
+export type UserData = {
+  fullName: string;
+  email: string;
+};
 
 export const authProvider: AuthBindings = {
   login: async ({ username, email, password }) => {
@@ -17,6 +23,26 @@ export const authProvider: AuthBindings = {
           localStorage.setItem(ACCESS_TOKEN_KEY, res.data.access);
           localStorage.setItem(REFRESH_TOKEN_KEY, res.data.refresh);
 
+          // Update user data on login
+          const resUser = await axios.get(`${API_URL}/users/me`, {
+            headers: {
+              authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN_KEY)}`,
+            },
+          });
+
+          if (resUser.status === 200) {
+            localStorage.setItem(
+              USER_DATA_KEY,
+              JSON.stringify({
+                email,
+                fullName:
+                  resUser.data.first_name || resUser.data.last_name
+                    ? `${resUser.data.first_name} ${resUser.data.last_name}`
+                    : null,
+              })
+            );
+          }
+
           // Update permissions list on login
           const resPermissions = await axios.get(`${API_URL}/permissions`, {
             headers: {
@@ -25,10 +51,7 @@ export const authProvider: AuthBindings = {
           });
 
           if (resPermissions.status === 200) {
-            localStorage.setItem(
-              USER_PERMISSIONS_KEY,
-              JSON.stringify(resPermissions.data)
-            );
+            localStorage.setItem(USER_PERMISSIONS_KEY, JSON.stringify(resPermissions.data));
           }
 
           return {
@@ -56,9 +79,7 @@ export const authProvider: AuthBindings = {
     };
   },
   logout: async () => {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
-    localStorage.removeItem(USER_PERMISSIONS_KEY);
+    localStorage.clear();
 
     return {
       success: true,
@@ -127,16 +148,19 @@ export const authProvider: AuthBindings = {
     };
   },
   getPermissions: async () => null,
-  getIdentity: async () => {
+  getIdentity: async (): Promise<UserData | null> => {
     const token = localStorage.getItem(ACCESS_TOKEN_KEY);
 
     if (token) {
+      const userData = localStorage.getItem(USER_DATA_KEY);
+      const parsedUserData = userData ? JSON.parse(userData) : null;
+
       return {
-        id: 1,
-        name: "John Doe",
-        avatar: "https://i.pravatar.cc/300",
+        fullName: parsedUserData?.fullName,
+        email: parsedUserData?.email,
       };
     }
+
     return null;
   },
   onError: async (error) => {

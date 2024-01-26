@@ -83,11 +83,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
       <Title level={5}>Tags</Title>
-      <Typography.Paragraph>
-        {record?.tags?.map((tag: string) => (
-          <Tag key={tag}>{tag}</Tag>
-        ))}
-      </Typography.Paragraph>
+      <Typography.Paragraph>{record?.tags?.map((tag: string) => <Tag key={tag}>{tag}</Tag>)}</Typography.Paragraph>
       <Title level={5}>Format</Title>
       <Typography.Paragraph>
         {record?.format &&
@@ -128,21 +124,11 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       </Typography.Paragraph>
       <Title level={5}>User params</Title>
       <Typography.Paragraph>
-        <Input.TextArea
-          value={record?.user_params ?? ""}
-          readOnly
-          rows={8}
-          style={{ fontFamily: "monospace" }}
-        />
+        <Input.TextArea value={record?.user_params ?? ""} readOnly rows={8} style={{ fontFamily: "monospace" }} />
       </Typography.Paragraph>
       <Title level={5}>System params</Title>
       <Typography.Paragraph>
-        <Input.TextArea
-          value={record?.system_params ?? ""}
-          readOnly
-          rows={8}
-          style={{ fontFamily: "monospace" }}
-        />
+        <Input.TextArea value={record?.system_params ?? ""} readOnly rows={8} style={{ fontFamily: "monospace" }} />
       </Typography.Paragraph>
       <Title level={5}>Linked process</Title>
       <Typography.Paragraph>
@@ -164,12 +150,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
           ))}
       </Typography.Paragraph>
       <CanAccess resource="fileuploads" action="show">
-        <List
-          title="Uploads"
-          breadcrumb={false}
-          canCreate={false}
-          resource="fileuploads"
-        >
+        <List title="Uploads" breadcrumb={false} canCreate={false} resource="fileuploads">
           <Table
             {...uploadTableProps}
             pagination={{
@@ -179,11 +160,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             rowKey="id"
           >
             <Table.Column dataIndex="name" title="Name" />
-            <Table.Column
-              dataIndex="size"
-              title="Size"
-              render={(value) => prettyBytes(value)}
-            />
+            <Table.Column dataIndex="size" title="Size" render={(value) => prettyBytes(value)} />
             <Table.Column
               dataIndex="created_at"
               title="Created At"
@@ -193,11 +170,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
               dataIndex={["user"]}
               title="User"
               render={(value) =>
-                userIsLoading ? (
-                  <>Loading...</>
-                ) : (
-                  userData?.data?.find((item) => item.id === value)?.email
-                )
+                userIsLoading ? <>Loading...</> : userData?.data?.find((item) => item.id === value)?.email
               }
             />
           </Table>

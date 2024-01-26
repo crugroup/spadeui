@@ -11,10 +11,7 @@ export const DEFAULT_PAGE_SIZE = 100;
 export const dataProvider = (
   apiUrl: string,
   httpClient: AxiosInstance = axiosInstance
-): Omit<
-  Required<DataProvider>,
-  "createMany" | "updateMany" | "deleteMany"
-> => ({
+): Omit<Required<DataProvider>, "createMany" | "updateMany" | "deleteMany"> => ({
   getList: async ({ resource, pagination, filters, sorters, meta }) => {
     const url = `${apiUrl}/${resource}`;
 
@@ -39,12 +36,9 @@ export const dataProvider = (
       query.ordering = generatedSort;
     }
 
-    const { data, headers } = await httpClient[requestMethod](
-      `${url}?${stringify(query)}&${stringify(queryFilters)}`,
-      {
-        headers: headersFromMeta,
-      }
-    );
+    const { data, headers } = await httpClient[requestMethod](`${url}?${stringify(query)}&${stringify(queryFilters)}`, {
+      headers: headersFromMeta,
+    });
 
     const total = data.count ?? +headers["x-total-count"] ?? data.length;
 
@@ -58,10 +52,7 @@ export const dataProvider = (
     const { headers, method } = meta ?? {};
     const requestMethod = (method as MethodTypes) ?? "get";
 
-    const { data } = await httpClient[requestMethod](
-      `${apiUrl}/${resource}?${stringify({ id: ids })}`,
-      { headers }
-    );
+    const { data } = await httpClient[requestMethod](`${apiUrl}/${resource}?${stringify({ id: ids })}`, { headers });
 
     return {
       data: data.results,
@@ -153,15 +144,7 @@ export const dataProvider = (
     return apiUrl;
   },
 
-  custom: async ({
-    url,
-    method,
-    filters,
-    sorters,
-    payload,
-    query,
-    headers,
-  }) => {
+  custom: async ({ url, method, filters, sorters, payload, query, headers }) => {
     let requestUrl = `${url}?`;
 
     if (sorters) {

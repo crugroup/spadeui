@@ -1,24 +1,9 @@
 import { ImportOutlined } from "@ant-design/icons";
-import {
-  BaseKey,
-  useCan,
-  useInvalidate,
-  useOne,
-  useResource,
-} from "@refinedev/core";
+import { BaseKey, useCan, useInvalidate, useOne, useResource } from "@refinedev/core";
 import Form from "@rjsf/antd";
 import validator from "@rjsf/validator-ajv8";
 import type { GetProp } from "antd";
-import {
-  Button,
-  Modal,
-  Space,
-  Typography,
-  Upload,
-  UploadFile,
-  UploadProps,
-  notification,
-} from "antd";
+import { Button, Modal, Space, Typography, Upload, UploadFile, UploadProps, notification } from "antd";
 import { ButtonProps } from "antd/lib";
 import axios from "axios";
 import prettyBytes from "pretty-bytes";
@@ -33,11 +18,7 @@ type FileUploadButtonProps = {
   hideText?: boolean;
 };
 
-const FileUploadButton: FC<FileUploadButtonProps> = ({
-  buttonProps,
-  recordItemId,
-  hideText,
-}) => {
+const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId, hideText }) => {
   const { id } = useResource();
   const invalidate = useInvalidate();
 
@@ -52,9 +33,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<UploadFile | undefined>(
-    undefined
-  );
+  const [selectedFile, setSelectedFile] = useState<UploadFile | undefined>(undefined);
 
   const uploadFileName = useMemo(
     () => selectedFile?.name ?? `File uploaded at ${new Date().toISOString()}`,
@@ -96,11 +75,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({
         {...buttonProps}
         onClick={() => setIsModalOpen(true)}
         disabled={!permissionData?.can}
-        title={
-          permissionData?.can
-            ? undefined
-            : "You don't have permissions to access"
-        }
+        title={permissionData?.can ? undefined : "You don't have permissions to access"}
         icon={<ImportOutlined />}
       >
         {!hideText && "File upload"}
@@ -132,9 +107,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({
           <Space style={{ minHeight: 60 }}>
             <Typography.Title level={5}>
               {selectedFile
-                ? `${selectedFile.name} (${prettyBytes(
-                    selectedFile.size ?? 0
-                  )})`
+                ? `${selectedFile.name} (${prettyBytes(selectedFile.size ?? 0)})`
                 : "Select file for upload"}
             </Typography.Title>
           </Space>
@@ -148,8 +121,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({
           <Space align="start">
             {!fileData?.data?.user_params && (
               <Typography.Paragraph>
-                Form is empty. Set it up in file's user params or upload the
-                file now without passing any params.
+                Form is empty. Set it up in file's user params or upload the file now without passing any params.
               </Typography.Paragraph>
             )}
             <Button htmlType="submit" type="primary">

@@ -1,11 +1,4 @@
-import {
-  DeleteButton,
-  EditButton,
-  FilterDropdown,
-  List,
-  ShowButton,
-  useTable,
-} from "@refinedev/antd";
+import { DeleteButton, EditButton, FilterDropdown, List, ShowButton, useTable } from "@refinedev/antd";
 import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
 import { Input, Space, Table } from "antd";
 import React from "react";
@@ -21,11 +14,7 @@ export const FileFormatList: React.FC<IResourceComponentsProps> = () => {
 
   return (
     <List canCreate={true}>
-      <Table
-        {...tableProps}
-        pagination={{ ...tableProps.pagination, showSizeChanger: false }}
-        rowKey="id"
-      >
+      <Table {...tableProps} pagination={{ ...tableProps.pagination, showSizeChanger: false }} rowKey="id">
         <Table.Column
           dataIndex="format"
           title="Format"

@@ -1,12 +1,4 @@
-import {
-  DeleteButton,
-  EditButton,
-  FilterDropdown,
-  List,
-  ShowButton,
-  useSelect,
-  useTable,
-} from "@refinedev/antd";
+import { DeleteButton, EditButton, FilterDropdown, List, ShowButton, useSelect, useTable } from "@refinedev/antd";
 import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
 import { Input, Select, Space, Table, Tag } from "antd";
 import React from "react";
@@ -29,11 +21,7 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
 
   return (
     <List canCreate={true}>
-      <Table
-        {...tableProps}
-        pagination={{ ...tableProps.pagination, showSizeChanger: false }}
-        rowKey="id"
-      >
+      <Table {...tableProps} pagination={{ ...tableProps.pagination, showSizeChanger: false }} rowKey="id">
         <Table.Column
           dataIndex="code"
           title="Code"
@@ -51,11 +39,7 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
           render={(tags: string[]) => tags.map((tag) => <Tag>{tag}</Tag>)}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
-              <Select
-                allowClear
-                style={{ minWidth: 200 }}
-                {...tagsSelectProps}
-              />
+              <Select allowClear style={{ minWidth: 200 }} {...tagsSelectProps} />
             </FilterDropdown>
           )}
         />
@@ -67,11 +51,7 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
               <EditButton hideText size="small" recordItemId={record.id} />
               <ShowButton hideText size="small" recordItemId={record.id} />
               <DeleteButton hideText size="small" recordItemId={record.id} />
-              <FileUploadButton
-                hideText
-                buttonProps={{ size: "small", type: "primary" }}
-                recordItemId={record.id}
-              />
+              <FileUploadButton hideText buttonProps={{ size: "small", type: "primary" }} recordItemId={record.id} />
             </Space>
           )}
         />

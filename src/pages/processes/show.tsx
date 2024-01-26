@@ -1,11 +1,4 @@
-import {
-  DateField,
-  List,
-  NumberField,
-  Show,
-  TextField,
-  useTable,
-} from "@refinedev/antd";
+import { DateField, List, NumberField, Show, TextField, useTable } from "@refinedev/antd";
 import {
   CanAccess,
   IResourceComponentsProps,
@@ -93,29 +86,14 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       </Typography.Paragraph>
       <Title level={5}>User params</Title>
       <Typography.Paragraph>
-        <Input.TextArea
-          value={record?.user_params ?? ""}
-          readOnly
-          rows={8}
-          style={{ fontFamily: "monospace" }}
-        />
+        <Input.TextArea value={record?.user_params ?? ""} readOnly rows={8} style={{ fontFamily: "monospace" }} />
       </Typography.Paragraph>
       <Title level={5}>System params</Title>
       <Typography.Paragraph>
-        <Input.TextArea
-          value={record?.system_params ?? ""}
-          readOnly
-          rows={8}
-          style={{ fontFamily: "monospace" }}
-        />
+        <Input.TextArea value={record?.system_params ?? ""} readOnly rows={8} style={{ fontFamily: "monospace" }} />
       </Typography.Paragraph>
       <CanAccess resource="processruns" action="show">
-        <List
-          title="Process runs"
-          breadcrumb={false}
-          canCreate={false}
-          resource="processruns"
-        >
+        <List title="Process runs" breadcrumb={false} canCreate={false} resource="processruns">
           <Table
             {...processRunsTableProps}
             pagination={{
@@ -135,11 +113,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
               dataIndex={["user"]}
               title="User"
               render={(value) =>
-                userIsLoading ? (
-                  <>Loading...</>
-                ) : (
-                  userData?.data?.find((item) => item.id === value)?.email
-                )
+                userIsLoading ? <>Loading...</> : userData?.data?.find((item) => item.id === value)?.email
               }
             />
           </Table>
