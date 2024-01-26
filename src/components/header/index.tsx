@@ -1,20 +1,15 @@
-import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
+import React from "react";
 import { useGetIdentity } from "@refinedev/core";
 import { Layout as AntdLayout, Space, Typography, theme } from "antd";
-import React from "react";
+import { UserData } from "../../authProvider";
+import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
 
 const { Text } = Typography;
 const { useToken } = theme;
 
-type IUser = {
-  id: number;
-  name: string;
-  email: string;
-};
-
 export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
   const { token } = useToken();
-  const { data: user } = useGetIdentity<IUser>();
+  const { data: user } = useGetIdentity<UserData>();
 
   const headerStyles: React.CSSProperties = {
     backgroundColor: token.colorBgElevated,
@@ -35,7 +30,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) =>
     <AntdLayout.Header style={headerStyles}>
       <Space>
         <Space style={{ marginLeft: "8px" }} size="middle">
-          {user?.name ? <Text strong>{user.name}</Text> : <Text strong>{user?.email}</Text>}
+          <Text strong>{user?.fullName || user?.email}</Text>
         </Space>
       </Space>
     </AntdLayout.Header>

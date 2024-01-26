@@ -2,14 +2,16 @@ import { AuthBindings } from "@refinedev/core";
 import { notification } from "antd";
 import axios from "axios";
 
+export const API_URL = "http://localhost:8000/api/v1";
 export const ACCESS_TOKEN_KEY = "access";
 export const REFRESH_TOKEN_KEY = "refresh";
 export const USER_PERMISSIONS_KEY = "userPermissions";
-export const USER_FIRST_NAME_KEY = "userFirstName";
-export const USER_LAST_NAME_KEY = "userLastName";
-export const USER_ID_KEY = "userId";
-export const USER_EMAIL_KEY = "userEmail";
-export const API_URL = "http://localhost:8000/api/v1";
+export const USER_DATA_KEY = "userFullName";
+
+export type UserData = {
+  fullName: string;
+  email: string;
+};
 
 export const authProvider: AuthBindings = {
   login: async ({ username, email, password }) => {
@@ -29,10 +31,16 @@ export const authProvider: AuthBindings = {
           });
 
           if (resUser.status === 200) {
-            localStorage.setItem(USER_FIRST_NAME_KEY, resUser.data.first_name);
-            localStorage.setItem(USER_LAST_NAME_KEY, resUser.data.last_name);
-            localStorage.setItem(USER_ID_KEY, resUser.data.id);
-            localStorage.setItem(USER_EMAIL_KEY, resUser.data.email);
+            localStorage.setItem(
+              USER_DATA_KEY,
+              JSON.stringify({
+                email,
+                fullName:
+                  resUser.data.first_name || resUser.data.last_name
+                    ? `${resUser.data.first_name} ${resUser.data.last_name}`
+                    : null,
+              })
+            );
           }
 
           // Update permissions list on login
@@ -71,9 +79,7 @@ export const authProvider: AuthBindings = {
     };
   },
   logout: async () => {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
-    localStorage.removeItem(USER_PERMISSIONS_KEY);
+    localStorage.clear();
 
     return {
       success: true,
@@ -142,18 +148,19 @@ export const authProvider: AuthBindings = {
     };
   },
   getPermissions: async () => null,
-  getIdentity: async () => {
+  getIdentity: async (): Promise<UserData | null> => {
     const token = localStorage.getItem(ACCESS_TOKEN_KEY);
 
     if (token) {
+      const userData = localStorage.getItem(USER_DATA_KEY);
+      const parsedUserData = userData ? JSON.parse(userData) : null;
+
       return {
-        id: localStorage.getItem(USER_ID_KEY),
-        name: [localStorage.getItem(USER_FIRST_NAME_KEY), localStorage.getItem(USER_LAST_NAME_KEY)]
-          .filter(Boolean)
-          .join(" "),
-        email: localStorage.getItem(USER_EMAIL_KEY),
+        fullName: parsedUserData?.fullName,
+        email: parsedUserData?.email,
       };
     }
+
     return null;
   },
   onError: async (error) => {
