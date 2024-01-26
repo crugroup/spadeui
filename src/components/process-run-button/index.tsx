@@ -1,12 +1,12 @@
 import { PlayCircleOutlined } from "@ant-design/icons";
 import { BaseKey, useCan, useDataProvider, useInvalidate, useOne, useResource } from "@refinedev/core";
-import Form from "@rjsf/antd";
 import validator from "@rjsf/validator-ajv8";
 import { Button, Modal, Space, notification } from "antd";
 import { ButtonProps } from "antd/lib";
 import Paragraph from "antd/lib/typography/Paragraph";
 import { FC, useState } from "react";
-import { API_URL } from "../../authProvider";
+import { API_URL } from "../../auth-provider";
+import { RjsfForm } from "../rjsf-form/rjsf-form";
 
 type ProcessRunButtonProps = {
   buttonProps: ButtonProps;
@@ -64,8 +64,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         onClick={() => setIsModalOpen(true)}
         disabled={!permissionData?.can}
         title={permissionData?.can ? undefined : "You don't have permissions to access"}
-        icon={<PlayCircleOutlined />}
-      >
+        icon={<PlayCircleOutlined />}>
         {!hideText && "Run process"}
       </Button>
       <Modal
@@ -75,9 +74,8 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         onCancel={() => {
           setIsModalOpen(false);
         }}
-        footer={<></>}
-      >
-        <Form schema={JSON.parse(processData?.data?.user_params ?? "{}")} validator={validator} onSubmit={onSubmit}>
+        footer={<></>}>
+        <RjsfForm schema={JSON.parse(processData?.data?.user_params ?? "{}")} validator={validator} onSubmit={onSubmit}>
           {!processData?.data?.user_params && (
             <Paragraph>
               Form is empty. Set it up in process' user params or run the process now without passing any params.
@@ -88,7 +86,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
               Submit
             </Button>
           </Space>
-        </Form>
+        </RjsfForm>
       </Modal>
     </>
   );

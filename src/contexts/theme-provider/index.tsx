@@ -1,22 +1,22 @@
 import { RefineThemes } from "@refinedev/antd";
 import { ConfigProvider, theme } from "antd";
 import { PropsWithChildren, createContext, useEffect, useState } from "react";
+import { darkColors, lightColors } from "./colors";
 
-type ColorModeContextType = {
+type ThemeProviderType = {
   mode: string;
   setMode: (mode: string) => void;
 };
 
-export const ColorModeContext = createContext<ColorModeContextType>({} as ColorModeContextType);
 
-export const ColorModeContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  // const colorModeFromLocalStorage = localStorage.getItem("colorMode");
-  // const isSystemPreferenceDark = window?.matchMedia(
-  //   "(prefers-color-scheme: dark)"
-  // ).matches;
+export const ThemeProviderContext = createContext<ThemeProviderType>({} as ThemeProviderType);
 
-  // const systemPreference = isSystemPreferenceDark ? "dark" : "light";
-  const [mode, setMode] = useState("light");
+export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const isSystemPreferenceDark = window?.matchMedia(
+    "(prefers-color-scheme: dark)"
+  ).matches;
+  const systemPreference = isSystemPreferenceDark ? "dark" : "light";
+  const [mode, setMode] = useState(window.localStorage.getItem("colorMode") || systemPreference);
 
   useEffect(() => {
     window.localStorage.setItem("colorMode", mode);
@@ -33,21 +33,22 @@ export const ColorModeContextProvider: React.FC<PropsWithChildren> = ({ children
   const { darkAlgorithm, defaultAlgorithm } = theme;
 
   return (
-    <ColorModeContext.Provider
+    <ThemeProviderContext.Provider
       value={{
         setMode: setColorMode,
         mode,
-      }}
-    >
+      }}>
       <ConfigProvider
-        // you can change the theme colors here. example: ...RefineThemes.Magenta,
         theme={{
           ...RefineThemes.Blue,
           algorithm: mode === "light" ? defaultAlgorithm : darkAlgorithm,
-        }}
-      >
+          token: {
+            fontFamily: "Inter, sans-serif",
+            ...mode === "light" ? lightColors : darkColors,
+          },
+        }}>
         {children}
       </ConfigProvider>
-    </ColorModeContext.Provider>
+    </ThemeProviderContext.Provider>
   );
 };

@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
-import { ACCESS_TOKEN_KEY, API_URL, REFRESH_TOKEN_KEY } from "../authProvider";
+import { ACCESS_TOKEN_KEY, API_URL, REFRESH_TOKEN_KEY } from "../auth-provider";
 
 const axiosInstance = axios.create();
 const axiosRefreshInstance = axios.create();
