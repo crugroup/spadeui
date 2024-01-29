@@ -43,7 +43,7 @@ jobs:
         uses: docker/build-push-action@v5.1.0
         with:
           context: .
-          file: ./compose/production/django/Dockerfile
+          file: ./docker/production.Dockerfile
           push: ${{ github.event_name != 'pull_request' && github.event.pull_request.merged }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
