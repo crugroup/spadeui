@@ -1,9 +1,8 @@
-FROM node:18
-
+FROM node:18 AS build
 COPY . /app
 WORKDIR /app
-RUN yarn install --immutable --production
+RUN yarn install && yarn run build
 
-EXPOSE 3000
-
-CMD ["yarn", "start"]
+FROM nginx:1.17.8-alpine
+COPY --from=build /app/dist /etc/nginx/html
+COPY ./docker/default.conf /etc/nginx/conf.d/default.conf
