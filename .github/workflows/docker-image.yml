@@ -2,6 +2,8 @@ name: Docker Image CI
 
 on:
   push:
+    branches:
+      - "develop"
     tags:
       - "v*"
   pull_request:
@@ -38,6 +40,12 @@ jobs:
         uses: docker/metadata-action@v5.5.0
         with:
           images: ghcr.io/crugroup/spadeshaft
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
   
       - name: Build and push Docker image
         uses: docker/build-push-action@v5.1.0
@@ -45,6 +53,6 @@ jobs:
           context: .
           file: ./docker/production.Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: ${{ github.event_name != 'pull_request' && github.event.pull_request.merged }}
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
