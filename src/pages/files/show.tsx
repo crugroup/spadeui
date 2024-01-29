@@ -8,7 +8,7 @@ import {
   useResource,
   useShow,
 } from "@refinedev/core";
-import { Input, Table, Tag, Typography } from "antd";
+import { Divider, Input, Table, Tag, Typography } from "antd";
 import prettyBytes from "pretty-bytes";
 import { Link } from "react-router-dom";
 import { FileUploadButton } from "../../components";
@@ -76,8 +76,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
           {defaultButtons}
           <FileUploadButton buttonProps={{ type: "primary" }} />
         </>
-      )}
-    >
+      )}>
       <Title level={5}>Code</Title>
       <TextField value={record?.code ?? ""} />
       <Title level={5}>Description</Title>
@@ -97,8 +96,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.format },
                 }) ?? "#"
-              }
-            >
+              }>
               {formatData?.data?.format}
             </Link>
           ))}
@@ -116,8 +114,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.processor },
                 }) ?? "#"
-              }
-            >
+              }>
               {processorData?.data?.name}
             </Link>
           ))}
@@ -143,13 +140,13 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.linked_process },
                 }) ?? "#"
-              }
-            >
+              }>
               {processData?.data?.code}
             </Link>
           ))}
       </Typography.Paragraph>
       <CanAccess resource="fileuploads" action="show">
+        <Divider />
         <List title="Uploads" breadcrumb={false} canCreate={false} resource="fileuploads">
           <Table
             {...uploadTableProps}
@@ -157,8 +154,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
               ...uploadTableProps.pagination,
               showSizeChanger: false,
             }}
-            rowKey="id"
-          >
+            rowKey="id">
             <Table.Column dataIndex="name" title="Name" />
             <Table.Column dataIndex="size" title="Size" render={(value) => prettyBytes(value)} />
             <Table.Column

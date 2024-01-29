@@ -8,7 +8,7 @@ import {
   useResource,
   useShow,
 } from "@refinedev/core";
-import { Input, Table, Typography } from "antd";
+import { Divider, Input, Table, Typography } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 import { ProcessRunButton } from "../../components/process-run-button";
@@ -57,8 +57,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
           {defaultButtons}
           <ProcessRunButton buttonProps={{ type: "primary" }} />
         </>
-      )}
-    >
+      )}>
       <Title level={5}>Id</Title>
       <NumberField value={record?.id ?? ""} />
       <Title level={5}>Code</Title>
@@ -78,8 +77,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.executor },
                 }) ?? "#"
-              }
-            >
+              }>
               {executorData?.data?.name}
             </Link>
           ))}
@@ -93,6 +91,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
         <Input.TextArea value={record?.system_params ?? ""} readOnly rows={8} style={{ fontFamily: "monospace" }} />
       </Typography.Paragraph>
       <CanAccess resource="processruns" action="show">
+        <Divider />
         <List title="Process runs" breadcrumb={false} canCreate={false} resource="processruns">
           <Table
             {...processRunsTableProps}
@@ -100,8 +99,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
               ...processRunsTableProps.pagination,
               showSizeChanger: false,
             }}
-            rowKey="id"
-          >
+            rowKey="id">
             <Table.Column
               dataIndex="created_at"
               title="Started At"
