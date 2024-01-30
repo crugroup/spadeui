@@ -3,10 +3,30 @@ import FileIcon from "../../public/icons/file-icon";
 import FileProcessorsIcon from "../../public/icons/file-processors-icon";
 import ExecutorsIcon from "../../public/icons/executors-icon";
 import ProcessesIcon from "../../public/icons/processes-icon";
+import SettingsIcon from "../../public/icons/settings-icon";
+import FormatListIcon from "../../public/icons/format-list-icon";
+
+export const MENU_ADMIN_TAB = "admin";
+export const MENU_USER_TAB = "work";
 
 export default [
   {
+    name: MENU_USER_TAB,
+    meta: {
+      label: "Work",
+      icon: <FormatListIcon />,
+    },
+  },
+  {
+    name: MENU_ADMIN_TAB,
+    meta: {
+      label: "Admin",
+      icon: <SettingsIcon />,
+    },
+  },
+  {
     name: "files",
+    parentName: "work",
     list: "/files",
     create: "/files/create",
     edit: "/files/edit/:id",
@@ -17,7 +37,20 @@ export default [
     },
   },
   {
+    name: "processes",
+    parentName: "work",
+    list: "/processes",
+    create: "/processes/create",
+    edit: "/processes/edit/:id",
+    show: "/processes/show/:id",
+    meta: {
+      canDelete: true,
+      icon: <ProcessesIcon />,
+    },
+  },
+  {
     name: "fileformats",
+    parentName: "admin",
     list: "/fileformats",
     create: "/fileformats/create",
     edit: "/fileformats/edit/:id",
@@ -30,6 +63,7 @@ export default [
   },
   {
     name: "fileprocessors",
+    parentName: "admin",
     list: "/fileprocessors",
     create: "/fileprocessors/create",
     edit: "/fileprocessors/edit/:id",
@@ -42,6 +76,7 @@ export default [
   },
   {
     name: "executors",
+    parentName: "admin",
     list: "/executors",
     create: "/executors/create",
     edit: "/executors/edit/:id",
@@ -49,17 +84,6 @@ export default [
     meta: {
       canDelete: true,
       icon: <ExecutorsIcon />,
-    },
-  },
-  {
-    name: "processes",
-    list: "/processes",
-    create: "/processes/create",
-    edit: "/processes/edit/:id",
-    show: "/processes/show/:id",
-    meta: {
-      canDelete: true,
-      icon: <ProcessesIcon />,
     },
   },
 ];

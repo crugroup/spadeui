@@ -13,6 +13,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ProcessRunButton } from "../../components/process-run-button";
 import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
+import IconStatusMapper from "../../components/icon-status-mapper/icon-status-mapper";
 
 const { Title } = Typography;
 
@@ -105,8 +106,8 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
               title="Started At"
               render={(value) => <DateField value={value} format="LLL" />}
             />
-            <Table.Column dataIndex="status" title="Status" />
-            <Table.Column dataIndex="result" title="Result" />
+            <Table.Column dataIndex="status" title="Status" render={(value) => <IconStatusMapper status={value} />} />
+            <Table.Column dataIndex="result" title="Result" render={(value) => <IconStatusMapper status={value} />} />
             <Table.Column
               dataIndex={["user"]}
               title="User"

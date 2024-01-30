@@ -1,10 +1,9 @@
-import LogoutIcon from "../../public/icons/logout-icon";
 import { ErrorComponent, ThemedLayoutV2, ThemedSiderV2 } from "@refinedev/antd";
-import { Authenticated } from "@refinedev/core";
+import { Authenticated, CanAccess } from "@refinedev/core";
 import { CatchAllNavigate, NavigateToResource } from "@refinedev/react-router-v6";
 import { Image, Space } from "antd";
-import { Link, Outlet, Route, Routes } from "react-router-dom";
-import { cloneElement, useContext } from "react";
+import { Link, Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import { ExecutorCreate, ExecutorEdit, ExecutorList, ExecutorShow } from "../pages/executors";
 import { FileFormatCreate, FileFormatEdit, FileFormatList, FileFormatShow } from "../pages/fileformats";
 import { FileProcessorCreate, FileProcessorEdit, FileProcessorList, FileProcessorShow } from "../pages/fileprocessors";
@@ -28,6 +27,7 @@ const spadeLogos: { [key: string]: { single: string; full: string } } = {
 };
 
 const CustomRoutes = () => {
+  const navigate = useNavigate();
   const { mode } = useContext(ThemeProviderContext);
 
   return (
@@ -44,11 +44,8 @@ const CustomRoutes = () => {
                   render={(p) => (
                     <>
                       {p.items}
-                      {cloneElement(p.logout as any, {
-                        icon: <LogoutIcon />,
-                      })}
                       <div className="icons-holder">
-                        <Space direction="vertical" align="center" size="middle" style={{ width: "100%" }}>
+                        <Space direction={p.collapsed ? "vertical" : "horizontal"} align="center" size="middle">
                           <a href="https://crugroup.com" target="_blank" rel="noopener noreferrer">
                             <Image height={24} preview={false} src="/logos/cru.svg" />
                           </a>
@@ -78,35 +75,174 @@ const CustomRoutes = () => {
         }>
         <Route index element={<NavigateToResource resource="files" />} />
         <Route path="/files">
-          <Route index element={<FileList />} />
-          <Route path="create" element={<FileCreate />} />
-          <Route path="edit/:id" element={<FileEdit />} />
-          <Route path="show/:id" element={<FileShow />} />
+          <Route
+            index
+            element={
+              <CanAccess resource="files" action="list" onUnauthorized={() => navigate("/")}>
+                <FileList />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="create"
+            element={
+              <CanAccess resource="files" action="create" onUnauthorized={() => navigate("/")}>
+                <FileCreate />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="edit/:id"
+            element={
+              <CanAccess resource="files" action="edit" onUnauthorized={() => navigate("/")}>
+                <FileEdit />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="show/:id"
+            element={
+              <CanAccess resource="files" action="show" onUnauthorized={() => navigate("/")}>
+                <FileShow />
+              </CanAccess>
+            }
+          />
         </Route>
-        <Route index element={<NavigateToResource resource="fileformats" />} />
         <Route path="/fileformats">
-          <Route index element={<FileFormatList />} />
-          <Route path="create" element={<FileFormatCreate />} />
-          <Route path="edit/:id" element={<FileFormatEdit />} />
-          <Route path="show/:id" element={<FileFormatShow />} />
+          <Route
+            index
+            element={
+              <CanAccess resource="fileformats" action="list" onUnauthorized={() => navigate("/")}>
+                <FileFormatList />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="create"
+            element={
+              <CanAccess resource="fileformats" action="create" onUnauthorized={() => navigate("/")}>
+                <FileFormatCreate />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="edit/:id"
+            element={
+              <CanAccess resource="fileformats" action="edit" onUnauthorized={() => navigate("/")}>
+                <FileFormatEdit />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="show/:id"
+            element={
+              <CanAccess resource="fileformats" action="show" onUnauthorized={() => navigate("/")}>
+                <FileFormatShow />
+              </CanAccess>
+            }
+          />
         </Route>
         <Route path="/fileprocessors">
-          <Route index element={<FileProcessorList />} />
-          <Route path="show/:id" element={<FileProcessorShow />} />
-          <Route path="edit/:id" element={<FileProcessorEdit />} />
-          <Route path="create" element={<FileProcessorCreate />} />
+          <Route
+            index
+            element={
+              <CanAccess resource="fileprocessors" action="list" onUnauthorized={() => navigate("/")}>
+                <FileProcessorList />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="create"
+            element={
+              <CanAccess resource="fileprocessors" action="create" onUnauthorized={() => navigate("/")}>
+                <FileProcessorCreate />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="edit/:id"
+            element={
+              <CanAccess resource="fileprocessors" action="edit" onUnauthorized={() => navigate("/")}>
+                <FileProcessorEdit />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="show/:id"
+            element={
+              <CanAccess resource="fileprocessors" action="show" onUnauthorized={() => navigate("/")}>
+                <FileProcessorShow />
+              </CanAccess>
+            }
+          />
         </Route>
         <Route path="/executors">
-          <Route index element={<ExecutorList />} />
-          <Route path="show/:id" element={<ExecutorShow />} />
-          <Route path="edit/:id" element={<ExecutorEdit />} />
-          <Route path="create" element={<ExecutorCreate />} />
+          <Route
+            index
+            element={
+              <CanAccess resource="executors" action="list" onUnauthorized={() => navigate("/")}>
+                <ExecutorList />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="create"
+            element={
+              <CanAccess resource="executors" action="create" onUnauthorized={() => navigate("/")}>
+                <ExecutorCreate />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="edit/:id"
+            element={
+              <CanAccess resource="executors" action="edit" onUnauthorized={() => navigate("/")}>
+                <ExecutorEdit />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="show/:id"
+            element={
+              <CanAccess resource="executors" action="show" onUnauthorized={() => navigate("/")}>
+                <ExecutorShow />
+              </CanAccess>
+            }
+          />
         </Route>
         <Route path="/processes">
-          <Route index element={<ProcessList />} />
-          <Route path="show/:id" element={<ProcessShow />} />
-          <Route path="edit/:id" element={<ProcessEdit />} />
-          <Route path="create" element={<ProcessCreate />} />
+          <Route
+            index
+            element={
+              <CanAccess resource="processes" action="list" onUnauthorized={() => navigate("/")}>
+                <ProcessList />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="create"
+            element={
+              <CanAccess resource="processes" action="create" onUnauthorized={() => navigate("/")}>
+                <ProcessCreate />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="edit/:id"
+            element={
+              <CanAccess resource="processes" action="edit" onUnauthorized={() => navigate("/")}>
+                <ProcessEdit />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="show/:id"
+            element={
+              <CanAccess resource="processes" action="show" onUnauthorized={() => navigate("/")}>
+                <ProcessShow />
+              </CanAccess>
+            }
+          />
         </Route>
         <Route path="*" element={<ErrorComponent />} />
       </Route>

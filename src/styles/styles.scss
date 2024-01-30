@@ -1,8 +1,10 @@
-.ant-card-body, .ant-card-actions {
+.ant-card-body,
+.ant-card-actions {
   max-width: 1300px;
 }
 
-.ant-page-header-heading {
+.ant-page-header-heading,
+.ant-page-header-content {
   max-width: 1280px;
 }
 
@@ -10,21 +12,44 @@
   border-top: none;
 }
 
+.ant-menu-sub:not(.ant-menu-vertical) .ant-menu-item {
+  padding-left: 40px !important;
+}
+
+.ant-layout-header {
+  @media (max-width: 575px) {
+    padding: 0 5px !important;
+  }
+
+  @media screen and (max-width: 575px) {
+    .logout-text {
+      display: none;
+    }
+  }
+}
+
+.btn-vertical-align {
+  > * {
+    vertical-align: middle;
+  }
+}
+
 .rjsf-form {
   .ant-alert {
     margin-bottom: 20px;
   }
 
-  .ant-form-item-label > label{
+  .ant-form-item-label > label {
     height: auto;
   }
 }
 .rjsf-form-dark {
-  .ant-form-item-label > label{
+  .ant-form-item-label > label {
     color: white;
   }
 
-  .ant-input-affix-wrapper, .ant-input-number-affix-wrapper {
+  .ant-input-affix-wrapper,
+  .ant-input-number-affix-wrapper {
     background: transparent;
     border-color: #315895;
 
@@ -36,6 +61,11 @@
 
 .icons-holder {
   bottom: 70px;
-  position: absolute; 
+  position: absolute;
   width: 100%;
+
+  > .ant-space {
+    justify-content: center;
+    width: 100%;
+  }
 }
