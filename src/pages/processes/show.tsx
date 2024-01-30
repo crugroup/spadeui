@@ -1,4 +1,4 @@
-import { DateField, List, NumberField, Show, TextField, useTable } from "@refinedev/antd";
+import { FilterDropdown, List, Show, TextField, useTable } from "@refinedev/antd";
 import {
   CanAccess,
   IResourceComponentsProps,
@@ -8,12 +8,14 @@ import {
   useResource,
   useShow,
 } from "@refinedev/core";
-import { Divider, Input, Table, Typography } from "antd";
+import { Select, Table, Tabs, Tag, Typography } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
+import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
+import IconStatusMapper from "../../components/icon-status-mapper/icon-status-mapper";
+import JsonField from "../../components/json-field/json-field";
 import { ProcessRunButton } from "../../components/process-run-button";
 import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
-import IconStatusMapper from "../../components/icon-status-mapper/icon-status-mapper";
 
 const { Title } = Typography;
 
@@ -32,10 +34,19 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
   });
 
   const { tableProps: processRunsTableProps } = useTable({
-    syncWithLocation: true,
+    syncWithLocation: false,
     resource: "processruns",
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
+    },
+    filters: {
+      permanent: [
+        {
+          field: "process",
+          value: record?.id,
+          operator: "eq",
+        },
+      ],
     },
   });
 
@@ -50,21 +61,14 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
   const getToPath = useGetToPath();
   const executorResource = useResource("executors").resource;
 
-  return (
-    <Show
-      isLoading={isLoading}
-      headerButtons={({ defaultButtons }) => (
-        <>
-          {defaultButtons}
-          <ProcessRunButton buttonProps={{ type: "primary" }} />
-        </>
-      )}>
-      <Title level={5}>Id</Title>
-      <NumberField value={record?.id ?? ""} />
+  const definitionsTab = (
+    <>
       <Title level={5}>Code</Title>
       <TextField value={record?.code} />
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
+      <Title level={5}>Tags</Title>
+      <Typography.Paragraph>{record?.tags?.map((tag: string) => <Tag key={tag}>{tag}</Tag>)}</Typography.Paragraph>
       <Title level={5}>Executor</Title>
       <Typography.Paragraph>
         {record?.executor &&
@@ -78,46 +82,97 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.executor },
                 }) ?? "#"
-              }>
+              }
+            >
               {executorData?.data?.name}
             </Link>
           ))}
       </Typography.Paragraph>
-      <Title level={5}>User params</Title>
+      <Title level={5}>
+        <UserParamsTooltip />
+      </Title>
+      <Typography.Paragraph>{record?.user_params && <JsonField value={record?.user_params} />}</Typography.Paragraph>
+      <Title level={5}>
+        <SystemParamsTooltip />
+      </Title>
       <Typography.Paragraph>
-        <Input.TextArea value={record?.user_params ?? ""} readOnly rows={8} style={{ fontFamily: "monospace" }} />
+        {record?.system_params && <JsonField value={record?.system_params} />}
       </Typography.Paragraph>
-      <Title level={5}>System params</Title>
-      <Typography.Paragraph>
-        <Input.TextArea value={record?.system_params ?? ""} readOnly rows={8} style={{ fontFamily: "monospace" }} />
-      </Typography.Paragraph>
-      <CanAccess resource="processruns" action="show">
-        <Divider />
-        <List title="Process runs" breadcrumb={false} canCreate={false} resource="processruns">
-          <Table
-            {...processRunsTableProps}
-            pagination={{
-              ...processRunsTableProps.pagination,
-              showSizeChanger: false,
-            }}
-            rowKey="id">
-            <Table.Column
-              dataIndex="created_at"
-              title="Started At"
-              render={(value) => <DateField value={value} format="LLL" />}
-            />
-            <Table.Column dataIndex="status" title="Status" render={(value) => <IconStatusMapper status={value} />} />
-            <Table.Column dataIndex="result" title="Result" render={(value) => <IconStatusMapper status={value} />} />
-            <Table.Column
-              dataIndex={["user"]}
-              title="User"
-              render={(value) =>
-                userIsLoading ? <>Loading...</> : userData?.data?.find((item) => item.id === value)?.email
-              }
-            />
-          </Table>
-        </List>
-      </CanAccess>
+    </>
+  );
+
+  const historyTab = (
+    <CanAccess resource="processruns" action="show">
+      <List title={<></>} breadcrumb={false} canCreate={false} resource="processruns">
+        <Table {...processRunsTableProps} pagination={false} rowKey="id">
+          <Table.Column
+            dataIndex="status"
+            title="Status"
+            render={(value) => <IconStatusMapper status={value} />}
+            sorter
+            filterDropdown={(props) => (
+              <FilterDropdown {...props}>
+                <Select allowClear style={{ minWidth: 200 }}>
+                  <Select.Option value="new">New</Select.Option>
+                  <Select.Option value="running">Running</Select.Option>
+                  <Select.Option value="finished">Finished</Select.Option>
+                  <Select.Option value="error">Error</Select.Option>
+                </Select>
+              </FilterDropdown>
+            )}
+          />
+          <Table.Column
+            dataIndex="result"
+            title="Result"
+            render={(value) => <IconStatusMapper status={value} />}
+            sorter
+            filterDropdown={(props) => (
+              <FilterDropdown {...props}>
+                <Select allowClear style={{ minWidth: 200 }}>
+                  <Select.Option value="sucess">Success</Select.Option>
+                  <Select.Option value="warning">Warning</Select.Option>
+                  <Select.Option value="error">Error</Select.Option>
+                </Select>
+              </FilterDropdown>
+            )}
+          />
+          <Table.Column
+            dataIndex="output"
+            title="Output"
+            render={(value) => value && <JsonField value={value} />}
+            sorter
+          />
+          <Table.Column dataIndex="error_message" title="Error message" sorter />
+        </Table>
+      </List>
+    </CanAccess>
+  );
+
+  return (
+    <Show
+      isLoading={isLoading}
+      headerButtons={({ defaultButtons }) => (
+        <>
+          {defaultButtons}
+          <ProcessRunButton buttonProps={{ type: "primary" }} />
+        </>
+      )}
+    >
+      <Tabs
+        defaultActiveKey="1"
+        items={[
+          {
+            key: "1",
+            label: "Definitions",
+            children: definitionsTab,
+          },
+          {
+            key: "2",
+            label: "History",
+            children: historyTab,
+          },
+        ]}
+      />
     </Show>
   );
 };

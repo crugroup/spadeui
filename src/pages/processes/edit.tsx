@@ -2,10 +2,12 @@ import { Edit, useForm, useSelect } from "@refinedev/antd";
 import { IResourceComponentsProps } from "@refinedev/core";
 import { Form, Input, Select } from "antd";
 import React from "react";
+import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
 import { ErrorNotifications } from "../../components/error-notifications";
+import JsonField from "../../components/json-field/json-field";
 
 export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm();
+  const { formProps, form, saveButtonProps, queryResult } = useForm();
 
   const processesData = queryResult?.data?.data;
 
@@ -13,6 +15,12 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
     resource: "executors",
     defaultValue: processesData?.executor,
     optionLabel: "name",
+  });
+
+  const { selectProps: tagsSelectProps } = useSelect({
+    resource: "tags",
+    optionLabel: "name",
+    optionValue: "name",
   });
 
   return (
@@ -42,6 +50,17 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
           <Input.TextArea />
         </Form.Item>
         <Form.Item
+          label="Tags"
+          name={["tags"]}
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Select {...tagsSelectProps} mode="tags" style={{ width: "100%" }} placeholder="Tags" />
+        </Form.Item>
+        <Form.Item
           label="Executor"
           name={"executor"}
           rules={[
@@ -53,18 +72,7 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
           <Select {...executorSelectProps} />
         </Form.Item>
         <Form.Item
-          label="System params"
-          name={"system_params"}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Input.TextArea rows={8} style={{ fontFamily: "monospace" }} />
-        </Form.Item>
-        <Form.Item
-          label="User params"
+          label={<UserParamsTooltip />}
           name={"user_params"}
           rules={[
             {
@@ -72,7 +80,18 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Input.TextArea rows={8} style={{ fontFamily: "monospace" }} />
+          <JsonField form={form} name="user_params" value={formProps.initialValues?.user_params} />
+        </Form.Item>
+        <Form.Item
+          label={<SystemParamsTooltip />}
+          name={"system_params"}
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <JsonField form={form} name="system_params" value={formProps.initialValues?.system_params} />
         </Form.Item>
       </Form>
     </Edit>

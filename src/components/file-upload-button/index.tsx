@@ -1,14 +1,14 @@
-import validator from "@rjsf/validator-ajv8";
-import axios from "axios";
-import prettyBytes from "pretty-bytes";
+import { UploadOutlined } from "@ant-design/icons";
 import { BaseKey, useCan, useInvalidate, useOne, useResource } from "@refinedev/core";
+import validator from "@rjsf/validator-ajv8";
+import type { GetProp } from "antd";
 import { Button, Modal, Space, Typography, Upload, UploadFile, UploadProps, notification } from "antd";
 import { ButtonProps } from "antd/lib";
+import axios from "axios";
+import prettyBytes from "pretty-bytes";
 import { FC, useMemo, useState } from "react";
 import { ACCESS_TOKEN_KEY, API_URL } from "../../auth-provider";
-import { UploadOutlined } from "@ant-design/icons";
 import { RjsfForm } from "../rjsf-form/rjsf-form";
-import type { GetProp } from "antd";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -76,7 +76,8 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
         onClick={() => setIsModalOpen(true)}
         disabled={!permissionData?.can}
         title={permissionData?.can ? undefined : "You don't have permissions to access"}
-        icon={<UploadOutlined />}>
+        icon={<UploadOutlined />}
+      >
         {!hideText && "File upload"}
       </Button>
       <Modal
@@ -87,7 +88,8 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
           setIsModalOpen(false);
           setSelectedFile(undefined);
         }}
-        footer={<></>}>
+        footer={<></>}
+      >
         <Upload
           style={{ marginBottom: 24 }}
           showUploadList={false}
@@ -100,7 +102,8 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
 
             return false;
           }}
-          fileList={selectedFile ? [selectedFile] : []}>
+          fileList={selectedFile ? [selectedFile] : []}
+        >
           <Space style={{ minHeight: 60 }}>
             <Typography.Title level={5}>
               {selectedFile
@@ -110,13 +113,8 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
           </Space>
         </Upload>
         {selectedFile && (
-          <RjsfForm schema={JSON.parse(fileData?.data?.user_params ?? "{}")} validator={validator} onSubmit={onSubmit}>
+          <RjsfForm schema={fileData?.data?.user_params} validator={validator} onSubmit={onSubmit}>
             <Space align="start">
-              {!fileData?.data?.user_params && (
-                <Typography.Paragraph>
-                  Form is empty. Set it up in file's user params or upload the file now without passing any params.
-                </Typography.Paragraph>
-              )}
               <Button htmlType="submit" type="primary">
                 Submit
               </Button>

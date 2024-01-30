@@ -8,10 +8,12 @@ import {
   useResource,
   useShow,
 } from "@refinedev/core";
-import { Divider, Input, Table, Tag, Typography } from "antd";
+import { Table, Tabs, Tag, Typography } from "antd";
 import prettyBytes from "pretty-bytes";
 import { Link } from "react-router-dom";
 import { FileUploadButton } from "../../components";
+import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
+import { JsonField } from "../../components/json-field/json-field";
 import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
 
 const { Title } = Typography;
@@ -23,10 +25,13 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
   const record = data?.data;
 
   const { tableProps: uploadTableProps } = useTable({
-    syncWithLocation: true,
+    syncWithLocation: false,
     resource: "fileuploads",
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
+    },
+    filters: {
+      permanent: [{ field: "file", value: record?.id, operator: "eq" }],
     },
   });
 
@@ -68,15 +73,8 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
   const processResource = useResource("processes").resource;
   const fileProcessorResource = useResource("fileprocessors").resource;
 
-  return (
-    <Show
-      isLoading={isLoading}
-      headerButtons={({ defaultButtons }) => (
-        <>
-          {defaultButtons}
-          <FileUploadButton buttonProps={{ type: "primary" }} />
-        </>
-      )}>
+  const definitionsTab = (
+    <>
       <Title level={5}>Code</Title>
       <TextField value={record?.code ?? ""} />
       <Title level={5}>Description</Title>
@@ -96,7 +94,8 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.format },
                 }) ?? "#"
-              }>
+              }
+            >
               {formatData?.data?.format}
             </Link>
           ))}
@@ -114,18 +113,11 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.processor },
                 }) ?? "#"
-              }>
+              }
+            >
               {processorData?.data?.name}
             </Link>
           ))}
-      </Typography.Paragraph>
-      <Title level={5}>User params</Title>
-      <Typography.Paragraph>
-        <Input.TextArea value={record?.user_params ?? ""} readOnly rows={8} style={{ fontFamily: "monospace" }} />
-      </Typography.Paragraph>
-      <Title level={5}>System params</Title>
-      <Typography.Paragraph>
-        <Input.TextArea value={record?.system_params ?? ""} readOnly rows={8} style={{ fontFamily: "monospace" }} />
       </Typography.Paragraph>
       <Title level={5}>Linked process</Title>
       <Typography.Paragraph>
@@ -140,38 +132,82 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.linked_process },
                 }) ?? "#"
-              }>
+              }
+            >
               {processData?.data?.code}
             </Link>
           ))}
       </Typography.Paragraph>
-      <CanAccess resource="fileuploads" action="show">
-        <Divider />
-        <List title="Uploads" breadcrumb={false} canCreate={false} resource="fileuploads">
-          <Table
-            {...uploadTableProps}
-            pagination={{
-              ...uploadTableProps.pagination,
-              showSizeChanger: false,
-            }}
-            rowKey="id">
-            <Table.Column dataIndex="name" title="Name" />
-            <Table.Column dataIndex="size" title="Size" render={(value) => prettyBytes(value)} />
-            <Table.Column
-              dataIndex="created_at"
-              title="Created At"
-              render={(value) => <DateField value={value} format="LLL" />}
-            />
-            <Table.Column
-              dataIndex={["user"]}
-              title="User"
-              render={(value) =>
-                userIsLoading ? <>Loading...</> : userData?.data?.find((item) => item.id === value)?.email
-              }
-            />
-          </Table>
-        </List>
-      </CanAccess>
+      <Title level={5}>
+        <UserParamsTooltip />
+      </Title>
+      <Typography.Paragraph>{record?.user_params && <JsonField value={record?.user_params} />}</Typography.Paragraph>
+      <Title level={5}>
+        <SystemParamsTooltip />
+      </Title>
+      <Typography.Paragraph>
+        {record?.system_params && <JsonField value={record?.system_params} />}
+      </Typography.Paragraph>
+    </>
+  );
+
+  const historyTab = (
+    <CanAccess resource="fileuploads" action="show">
+      <List title={<></>} breadcrumb={false} canCreate={false} resource="fileuploads">
+        <Table
+          {...uploadTableProps}
+          pagination={{
+            ...uploadTableProps.pagination,
+            showSizeChanger: false,
+          }}
+          rowKey="id"
+        >
+          <Table.Column dataIndex="name" title="Name" sorter />
+          <Table.Column dataIndex="size" title="Size" render={(value) => prettyBytes(value)} sorter />
+          <Table.Column
+            dataIndex="created_at"
+            title="Created At"
+            render={(value) => <DateField value={value} format="LLL" />}
+            sorter
+          />
+          <Table.Column
+            dataIndex={["user"]}
+            title="User"
+            render={(value) =>
+              userIsLoading ? <>Loading...</> : userData?.data?.find((item) => item.id === value)?.email
+            }
+            sorter
+          />
+        </Table>
+      </List>
+    </CanAccess>
+  );
+
+  return (
+    <Show
+      isLoading={isLoading}
+      headerButtons={({ defaultButtons }) => (
+        <>
+          {defaultButtons}
+          <FileUploadButton buttonProps={{ type: "primary" }} />
+        </>
+      )}
+    >
+      <Tabs
+        defaultActiveKey="1"
+        items={[
+          {
+            key: "1",
+            label: "Definitions",
+            children: definitionsTab,
+          },
+          {
+            key: "2",
+            label: "History",
+            children: historyTab,
+          },
+        ]}
+      />
     </Show>
   );
 };

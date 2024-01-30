@@ -6,6 +6,6 @@ export const lightColors = {
 
 export const darkColors = {
   colorPrimary,
-  colorBgBase: '#101D31',
-  colorBgContainer: '#213453'
+  colorBgBase: "#101D31",
+  colorBgContainer: "#213453",
 };
