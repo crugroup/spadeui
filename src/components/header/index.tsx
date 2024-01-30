@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
-import { useGetIdentity } from "@refinedev/core";
+import { useGetIdentity, useLogout } from "@refinedev/core";
 import { UserData } from "../../auth-provider";
-import { Layout as AntdLayout, Space, Typography, Switch, theme } from "antd";
+import { Layout as AntdLayout, Space, Typography, Switch, theme, Button } from "antd";
 import { ThemeProviderContext } from "../../contexts/theme-provider";
+import LogoutIcon from "../../../public/icons/logout-icon";
 import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
 
 const { Text } = Typography;
@@ -12,6 +13,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) =>
   const { token } = useToken();
   const { data: user } = useGetIdentity<UserData>();
   const { mode, setMode } = useContext(ThemeProviderContext);
+  const { mutate: logout } = useLogout();
 
   const headerStyles: React.CSSProperties = {
     backgroundColor: token.colorBgElevated,
@@ -37,8 +39,16 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) =>
           onChange={() => setMode(mode === "light" ? "dark" : "light")}
           defaultChecked={mode === "dark"}
         />
-        <Space style={{ marginLeft: "8px" }} size="middle">
+        <Space size="middle">
           <Text strong>{user?.fullName || user?.email}</Text>
+          <Button
+            className="btn-vertical-align"
+            onClick={() => logout()}
+            type="text"
+            size="small"
+            icon={<LogoutIcon />}>
+            <span className="logout-text">Logout</span>
+          </Button>
         </Space>
       </Space>
     </AntdLayout.Header>

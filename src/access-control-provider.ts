@@ -1,6 +1,7 @@
 import { USER_PERMISSIONS_KEY } from "./auth-provider";
 import { CanParams } from "@refinedev/core";
 import { singular } from "pluralize";
+import { MENU_ADMIN_TAB, MENU_USER_TAB } from "./routes/resources";
 
 const ACTIONS_MAPPING = {
   create: "add",
@@ -24,6 +25,31 @@ export default {
     // Superuser has access to all resources and actions
     if (permissions.some((p) => p.codename === "*")) {
       return { can: true };
+    }
+
+    if (resource === MENU_USER_TAB) {
+      const canAccessFiles = permissions.some(
+        (p) => p.codename === `${ACTIONS_MAPPING[action as keyof typeof ACTIONS_MAPPING]}_${singular("files")}`
+      );
+      const canAccessProcesses = permissions.some(
+        (p) => p.codename === `${ACTIONS_MAPPING[action as keyof typeof ACTIONS_MAPPING]}_${singular("processes")}`
+      );
+
+      return { can: canAccessFiles || canAccessProcesses };
+    }
+
+    if (resource === MENU_ADMIN_TAB) {
+      const canAccessFileFormats = permissions.some(
+        (p) => p.codename === `${ACTIONS_MAPPING[action as keyof typeof ACTIONS_MAPPING]}_${singular("fileformats")}`
+      );
+      const canAccessFileProcessors = permissions.some(
+        (p) => p.codename === `${ACTIONS_MAPPING[action as keyof typeof ACTIONS_MAPPING]}_${singular("fileprocessors")}`
+      );
+      const canAccessExecutors = permissions.some(
+        (p) => p.codename === `${ACTIONS_MAPPING[action as keyof typeof ACTIONS_MAPPING]}_${singular("executors")}`
+      );
+
+      return { can: canAccessFileFormats || canAccessFileProcessors || canAccessExecutors };
     }
 
     // Action names used by Refine are different from the ones used by Django
