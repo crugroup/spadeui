@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "@microlink/react-json-view": "^1.23.0",
     "@refinedev/antd": "^5.7.0",
     "@refinedev/cli": "^2.7.4",
     "@refinedev/core": "^4.28.2",

@@ -36,7 +36,8 @@ function App() {
                   warnWhenUnsavedChanges: true,
                   useNewQueryKeys: true,
                   projectId: "hkbITG-QnCUao-tHoTUD",
-                }}>
+                }}
+              >
                 <CustomRoutes />
                 <RefineKbar />
                 <UnsavedChangesNotifier />

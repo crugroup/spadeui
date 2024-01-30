@@ -6,12 +6,9 @@ import { FormProps } from "@rjsf/core";
 export const RjsfForm = ({ children, ...rest }: FormProps) => {
   const { mode } = useContext(ThemeProviderContext);
 
-  return  (
-    <Form 
-      {...rest}
-      className={`rjsf-form rjsf-form-${mode}`}
-    >
+  return (
+    <Form {...rest} className={`rjsf-form rjsf-form-${mode}`}>
       {children}
     </Form>
   );
-}
+};

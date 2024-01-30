@@ -2,10 +2,12 @@ import { Edit, useForm, useSelect } from "@refinedev/antd";
 import { IResourceComponentsProps } from "@refinedev/core";
 import { Form, Input, Select } from "antd";
 import React from "react";
+import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
 import { ErrorNotifications } from "../../components/error-notifications";
+import { JsonField } from "../../components/json-field/json-field";
 
 export const FileEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm();
+  const { formProps, form, saveButtonProps, queryResult } = useForm();
 
   const filesData = queryResult?.data?.data;
 
@@ -90,18 +92,7 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
           <Select {...processorSelectProps} />
         </Form.Item>
         <Form.Item
-          label="System params"
-          name={"system_params"}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Input.TextArea rows={8} style={{ fontFamily: "monospace" }} />
-        </Form.Item>
-        <Form.Item
-          label="User params"
+          label={<UserParamsTooltip />}
           name={"user_params"}
           rules={[
             {
@@ -109,7 +100,18 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Input.TextArea rows={8} style={{ fontFamily: "monospace" }} />
+          <JsonField form={form} name="user_params" value={formProps.initialValues?.user_params} />
+        </Form.Item>
+        <Form.Item
+          label={<SystemParamsTooltip />}
+          name={"system_params"}
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <JsonField form={form} name="system_params" value={formProps.initialValues?.system_params} />
         </Form.Item>
         <Form.Item
           label="Linked process"

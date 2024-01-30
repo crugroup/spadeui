@@ -43,7 +43,7 @@ export const dataProvider = (
     const total = data.count ?? +headers["x-total-count"] ?? data.length;
 
     return {
-      data: data.results,
+      data: Array.isArray(data) ? data : data.results,
       total: total || data.length,
     };
   },

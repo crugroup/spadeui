@@ -8,13 +8,10 @@ type ThemeProviderType = {
   setMode: (mode: string) => void;
 };
 
-
 export const ThemeProviderContext = createContext<ThemeProviderType>({} as ThemeProviderType);
 
 export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const isSystemPreferenceDark = window?.matchMedia(
-    "(prefers-color-scheme: dark)"
-  ).matches;
+  const isSystemPreferenceDark = window?.matchMedia("(prefers-color-scheme: dark)").matches;
   const systemPreference = isSystemPreferenceDark ? "dark" : "light";
   const [mode, setMode] = useState(window.localStorage.getItem("colorMode") || systemPreference);
 
@@ -37,16 +34,18 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
       value={{
         setMode: setColorMode,
         mode,
-      }}>
+      }}
+    >
       <ConfigProvider
         theme={{
           ...RefineThemes.Blue,
           algorithm: mode === "light" ? defaultAlgorithm : darkAlgorithm,
           token: {
             fontFamily: "Inter, sans-serif",
-            ...mode === "light" ? lightColors : darkColors,
+            ...(mode === "light" ? lightColors : darkColors),
           },
-        }}>
+        }}
+      >
         {children}
       </ConfigProvider>
     </ThemeProviderContext.Provider>
