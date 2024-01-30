@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
+import LogoutIcon from "../../../public/icons/logout-icon";
 import { useGetIdentity, useLogout } from "@refinedev/core";
 import { UserData } from "../../auth-provider";
 import { Layout as AntdLayout, Space, Typography, Switch, theme, Button } from "antd";
 import { ThemeProviderContext } from "../../contexts/theme-provider";
-import LogoutIcon from "../../../public/icons/logout-icon";
 import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
 
 const { Text } = Typography;
@@ -15,23 +15,8 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) =>
   const { mode, setMode } = useContext(ThemeProviderContext);
   const { mutate: logout } = useLogout();
 
-  const headerStyles: React.CSSProperties = {
-    backgroundColor: token.colorBgElevated,
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    padding: "0px 24px",
-    height: "64px",
-  };
-
-  if (sticky) {
-    headerStyles.position = "sticky";
-    headerStyles.top = 0;
-    headerStyles.zIndex = 1;
-  }
-
   return (
-    <AntdLayout.Header style={headerStyles}>
+    <AntdLayout.Header style={{ backgroundColor: token.colorBgElevated }}>
       <Space>
         <Switch
           checkedChildren="☾"
