@@ -1,3 +1,5 @@
+$smallDevice: 576px;
+
 .ant-card-body,
 .ant-card-actions {
   max-width: 1300px;
@@ -12,16 +14,51 @@
   border-top: none;
 }
 
-.ant-menu-sub:not(.ant-menu-vertical) .ant-menu-item {
-  padding-left: 40px !important;
+.ant-menu-sub:not(.ant-menu-vertical) {
+  margin-left: -5px;
+}
+
+.ant-menu-root {
+  display: flex;
+  flex-direction: column;
+
+  .icons-holder {
+    margin-top: auto;
+
+    > .ant-space {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+}
+
+.ant-layout-has-sider > .ant-btn-icon-only {
+  margin-top: -20px;
+
+  @media (max-width: $smallDevice) {
+    margin-top: -50px;
+  }
 }
 
 .ant-layout-header {
-  @media (max-width: 575px) {
-    padding: 0 5px !important;
+  padding: 0 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  @media (max-width: $smallDevice) {
+    padding: 0;
+
+    .ant-btn {
+      padding-right: 0;
+    }
   }
 
-  @media screen and (max-width: 575px) {
+  @media (max-width: $smallDevice) {
     .logout-text {
       display: none;
     }
@@ -56,16 +93,5 @@
     input {
       color: white;
     }
-  }
-}
-
-.icons-holder {
-  bottom: 70px;
-  position: absolute;
-  width: 100%;
-
-  > .ant-space {
-    justify-content: center;
-    width: 100%;
   }
 }

@@ -1,7 +1,7 @@
 import { PlayCircleOutlined } from "@ant-design/icons";
-import { BaseKey, useCan, useDataProvider, useInvalidate, useOne, useResource } from "@refinedev/core";
+import { BaseKey, useCan, useCustomMutation, useInvalidate, useOne, useResource } from "@refinedev/core";
 import validator from "@rjsf/validator-ajv8";
-import { Button, Modal, Space, notification } from "antd";
+import { Button, Modal, Space } from "antd";
 import { ButtonProps } from "antd/lib";
 import Paragraph from "antd/lib/typography/Paragraph";
 import { FC, useState } from "react";
@@ -16,6 +16,7 @@ type ProcessRunButtonProps = {
 
 const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId, hideText }) => {
   const { id } = useResource();
+  const { mutate } = useCustomMutation();
   const invalidate = useInvalidate();
 
   const { data: processData } = useOne({
@@ -30,26 +31,33 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const dataProvider = useDataProvider();
-
   const onSubmit = async ({ formData }: { formData?: FormData }) => {
-    const dp = dataProvider();
-
-    // Run the process
-    try {
-      await dp?.custom?.({
+    mutate(
+      {
         url: `${API_URL}/processes/${recordItemId ?? id}/run`,
-        payload: {
+        method: "post",
+        values: {
           params: JSON.stringify(formData) ?? {},
         },
-        method: "post",
-      });
-
-      notification.success({ message: "File uploaded successfully" });
-      setIsModalOpen(false);
-    } catch {
-      notification.error({ message: "File upload failed" });
-    }
+        successNotification: () => ({
+          message: "The process was launched successfuly",
+          type: "success",
+          description: "Success",
+        }),
+        errorNotification: (err) => {
+          return {
+            message: err?.response.data.error_message || err?.message || "Something went wrong",
+            type: "error",
+            description: "Error",
+          };
+        },
+      },
+      {
+        onSuccess: () => {
+          setIsModalOpen(false);
+        },
+      }
+    );
 
     invalidate({
       resource: "processruns",
