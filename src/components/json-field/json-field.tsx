@@ -17,7 +17,7 @@ export const JsonField: FC<JsonFieldProps> = ({ value: initialValue, form, name 
 
   useEffect(() => {
     if (editable) {
-      form.setFieldsValue({ [name]: value });
+      form.setFieldValue(name, value);
     }
   }, [value]);
 
