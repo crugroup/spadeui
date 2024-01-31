@@ -49,15 +49,7 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
         >
           <Input.TextArea />
         </Form.Item>
-        <Form.Item
-          label="Tags"
-          name={["tags"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
+        <Form.Item label="Tags" name={["tags"]}>
           <Select {...tagsSelectProps} mode="tags" style={{ width: "100%" }} placeholder="Tags" />
         </Form.Item>
         <Form.Item

@@ -141,7 +141,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
           <Table.Column
             dataIndex="output"
             title="Output"
-            render={(value) => value && <JsonField value={value} />}
+            render={(value) => value && <JsonField value={value} collapsed={true} />}
             sorter
           />
           <Table.Column dataIndex="error_message" title="Error message" sorter />
