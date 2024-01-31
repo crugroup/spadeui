@@ -1,4 +1,4 @@
-import ReactJson from "@microlink/react-json-view";
+import ReactJson, { InteractionProps } from "@microlink/react-json-view";
 import { FormInstance, Input } from "antd";
 import { FC, useContext, useEffect, useState } from "react";
 import { ThemeProviderContext } from "../../contexts/theme-provider";
@@ -16,37 +16,25 @@ export const JsonField: FC<JsonFieldProps> = ({ value: initialValue, form, name 
   const editable = form && name;
 
   useEffect(() => {
-    if (form && name) {
+    if (editable) {
       form.setFieldsValue({ [name]: value });
     }
   }, [value]);
+
+  const onChange = editable
+    ? (interaction: InteractionProps) => {
+        setValue(interaction.updated_src);
+      }
+    : undefined;
 
   return (
     <>
       {form && <Input.TextArea hidden />}
       <ReactJson
         src={value}
-        onEdit={
-          editable
-            ? (edit) => {
-                setValue(edit.updated_src);
-              }
-            : undefined
-        }
-        onAdd={
-          editable
-            ? (add) => {
-                setValue(add.updated_src);
-              }
-            : undefined
-        }
-        onDelete={
-          editable
-            ? (del) => {
-                setValue(del.updated_src);
-              }
-            : undefined
-        }
+        onEdit={onChange}
+        onAdd={onChange}
+        onDelete={onChange}
         theme={mode === "light" ? lightTheme : darkTheme}
       ></ReactJson>
     </>

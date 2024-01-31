@@ -5,7 +5,7 @@
 
 export const lightTheme = {
   base00: "transparent",
-  base01: "transparent",
+  base01: "#ffffff",
   base02: "transparent",
   base03: "#93a1a1",
   base04: "rgba(0, 0, 0, 0.3)",
@@ -24,7 +24,7 @@ export const lightTheme = {
 
 export const darkTheme = {
   base00: "transparent",
-  base01: "transparent",
+  base01: "#000000",
   base02: "transparent",
   base03: "#b0b0b0",
   base04: "#d0d0d0",
