@@ -31,9 +31,9 @@ jobs:
       - name: Log in to the Container registry
         uses: docker/login-action@v3.0.0
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io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
+          username: ${{ secrets.DOCKER_ACCESS_USER }}
+          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
   
       - name: Extract metadata (tags, labels) for Docker
         id: meta
