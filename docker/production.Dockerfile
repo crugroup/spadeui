@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:18-alpine3.19 AS build
+FROM --platform=$BUILDPLATFORM node:18-alpine3.19 AS build
 COPY . /app
 WORKDIR /app
 RUN yarn install && yarn run build
