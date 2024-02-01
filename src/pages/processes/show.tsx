@@ -91,13 +91,11 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       <Title level={5}>
         <UserParamsTooltip />
       </Title>
-      <Typography.Paragraph key={JSON.stringify(record?.user_params ?? {})}>
-        {record?.user_params && <JsonField value={record?.user_params} />}
-      </Typography.Paragraph>
+      <Typography.Paragraph>{record?.user_params && <JsonField value={record?.user_params} />}</Typography.Paragraph>
       <Title level={5}>
         <SystemParamsTooltip />
       </Title>
-      <Typography.Paragraph key={JSON.stringify(record?.system_params ?? {})}>
+      <Typography.Paragraph>
         {record?.system_params && <JsonField value={record?.system_params} />}
       </Typography.Paragraph>
     </>

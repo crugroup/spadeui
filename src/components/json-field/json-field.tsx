@@ -17,14 +17,13 @@ export const JsonField: FC<JsonFieldProps> = ({ value: initialValue, form, name,
   const editable = form && name;
 
   useEffect(() => {
-    if (editable) {
-      form.setFieldValue(name, value);
-    }
-  }, [value]);
+    setValue(initialValue);
+  }, [initialValue]);
 
   const onChange = editable
     ? (interaction: InteractionProps) => {
         setValue(interaction.updated_src);
+        form.setFieldValue(name, interaction.updated_src);
       }
     : undefined;
 
