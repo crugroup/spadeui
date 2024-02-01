@@ -52,7 +52,7 @@ const CustomRoutes = () => {
                           <a href="https://exlabs.com" target="_blank" rel="noopener noreferrer">
                             <Image height={24} preview={false} src="/logos/exlabs.svg" />
                           </a>
-                          <a href="https://github.com/crugroup/spadeshaft" target="_blank" rel="noopener noreferrer">
+                          <a href="https://github.com/crugroup/spadeui" target="_blank" rel="noopener noreferrer">
                             <Image height={24} preview={false} src="/logos/github.svg" />
                           </a>
                         </Space>
@@ -66,16 +66,13 @@ const CustomRoutes = () => {
                   <img
                     src={collapsed ? spadeLogos[mode]["single"] : spadeLogos[mode]["full"]}
                     style={!collapsed ? { marginLeft: -13 } : undefined}
-                    alt="Spade logo"
-                  ></img>
+                    alt="Spade logo"></img>
                 </Link>
-              )}
-            >
+              )}>
               <Outlet />
             </ThemedLayoutV2>
           </Authenticated>
-        }
-      >
+        }>
         <Route index element={<NavigateToResource resource="files" />} />
         <Route path="/files">
           <Route
@@ -254,8 +251,7 @@ const CustomRoutes = () => {
           <Authenticated key="authenticated-outer" fallback={<Outlet />}>
             <NavigateToResource />
           </Authenticated>
-        }
-      >
+        }>
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/update-password" element={<UpdatePassword />} />
