@@ -8,9 +8,10 @@ export type JsonFieldProps = {
   value: any;
   form?: FormInstance;
   name?: string;
+  collapsed?: boolean;
 };
 
-export const JsonField: FC<JsonFieldProps> = ({ value: initialValue, form, name }) => {
+export const JsonField: FC<JsonFieldProps> = ({ value: initialValue, form, name, collapsed }) => {
   const { mode } = useContext(ThemeProviderContext);
   const [value, setValue] = useState(initialValue ?? {});
   const editable = form && name;
@@ -35,6 +36,8 @@ export const JsonField: FC<JsonFieldProps> = ({ value: initialValue, form, name 
         onEdit={onChange}
         onAdd={onChange}
         onDelete={onChange}
+        name={false}
+        collapsed={collapsed}
         theme={mode === "light" ? lightTheme : darkTheme}
       ></ReactJson>
     </>

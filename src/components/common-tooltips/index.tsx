@@ -20,4 +20,9 @@ export const SystemParamsTooltip = () => (
   <Tooltip header="System params" text="JSON dictionary of constant values passed to the executor/processor" />
 );
 
-export const UserParamsTooltip = () => <Tooltip header="User params" text="Help text" />;
+export const UserParamsTooltip = () => (
+  <Tooltip
+    header="User params"
+    text="react-jsonschema-form configuration of a dynamic form displayed on file upload or process execution"
+  />
+);
