@@ -5,7 +5,7 @@ on:
     branches:
       - "develop"
     tags:
-      - "v*"
+      - "*"
   pull_request:
     branches:
       - "develop"
@@ -39,7 +39,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5.5.0
         with:
-          images: ghcr.io/crugroup/spadeshaft
+          images: ghcr.io/crugroup/spadeui
           tags: |
             type=ref,event=branch
             type=ref,event=pr
