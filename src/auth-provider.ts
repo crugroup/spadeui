@@ -5,7 +5,6 @@ import axios from "axios";
 export const API_URL = "http://localhost:8000/api/v1";
 export const ACCESS_TOKEN_KEY = "access";
 export const REFRESH_TOKEN_KEY = "refresh";
-export const USER_PERMISSIONS_KEY = "userPermissions";
 export const USER_DATA_KEY = "userFullName";
 
 export type UserData = {
@@ -41,17 +40,6 @@ export const authProvider: AuthBindings = {
                     : null,
               })
             );
-          }
-
-          // Update permissions list on login
-          const resPermissions = await axios.get(`${API_URL}/permissions`, {
-            headers: {
-              authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN_KEY)}`,
-            },
-          });
-
-          if (resPermissions.status === 200) {
-            localStorage.setItem(USER_PERMISSIONS_KEY, JSON.stringify(resPermissions.data));
           }
 
           return {
