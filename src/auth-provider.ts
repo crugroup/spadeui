@@ -2,7 +2,7 @@ import { AuthBindings } from "@refinedev/core";
 import { notification } from "antd";
 import axios from "axios";
 
-export const API_URL = process.env.SPADE_API_URL || "http://localhost:8000/api/v1";
+export const API_URL = process.env.REACT_APP_SPADE_API_URL || "http://localhost:8000/api/v1";
 export const ACCESS_TOKEN_KEY = "access";
 export const REFRESH_TOKEN_KEY = "refresh";
 export const USER_DATA_KEY = "userFullName";
