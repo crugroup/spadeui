@@ -1,4 +1,5 @@
 FROM --platform=$BUILDPLATFORM node:18-alpine3.19 AS build
+ARG SPADE_API_URL=http://localhost:8000/api/v1
 COPY . /app
 WORKDIR /app
 RUN yarn install && yarn run build
