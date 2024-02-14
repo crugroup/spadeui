@@ -4,6 +4,7 @@ import axiosHelper from "./helpers/axios-token-interceptor";
 import resources from "./routes/resources";
 import CustomRoutes from "./routes/routes";
 import accessControlProvider from "./access-control-provider";
+import { spadeTitleHandler } from "./helpers/title-handler";
 import routerBindings, { DocumentTitleHandler, UnsavedChangesNotifier } from "@refinedev/react-router-v6";
 import { useNotificationProvider } from "@refinedev/antd";
 import { Refine } from "@refinedev/core";
@@ -41,7 +42,7 @@ function App() {
                 <CustomRoutes />
                 <RefineKbar />
                 <UnsavedChangesNotifier />
-                <DocumentTitleHandler />
+                <DocumentTitleHandler handler={spadeTitleHandler as any}/>
               </Refine>
               <DevtoolsPanel />
             </DevtoolsProvider>
