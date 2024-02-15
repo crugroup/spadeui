@@ -81,8 +81,6 @@ jobs:
         with:
           context: .
           file: ./docker/production.Dockerfile
-          build-args: |
-            SPADE_API_URL=https://spade-backend-dev.crugroup.com/api/v1
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta_azure.outputs.tags }}

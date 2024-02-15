@@ -42,7 +42,7 @@ function App() {
                 <CustomRoutes />
                 <RefineKbar />
                 <UnsavedChangesNotifier />
-                <DocumentTitleHandler/>
+                <DocumentTitleHandler handler={spadeTitleHandler as any}/>
               </Refine>
               <DevtoolsPanel />
             </DevtoolsProvider>

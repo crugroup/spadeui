@@ -1,0 +1,6 @@
+#!/bin/sh
+
+BASE_URL=${VITE_BACKEND_BASE_URL:-__VITE_BACKEND_BASE_URL__}
+
+sed -i "s#__VITE_BACKEND_BASE_URL__#${BASE_URL}#" /etc/nginx/html/public/env.js
+nginx -g "daemon off;"
