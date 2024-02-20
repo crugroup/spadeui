@@ -34,8 +34,7 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
             {
               required: true,
             },
-          ]}
-        >
+          ]}>
           <Input />
         </Form.Item>
         <Form.Item
@@ -45,12 +44,11 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
             {
               required: false,
             },
-          ]}
-        >
+          ]}>
           <Input.TextArea />
         </Form.Item>
         <Form.Item label="Tags" name={["tags"]}>
-          <Select {...tagsSelectProps} mode="tags" style={{ width: "100%" }} placeholder="Tags" />
+          <Select {...tagsSelectProps} mode="tags" placeholder="Tags" />
         </Form.Item>
         <Form.Item
           label="Executor"
@@ -59,8 +57,7 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
             {
               required: true,
             },
-          ]}
-        >
+          ]}>
           <Select {...executorSelectProps} />
         </Form.Item>
         <Form.Item
@@ -70,8 +67,7 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
             {
               required: false,
             },
-          ]}
-        >
+          ]}>
           <JsonField form={form} name="user_params" value={formProps.initialValues?.user_params} />
         </Form.Item>
         <Form.Item
@@ -81,8 +77,7 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
             {
               required: false,
             },
-          ]}
-        >
+          ]}>
           <JsonField form={form} name="system_params" value={formProps.initialValues?.system_params} />
         </Form.Item>
       </Form>

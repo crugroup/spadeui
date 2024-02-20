@@ -66,16 +66,13 @@ const CustomRoutes = () => {
                   <img
                     src={collapsed ? spadeLogos[mode]["single"] : spadeLogos[mode]["full"]}
                     style={!collapsed ? { marginLeft: -13 } : undefined}
-                    alt="Spade logo"
-                  ></img>
+                    alt="Spade logo"></img>
                 </Link>
-              )}
-            >
+              )}>
               <Outlet />
             </ThemedLayoutV2>
           </Authenticated>
-        }
-      >
+        }>
         <Route index element={<NavigateToResource resource="files" />} />
         <Route path="/files">
           <Route
@@ -254,8 +251,7 @@ const CustomRoutes = () => {
           <Authenticated key="authenticated-outer" fallback={<Outlet />}>
             <NavigateToResource />
           </Authenticated>
-        }
-      >
+        }>
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/update-password" element={<UpdatePassword />} />
