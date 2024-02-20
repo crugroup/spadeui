@@ -61,7 +61,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
           render={(tags: string[]) => tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
-              <Select allowClear style={{ minWidth: 200 }} {...tagsSelectProps} />
+              <Select allowClear {...tagsSelectProps} className="filter-dropdown__select" />
             </FilterDropdown>
           )}
         />
@@ -74,7 +74,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
           sorter
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
-              <Select style={{ minWidth: 200 }} {...executorSelectProps} />
+              <Select {...executorSelectProps} className="filter-dropdown__select" />
             </FilterDropdown>
           )}
         />

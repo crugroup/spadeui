@@ -82,8 +82,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.executor },
                 }) ?? "#"
-              }
-            >
+              }>
               {executorData?.data?.name}
             </Link>
           ))}
@@ -112,7 +111,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
             sorter
             filterDropdown={(props) => (
               <FilterDropdown {...props}>
-                <Select allowClear style={{ minWidth: 200 }}>
+                <Select allowClear className="filter-dropdown__select">
                   <Select.Option value="new">New</Select.Option>
                   <Select.Option value="running">Running</Select.Option>
                   <Select.Option value="finished">Finished</Select.Option>
@@ -128,7 +127,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
             sorter
             filterDropdown={(props) => (
               <FilterDropdown {...props}>
-                <Select allowClear style={{ minWidth: 200 }}>
+                <Select allowClear className="filter-dropdown__select">
                   <Select.Option value="sucess">Success</Select.Option>
                   <Select.Option value="warning">Warning</Select.Option>
                   <Select.Option value="error">Error</Select.Option>
@@ -156,8 +155,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
           {defaultButtons}
           <ProcessRunButton buttonProps={{ type: "primary" }} />
         </>
-      )}
-    >
+      )}>
       <Tabs
         defaultActiveKey="1"
         items={[

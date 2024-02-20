@@ -39,7 +39,7 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
           render={(tags: string[]) => tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
-              <Select allowClear style={{ minWidth: 200 }} {...tagsSelectProps} />
+              <Select allowClear {...tagsSelectProps} className="filter-dropdown__select" />
             </FilterDropdown>
           )}
         />

@@ -81,7 +81,8 @@ $smallDevice: 576px;
   }
 }
 .rjsf-form-dark {
-  .ant-form-item-label > label {
+  .ant-form-item-label > label,
+  span {
     color: white;
   }
 
@@ -98,4 +99,23 @@ $smallDevice: 576px;
 
 .ant-table .copy-to-clipboard-container {
   position: absolute;
+}
+
+.file-upload-button__text.file-upload-button__text {
+  margin: 0;
+  padding: 20px 0;
+}
+
+.file-upload-button__rjsf-form {
+  margin-top: 20px;
+}
+
+.file-upload-button__modal {
+  .rjsf-form {
+    margin-top: 20px;
+  }
+}
+
+.filter-dropdown__select {
+  min-width: 200px;
 }
