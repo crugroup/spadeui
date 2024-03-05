@@ -2,10 +2,16 @@ import { AuthBindings } from "@refinedev/core";
 import { notification } from "antd";
 import axios from "axios";
 
-declare global {
-  var env: { VITE_BACKEND_BASE_URL: string | undefined }
+let backendBaseUrl = import.meta.env.VITE_BACKEND_BASE_URL;
+
+if ((window as any).env.VITE_BACKEND_BASE_URL !== "__VITE_BACKEND_BASE_URL__") {
+  backendBaseUrl = (window as any).env.VITE_BACKEND_BASE_URL;
 }
-export const API_URL = window.env.VITE_BACKEND_BASE_URL || "http://localhost:8000/api/v1";
+
+if (backendBaseUrl === undefined) {
+  backendBaseUrl = "http://localhost:8000/api/v1";
+}
+export const API_URL = backendBaseUrl;
 export const ACCESS_TOKEN_KEY = "access";
 export const REFRESH_TOKEN_KEY = "refresh";
 export const USER_DATA_KEY = "userFullName";
