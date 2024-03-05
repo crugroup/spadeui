@@ -1,4 +1,4 @@
-import { DateField, List, Show, TextField, useTable } from "@refinedev/antd";
+import { DateField, FilterDropdown, List, Show, TextField, useTable } from "@refinedev/antd";
 import {
   CanAccess,
   IResourceComponentsProps,
@@ -8,13 +8,15 @@ import {
   useResource,
   useShow,
 } from "@refinedev/core";
-import { Table, Tabs, Tag, Typography } from "antd";
+import { Select, Table, Tabs, Tag, Typography } from "antd";
 import prettyBytes from "pretty-bytes";
 import { Link } from "react-router-dom";
 import { FileUploadButton } from "../../components";
 import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
 import { JsonField } from "../../components/json-field/json-field";
 import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
+import IconStatusMapper from "../../components/icon-status-mapper/icon-status-mapper";
+import React from "react";
 
 const { Title } = Typography;
 
@@ -163,7 +165,23 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
           rowKey="id"
         >
           <Table.Column dataIndex="name" title="Name" sorter />
+          <Table.Column
+            dataIndex="result"
+            title="Result"
+            render={(value) => <IconStatusMapper status={value} />}
+            sorter
+            filterDropdown={(props) => (
+              <FilterDropdown {...props}>
+                <Select allowClear className="filter-dropdown__select">
+                  <Select.Option value="sucess">Success</Select.Option>
+                  <Select.Option value="warning">Warning</Select.Option>
+                  <Select.Option value="error">Error</Select.Option>
+                </Select>
+              </FilterDropdown>
+            )}
+          />
           <Table.Column dataIndex="size" title="Size" render={(value) => prettyBytes(value)} sorter />
+          <Table.Column dataIndex="rows" title="Rows" sorter />
           <Table.Column
             dataIndex="created_at"
             title="Created At"

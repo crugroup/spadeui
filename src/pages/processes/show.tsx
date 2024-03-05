@@ -1,4 +1,4 @@
-import { FilterDropdown, List, Show, TextField, useTable } from "@refinedev/antd";
+import { DateField, FilterDropdown, List, Show, TextField, useTable } from "@refinedev/antd";
 import {
   CanAccess,
   IResourceComponentsProps,
@@ -82,21 +82,22 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.executor },
                 }) ?? "#"
-              }>
+              }
+            >
               {executorData?.data?.name}
             </Link>
           ))}
       </Typography.Paragraph>
-      <Title level={5}>
-        <UserParamsTooltip />
-      </Title>
-      <Typography.Paragraph>{record?.user_params && <JsonField value={record?.user_params} />}</Typography.Paragraph>
       <Title level={5}>
         <SystemParamsTooltip />
       </Title>
       <Typography.Paragraph>
         {record?.system_params && <JsonField value={record?.system_params} />}
       </Typography.Paragraph>
+      <Title level={5}>
+        <UserParamsTooltip />
+      </Title>
+      <Typography.Paragraph>{record?.user_params && <JsonField value={record?.user_params} />}</Typography.Paragraph>
     </>
   );
 
@@ -142,6 +143,20 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
             sorter
           />
           <Table.Column dataIndex="error_message" title="Error message" sorter />
+          <Table.Column
+            dataIndex="created_at"
+            title="Created At"
+            render={(value) => <DateField value={value} format="LLL" />}
+            sorter
+          />
+          <Table.Column
+            dataIndex={["user"]}
+            title="User"
+            render={(value) =>
+              userIsLoading ? <>Loading...</> : userData?.data?.find((item) => item.id === value)?.email
+            }
+            sorter
+          />
         </Table>
       </List>
     </CanAccess>
@@ -155,7 +170,8 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
           {defaultButtons}
           <ProcessRunButton buttonProps={{ type: "primary" }} />
         </>
-      )}>
+      )}
+    >
       <Tabs
         defaultActiveKey="1"
         items={[
