@@ -51,8 +51,11 @@ export const dataProvider = (
   getMany: async ({ resource, ids, meta }) => {
     const { headers, method } = meta ?? {};
     const requestMethod = (method as MethodTypes) ?? "get";
+    const uniqueIds = Array.from(new Set(ids));
 
-    const { data } = await httpClient[requestMethod](`${apiUrl}/${resource}?${stringify({ id: ids })}`, { headers });
+    const { data } = await httpClient[requestMethod](`${apiUrl}/${resource}?id__in=${uniqueIds.join(",")}`, {
+      headers,
+    });
 
     return {
       data: data.results,

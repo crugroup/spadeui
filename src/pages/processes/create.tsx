@@ -61,17 +61,6 @@ export const ProcessCreate: React.FC<IResourceComponentsProps> = () => {
           <Select {...executorSelectProps} />
         </Form.Item>
         <Form.Item
-          label={<UserParamsTooltip />}
-          name={"user_params"}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <JsonField form={form} name="user_params" value={formProps.initialValues?.user_params} />
-        </Form.Item>
-        <Form.Item
           label={<SystemParamsTooltip />}
           name={"system_params"}
           rules={[
@@ -80,6 +69,17 @@ export const ProcessCreate: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
+          <Form.Item
+            label={<UserParamsTooltip />}
+            name={"user_params"}
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <JsonField form={form} name="user_params" value={formProps.initialValues?.user_params} />
+          </Form.Item>
           <JsonField form={form} name="system_params" value={formProps.initialValues?.system_params} />
         </Form.Item>
       </Form>

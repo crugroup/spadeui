@@ -50,7 +50,7 @@ const IconStatusMapper = ({ status }: { status: string }) => {
         </Tooltip>
       );
     default:
-      return <span>status</span>;
+      return <span></span>;
   }
 };
 

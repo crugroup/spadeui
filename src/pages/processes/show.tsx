@@ -146,7 +146,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
           <Table.Column
             dataIndex="created_at"
             title="Created At"
-            render={(value) => <DateField value={value} format="LLL" />}
+            render={(value) => (value ? <DateField value={value} format="LLL" /> : null)}
             sorter
           />
           <Table.Column
