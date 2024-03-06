@@ -17,7 +17,8 @@ export const JsonField: FC<JsonFieldProps> = ({ value: initialValue, form, name,
   const editable = form && name;
 
   useEffect(() => {
-    setValue(initialValue);
+    setValue(initialValue ? initialValue : {});
+    form?.setFieldValue(name, initialValue ? initialValue : {});
   }, [initialValue]);
 
   const onChange = editable
@@ -37,8 +38,7 @@ export const JsonField: FC<JsonFieldProps> = ({ value: initialValue, form, name,
         onDelete={onChange}
         name={false}
         collapsed={collapsed}
-        theme={mode === "light" ? lightTheme : darkTheme}
-      ></ReactJson>
+        theme={mode === "light" ? lightTheme : darkTheme}></ReactJson>
     </>
   );
 };

@@ -113,7 +113,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
           </Space>
         </Upload>
         {selectedFile && (
-          <RjsfForm schema={fileData?.data?.user_params} validator={validator} onSubmit={onSubmit}>
+          <RjsfForm schema={fileData?.data?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
             <Space align="start">
               <Button htmlType="submit" type="primary">
                 Submit
