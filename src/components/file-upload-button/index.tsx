@@ -48,16 +48,20 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
     form.append("params", JSON.stringify(formData));
 
     try {
-      await axios.post(`${API_URL}/files/${recordItemId ?? id}/upload`, form, {
+      const resp = await axios.post(`${API_URL}/files/${recordItemId ?? id}/upload`, form, {
         headers: {
           authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN_KEY)}`,
           "Content-Disposition": `attachment; filename="${uploadFileName}"`,
         },
       });
-
-      notification.success({ message: "File uploaded successfully" });
-      setSelectedFile(undefined);
-      setIsModalOpen(false);
+      if (resp.data.result === "failed") {
+        notification.error({ message: resp.data.error_message ?? "File upload failed" });
+        setSelectedFile(undefined);
+      } else {
+        notification.success({ message: "File uploaded successfully" });
+        setSelectedFile(undefined);
+        setIsModalOpen(false);
+      }
     } catch {
       notification.error({ message: "File upload failed" });
       setSelectedFile(undefined);
