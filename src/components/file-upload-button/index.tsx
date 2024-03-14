@@ -34,6 +34,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<UploadFile | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
 
   const uploadFileName = useMemo(
     () => selectedFile?.name ?? `File uploaded at ${new Date().toISOString()}`,
@@ -42,6 +43,8 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
 
   const onSubmit = async ({ formData }: { formData?: FormData }) => {
     // Upload the file
+    setIsLoading(true);
+
     const form = new FormData();
     form.append("file", selectedFile as FileType);
     form.append("filename", uploadFileName);
@@ -71,6 +74,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
       resource: "fileuploads",
       invalidates: ["list"],
     });
+    setIsLoading(false);
   };
 
   return (
@@ -119,7 +123,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
         {selectedFile && (
           <RjsfForm schema={fileData?.data?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
             <Space align="start">
-              <Button htmlType="submit" type="primary">
+              <Button disabled={isLoading} htmlType="submit" type="primary">
                 Submit
               </Button>
               <Button onClick={() => setSelectedFile(undefined)}>Clear</Button>
