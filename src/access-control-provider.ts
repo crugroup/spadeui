@@ -1,8 +1,8 @@
-import { ACCESS_TOKEN_KEY, API_URL } from "./auth-provider";
 import { CanParams } from "@refinedev/core";
-import { singular } from "pluralize";
-import { MENU_ADMIN_TAB, MENU_USER_TAB } from "./routes/resources";
 import axios, { AxiosResponse } from "axios";
+import { singular } from "pluralize";
+import { ACCESS_TOKEN_KEY, API_URL } from "./auth-provider";
+import { MENU_ADMIN_TAB, MENU_USER_TAB } from "./routes/resources";
 
 const ACTIONS_MAPPING = {
   create: "add",
@@ -31,6 +31,11 @@ async function fetchPermissions() {
   try {
     const res = await permissionsQuery;
     permissions = res.data;
+  } catch (e) {
+    if (!window.location.href.endsWith("/login")) {
+      localStorage.clear();
+      window.location.href = "/login";
+    }
   } finally {
     permissionsQuery = null;
   }
