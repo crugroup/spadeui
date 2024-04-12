@@ -1,9 +1,9 @@
 import "./styles/styles.scss";
 import "@refinedev/antd/dist/reset.css";
 import axiosHelper from "./helpers/axios-token-interceptor";
-import resources from "./routes/resources";
-import CustomRoutes from "./routes/routes";
-import accessControlProvider from "./access-control-provider";
+import resources from "./config/routes/resources";
+import CustomRoutes from "./config/routes/routes";
+import accessControlProvider from "./config/access-control-provider";
 import { spadeTitleHandler } from "./helpers/title-handler";
 import routerBindings, { DocumentTitleHandler, UnsavedChangesNotifier } from "@refinedev/react-router-v6";
 import { useNotificationProvider } from "@refinedev/antd";
@@ -12,9 +12,10 @@ import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import { App as AntdApp } from "antd";
 import { BrowserRouter } from "react-router-dom";
-import { API_URL, authProvider } from "./auth-provider";
+import { authProvider } from "./config/auth-provider";
 import { ThemeProvider } from "./contexts/theme-provider";
-import { dataProvider } from "./rest-data-provider";
+import { dataProvider } from "./config/rest-data-provider";
+import { API_URL } from "./config/constants";
 
 axiosHelper.setAxiosTokenInterceptor();
 
@@ -36,9 +37,7 @@ function App() {
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
                   useNewQueryKeys: true,
-                  projectId: "hkbITG-QnCUao-tHoTUD",
-                }}
-              >
+                }}>
                 <CustomRoutes />
                 <RefineKbar />
                 <UnsavedChangesNotifier />

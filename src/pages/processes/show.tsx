@@ -15,7 +15,7 @@ import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-
 import IconStatusMapper from "../../components/icon-status-mapper/icon-status-mapper";
 import JsonField from "../../components/json-field/json-field";
 import { ProcessRunButton } from "../../components/process-run-button";
-import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
+import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 const { Title } = Typography;
 
@@ -82,8 +82,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.executor },
                 }) ?? "#"
-              }
-            >
+              }>
               {executorData?.data?.name}
             </Link>
           ))}
@@ -170,8 +169,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
           {defaultButtons}
           <ProcessRunButton buttonProps={{ type: "primary" }} />
         </>
-      )}
-    >
+      )}>
       <Tabs
         defaultActiveKey="1"
         items={[

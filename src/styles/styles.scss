@@ -1,59 +1,7 @@
-$smallDevice: 576px;
+@import "./global";
+@import "./antd";
 
-.ant-card .ant-card-actions {
-  border-top: none;
-}
-
-.ant-menu-sub:not(.ant-menu-vertical) {
-  margin-left: -5px;
-}
-
-.ant-menu-root {
-  display: flex;
-  flex-direction: column;
-
-  .icons-holder {
-    margin-top: auto;
-
-    > .ant-space {
-      justify-content: center;
-      width: 100%;
-    }
-  }
-}
-
-.ant-layout-has-sider > .ant-btn-icon-only {
-  margin-top: -20px;
-
-  @media (max-width: $smallDevice) {
-    margin-top: -50px;
-  }
-}
-
-.ant-layout-header {
-  padding: 0 24px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: 64px;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-
-  @media (max-width: $smallDevice) {
-    padding: 0;
-
-    .ant-btn {
-      padding-right: 0;
-    }
-  }
-
-  @media (max-width: $smallDevice) {
-    .logout-text {
-      display: none;
-    }
-  }
-}
+$primary: "#30A4FD";
 
 .btn-vertical-align {
   > * {
@@ -87,10 +35,6 @@ $smallDevice: 576px;
   }
 }
 
-.ant-table .copy-to-clipboard-container {
-  position: absolute;
-}
-
 .file-upload-button__text.file-upload-button__text {
   margin: 0;
   padding: 20px 0;
@@ -108,4 +52,33 @@ $smallDevice: 576px;
 
 .filter-dropdown__select {
   min-width: 200px;
+}
+
+.register-form {
+  .ant-btn {
+    width: 100%;
+  }
+
+  .have-account {
+    display: block;
+    font-size: 12px;
+    margin: 20px auto;
+
+    a {
+      color: $primary;
+    }
+  }
+
+  label::before {
+    visibility: hidden;
+    height: 0;
+    width: 0;
+  }
+}
+
+.register-logo-holder {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+  font-size: 20px;
 }

@@ -1,10 +1,10 @@
-import FilesIcon from "../../public/icons/files-icon";
-import FileIcon from "../../public/icons/file-icon";
-import FileProcessorsIcon from "../../public/icons/file-processors-icon";
-import ExecutorsIcon from "../../public/icons/executors-icon";
-import ProcessesIcon from "../../public/icons/processes-icon";
-import SettingsIcon from "../../public/icons/settings-icon";
-import FormatListIcon from "../../public/icons/format-list-icon";
+import FilesIcon from "../../../public/icons/files-icon";
+import FileIcon from "../../../public/icons/file-icon";
+import FileProcessorsIcon from "../../../public/icons/file-processors-icon";
+import ExecutorsIcon from "../../../public/icons/executors-icon";
+import ProcessesIcon from "../../../public/icons/processes-icon";
+import SettingsIcon from "../../../public/icons/settings-icon";
+import FormatListIcon from "../../../public/icons/format-list-icon";
 
 export const MENU_ADMIN_TAB = "admin";
 export const MENU_USER_TAB = "work";

@@ -3,7 +3,7 @@ import { BaseRecord, IResourceComponentsProps, useMany } from "@refinedev/core";
 import { Input, Select, Space, Table, Tag } from "antd";
 import React from "react";
 import { ProcessRunButton } from "../../components/process-run-button";
-import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
+import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 export const ProcessList: React.FC<IResourceComponentsProps> = () => {
   const { tableProps } = useTable({

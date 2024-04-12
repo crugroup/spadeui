@@ -3,7 +3,7 @@ import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
 import { Input, Select, Space, Table, Tag } from "antd";
 import React from "react";
 import { FileUploadButton } from "../../components";
-import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
+import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 export const FileList: React.FC<IResourceComponentsProps> = () => {
   const { tableProps } = useTable({
