@@ -1,0 +1,60 @@
+$smallDevice: 576px;
+
+.ant-card .ant-card-actions {
+  border-top: none;
+}
+
+.ant-menu-sub:not(.ant-menu-vertical) {
+  margin-left: -5px;
+}
+
+.ant-menu-root {
+  display: flex;
+  flex-direction: column;
+
+  .icons-holder {
+    margin-top: auto;
+
+    > .ant-space {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+}
+
+.ant-layout-has-sider > .ant-btn-icon-only {
+  margin-top: -20px;
+
+  @media (max-width: $smallDevice) {
+    margin-top: -50px;
+  }
+}
+
+.ant-layout-header {
+  padding: 0 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  @media (max-width: $smallDevice) {
+    padding: 0;
+
+    .ant-btn {
+      padding-right: 0;
+    }
+  }
+
+  @media (max-width: $smallDevice) {
+    .logout-text {
+      display: none;
+    }
+  }
+}
+
+.ant-table .copy-to-clipboard-container {
+  position: absolute;
+}

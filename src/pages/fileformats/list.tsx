@@ -2,7 +2,7 @@ import { DeleteButton, EditButton, FilterDropdown, List, ShowButton, useTable } 
 import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
 import { Input, Space, Table } from "antd";
 import React from "react";
-import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
+import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 export const FileFormatList: React.FC<IResourceComponentsProps> = () => {
   const { tableProps } = useTable({

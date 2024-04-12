@@ -1,8 +1,7 @@
 import { CanParams } from "@refinedev/core";
-import axios, { AxiosResponse } from "axios";
 import { singular } from "pluralize";
-import { ACCESS_TOKEN_KEY, API_URL } from "./auth-provider";
 import { MENU_ADMIN_TAB, MENU_USER_TAB } from "./routes/resources";
+import { USER_PERMISSIONS_KEY } from "./constants";
 
 const ACTIONS_MAPPING = {
   create: "add",
@@ -12,44 +11,15 @@ const ACTIONS_MAPPING = {
   delete: "delete",
 };
 
-// Permissions-related data is stored in variables rather than local storage
-// so it can be refetched simply by refreshing the page
-let permissions: { name: string; codename: string }[] = [];
-
-// API query promise is stored in a variable to avoid making multiple requests
-let permissionsQuery: Promise<AxiosResponse> | null;
-
-async function fetchPermissions() {
-  if (!permissionsQuery) {
-    permissionsQuery = axios.get(`${API_URL}/permissions`, {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN_KEY)}`,
-      },
-    });
-  }
-
-  try {
-    const res = await permissionsQuery;
-    permissions = res.data;
-  } catch (e) {
-    if (!window.location.href.endsWith("/login")) {
-      localStorage.clear();
-      window.location.href = "/login";
-    }
-  } finally {
-    permissionsQuery = null;
-  }
-}
-
 export default {
   can: async ({ resource, action }: CanParams) => {
     if (!resource) {
       return { can: true };
     }
 
-    if (!permissions.length) {
-      await fetchPermissions();
-    }
+    const permissions: { name: string; codename: string }[] = JSON.parse(
+      localStorage.getItem(USER_PERMISSIONS_KEY) ?? "[]"
+    );
 
     // Superuser has access to all resources and actions
     if (permissions.some((p) => p.codename === "*")) {

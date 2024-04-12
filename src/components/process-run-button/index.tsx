@@ -4,8 +4,8 @@ import validator from "@rjsf/validator-ajv8";
 import { Button, Modal, Space } from "antd";
 import { ButtonProps } from "antd/lib";
 import { FC, useState } from "react";
-import { API_URL } from "../../auth-provider";
 import { RjsfForm } from "../rjsf-form/rjsf-form";
+import { API_URL } from "../../config/constants";
 
 type ProcessRunButtonProps = {
   buttonProps: ButtonProps;
@@ -71,8 +71,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         onClick={() => setIsModalOpen(true)}
         disabled={!permissionData?.can}
         title={permissionData?.can ? undefined : "You don't have permissions to access"}
-        icon={<PlayCircleOutlined />}
-      >
+        icon={<PlayCircleOutlined />}>
         {!hideText && "Run process"}
       </Button>
       <Modal
@@ -82,8 +81,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         onCancel={() => {
           setIsModalOpen(false);
         }}
-        footer={<></>}
-      >
+        footer={<></>}>
         <RjsfForm schema={processData?.data?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
           <Space align="start">
             <Button disabled={isLoading} htmlType="submit" type="primary">

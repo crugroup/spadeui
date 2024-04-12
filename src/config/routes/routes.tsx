@@ -1,19 +1,29 @@
 import { ErrorComponent, ThemedLayoutV2, ThemedSiderV2 } from "@refinedev/antd";
 import { Authenticated, CanAccess } from "@refinedev/core";
-import { CatchAllNavigate, NavigateToResource } from "@refinedev/react-router-v6";
+import { NavigateToResource } from "@refinedev/react-router-v6";
 import { Image, Space } from "antd";
 import { Link, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import { ExecutorCreate, ExecutorEdit, ExecutorList, ExecutorShow } from "../pages/executors";
-import { FileFormatCreate, FileFormatEdit, FileFormatList, FileFormatShow } from "../pages/fileformats";
-import { FileProcessorCreate, FileProcessorEdit, FileProcessorList, FileProcessorShow } from "../pages/fileprocessors";
-import { FileCreate, FileEdit, FileList, FileShow } from "../pages/files";
-import { ForgotPassword } from "../pages/forgotPassword";
-import { Login } from "../pages/login";
-import { ProcessCreate, ProcessEdit, ProcessList, ProcessShow } from "../pages/processes";
-import { UpdatePassword } from "../pages/updatePassword";
-import { Header } from "../components/header";
-import { ThemeProviderContext } from "../contexts/theme-provider";
+import { ExecutorCreate, ExecutorEdit, ExecutorList, ExecutorShow } from "../../pages/executors";
+import { FileFormatCreate, FileFormatEdit, FileFormatList, FileFormatShow } from "../../pages/fileformats";
+import {
+  FileProcessorCreate,
+  FileProcessorEdit,
+  FileProcessorList,
+  FileProcessorShow,
+} from "../../pages/fileprocessors";
+import { FileCreate, FileEdit, FileList, FileShow } from "../../pages/files";
+import { ForgotPassword } from "../../pages/auth/forgotPassword";
+import { Login } from "../../pages/auth/login";
+import { ProcessCreate, ProcessEdit, ProcessList, ProcessShow } from "../../pages/processes";
+import { UpdatePassword } from "../../pages/auth/updatePassword";
+import { Header } from "../../components/header";
+import { ThemeProviderContext } from "../../contexts/theme-provider";
+import { Register } from "../../pages/auth/register";
+import { AccountCreated } from "../../pages/auth/accountCreated";
+import { ConfirmEmail } from "../../pages/auth/confirmEmail";
+import { UpdatePasswordLoggedIn } from "../../pages/updatePasswordLoggedIn";
+import { ACCOUNT_CONFIRMATION_REQUIRED } from "../constants";
 
 const spadeLogos: { [key: string]: { single: string; full: string } } = {
   dark: {
@@ -34,7 +44,7 @@ const CustomRoutes = () => {
     <Routes>
       <Route
         element={
-          <Authenticated key="authenticated-inner" fallback={<CatchAllNavigate to="/login" />}>
+          <Authenticated key="authenticated-inner" appendCurrentPathToQuery={false}>
             <ThemedLayoutV2
               Header={() => <Header sticky />}
               Sider={(props) => (
@@ -73,7 +83,19 @@ const CustomRoutes = () => {
             </ThemedLayoutV2>
           </Authenticated>
         }>
-        <Route index element={<NavigateToResource resource="files" />} />
+        <Route
+          index
+          element={
+            <CanAccess
+              resource="files"
+              action="list"
+              onUnauthorized={() => {
+                navigate("/");
+              }}>
+              <NavigateToResource resource="files" />
+            </CanAccess>
+          }
+        />
         <Route path="/files">
           <Route
             index
@@ -244,6 +266,7 @@ const CustomRoutes = () => {
             }
           />
         </Route>
+        <Route path="/update-password" element={<UpdatePasswordLoggedIn />} />
         <Route path="*" element={<ErrorComponent />} />
       </Route>
       <Route
@@ -253,8 +276,29 @@ const CustomRoutes = () => {
           </Authenticated>
         }>
         <Route path="/login" element={<Login />} />
+        {ACCOUNT_CONFIRMATION_REQUIRED && (
+          <>
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/account-created"
+              element={
+                <ThemedLayoutV2 Sider={() => null}>
+                  <AccountCreated />
+                </ThemedLayoutV2>
+              }
+            />
+            <Route
+              path="/confirm-email/:token"
+              element={
+                <ThemedLayoutV2 Sider={() => null}>
+                  <ConfirmEmail />
+                </ThemedLayoutV2>
+              }
+            />
+          </>
+        )}
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/update-password" element={<UpdatePassword />} />
+        <Route path="/update-password/:uid/:token" element={<UpdatePassword />} />
       </Route>
     </Routes>
   );

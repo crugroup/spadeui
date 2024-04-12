@@ -1,7 +1,8 @@
 import { DataProvider } from "@refinedev/core";
 import { AxiosInstance, isAxiosError } from "axios";
 import { stringify } from "query-string";
-import { axiosInstance, generateFilter, generateSort } from "./utils";
+import { generateFilter, generateSort } from "./utils";
+import axiosHelper from "../../helpers/axios-token-interceptor";
 
 type MethodTypes = "get" | "delete" | "head" | "options";
 type MethodTypesWithBody = "post" | "put" | "patch";
@@ -10,7 +11,7 @@ export const DEFAULT_PAGE_SIZE = 100;
 
 export const dataProvider = (
   apiUrl: string,
-  httpClient: AxiosInstance = axiosInstance
+  httpClient: AxiosInstance = axiosHelper.axiosInstance
 ): Omit<Required<DataProvider>, "createMany" | "updateMany" | "deleteMany"> => ({
   getList: async ({ resource, pagination, filters, sorters, meta }) => {
     const url = `${apiUrl}/${resource}`;

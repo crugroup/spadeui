@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { FileUploadButton } from "../../components";
 import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
 import { JsonField } from "../../components/json-field/json-field";
-import { DEFAULT_PAGE_SIZE } from "../../rest-data-provider";
+import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 import IconStatusMapper from "../../components/icon-status-mapper/icon-status-mapper";
 import React from "react";
 
@@ -96,8 +96,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.format },
                 }) ?? "#"
-              }
-            >
+              }>
               {formatData?.data?.format}
             </Link>
           ))}
@@ -115,8 +114,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.processor },
                 }) ?? "#"
-              }
-            >
+              }>
               {processorData?.data?.name}
             </Link>
           ))}
@@ -134,8 +132,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.linked_process },
                 }) ?? "#"
-              }
-            >
+              }>
               {processData?.data?.code}
             </Link>
           ))}
@@ -162,8 +159,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             ...uploadTableProps.pagination,
             showSizeChanger: false,
           }}
-          rowKey="id"
-        >
+          rowKey="id">
           <Table.Column dataIndex="name" title="Name" sorter />
           <Table.Column
             dataIndex="result"
@@ -209,8 +205,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
           {defaultButtons}
           <FileUploadButton buttonProps={{ type: "primary" }} />
         </>
-      )}
-    >
+      )}>
       <Tabs
         defaultActiveKey="1"
         items={[
