@@ -15,7 +15,7 @@ type ProcessRunButtonProps = {
 
 const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId, hideText }) => {
   const { id } = useResource();
-  const { mutate } = useCustomMutation();
+  const { isLoading, mutate } = useCustomMutation();
   const invalidate = useInvalidate();
 
   const { data: processData } = useOne({
@@ -86,7 +86,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
       >
         <RjsfForm schema={processData?.data?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
           <Space align="start">
-            <Button htmlType="submit" type="primary">
+            <Button disabled={isLoading} htmlType="submit" type="primary">
               Submit
             </Button>
           </Space>
