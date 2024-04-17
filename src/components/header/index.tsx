@@ -26,6 +26,22 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) =>
     {
       key: "2",
       label: (
+        <Link to="https://crugroup.github.io/spade/" target="_blank" rel="noopener noreferrer">
+          Documentation
+        </Link>
+      ),
+    },
+    {
+      key: "3",
+      label: (
+        <Link to="https://getspade.io/" target="_blank" rel="noopener noreferrer">
+          About
+        </Link>
+      ),
+    },
+    {
+      key: "4",
+      label: (
         <>
           Toggle theme:&nbsp;
           <Switch
@@ -38,6 +54,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) =>
       ),
     },
   ];
+
   return (
     <AntdLayout.Header style={{ backgroundColor: token.colorBgElevated }}>
       <Space>
