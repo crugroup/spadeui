@@ -49,7 +49,7 @@
   "scripts": {
     "dev": "refine dev",
     "build": "tsc && refine build",
-    "preview": "refine start",
+    "start": "refine start",
     "refine": "refine",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
@@ -66,8 +66,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "refine": {
-    "projectId": "hkbITG-QnCUao-tHoTUD"
   }
 }

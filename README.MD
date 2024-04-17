@@ -1,45 +1,49 @@
 # SpadeUI
 
-<br/>
+Bridge the gap between your business and your development team by using Spade's simple interface to automate frequent business tasks.
 
-This project was generated with [create refine-app](https://github.com/refinedev/refine/tree/master/packages/create-refine-app).
+This repository hosts the frontend code for **Spade**. It complements the [backend service](https://github.com/crugroup/spade), hosted separately, to offer a complete solution. Feel free to visit the [Spade homepage](https://getspade.io/).
 
-## Getting Started
+## Features
 
-A React Framework for building internal tools, admin panels, dashboards & B2B apps with unmatched flexibility ✨
+This tool is built with **TypeScript** and leverages the capabilities of **Refine.dev** to streamline development and enhance functionality.
 
-Refine's hooks and components simplifies the development process and eliminates the repetitive tasks by providing industry-standard solutions for crucial aspects of a project, including authentication, access control, routing, networking, state management, and i18n.
+- User-Friendly Interface
+
+- Flexibility
+
+- Uploading files & executing Processes
+
+- Customisable forms
+
+- Cross-Platform Interoperability
+
+- Scalability
+
+## Related Repositories
+
+[Backend repository](https://github.com/crugroup/spade) contains all server-side code associated with this initiative.
 
 ## Available Scripts
 
-### Running the development server.
+#### Running the development server
 
 ```bash
     yarn dev
 ```
 
-### Building for production.
+#### Building for production
 
 ```bash
     yarn build
 ```
 
-### Running the production server.
-
-```bash
-    yarn start
-```
-
 ## Learn More
 
-To learn more about **Refine**, please check out the [Documentation](https://refine.dev/docs)
+For additional resources and further information, visit the links below:
 
-- **REST Data Provider** [Docs](https://refine.dev/docs/core/providers/data-provider/#overview)
-- **Ant Design** [Docs](https://refine.dev/docs/ui-frameworks/antd/tutorial/)
-- **Inferencer** [Docs](https://refine.dev/docs/packages/documentation/inferencer)
-- **React Router** [Docs](https://refine.dev/docs/core/providers/router-provider/)
-- **Custom Auth Provider** [Docs](https://refine.dev/docs/core/providers/auth-provider/)
+- **Documentation**: https://crugroup.github.io/spade/
 
-## License
+- **Homepage**: https://getspade.io/
 
-MIT
+- **Refine Documentation**: https://refine.dev/docs

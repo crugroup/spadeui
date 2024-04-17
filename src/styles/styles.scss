@@ -3,12 +3,6 @@
 
 $primary: "#30A4FD";
 
-.btn-vertical-align {
-  > * {
-    vertical-align: middle;
-  }
-}
-
 .rjsf-form {
   .ant-alert {
     margin-bottom: 20px;
@@ -18,6 +12,7 @@ $primary: "#30A4FD";
     height: auto;
   }
 }
+
 .rjsf-form-dark {
   .ant-form-item-label > label,
   span {
