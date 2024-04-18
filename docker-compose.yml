@@ -1,8 +1,7 @@
-version: '3.8'
 services:
-  frontend:
-    image: node:18
-    container_name: spadeshaft
+  spadeui:
+    image: node:21
+    container_name: spadeui
     ports:
       - "3000:3000"
     volumes:

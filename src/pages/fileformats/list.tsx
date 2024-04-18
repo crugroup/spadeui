@@ -1,18 +1,30 @@
-import { DeleteButton, EditButton, List, ShowButton, useTable } from "@refinedev/antd";
+import { DeleteButton, EditButton, FilterDropdown, List, ShowButton, useTable } from "@refinedev/antd";
 import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
-import { Space, Table } from "antd";
+import { Input, Space, Table } from "antd";
 import React from "react";
+import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 export const FileFormatList: React.FC<IResourceComponentsProps> = () => {
   const { tableProps } = useTable({
     syncWithLocation: true,
+    pagination: {
+      pageSize: DEFAULT_PAGE_SIZE,
+    },
   });
 
   return (
     <List canCreate={true}>
-      <Table {...tableProps} rowKey="id">
-        <Table.Column dataIndex="id" title="Id" />
-        <Table.Column dataIndex="format" title="Format" />
+      <Table {...tableProps} pagination={{ ...tableProps.pagination, showSizeChanger: false }} rowKey="id">
+        <Table.Column
+          dataIndex="format"
+          title="Format"
+          sorter
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input placeholder="Search by format" />
+            </FilterDropdown>
+          )}
+        />
         <Table.Column
           title="Actions"
           dataIndex="actions"

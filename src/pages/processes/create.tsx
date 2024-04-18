@@ -2,18 +2,28 @@ import { Create, useForm, useSelect } from "@refinedev/antd";
 import { IResourceComponentsProps } from "@refinedev/core";
 import { Form, Input, Select } from "antd";
 import React from "react";
+import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
+import { ErrorNotifications } from "../../components/error-notifications";
+import JsonField from "../../components/json-field/json-field";
 
 export const ProcessCreate: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm();
+  const { form, formProps, saveButtonProps, queryResult } = useForm();
 
   const { selectProps: executorSelectProps } = useSelect({
     resource: "executors",
     optionLabel: "name",
   });
 
+  const { selectProps: tagsSelectProps } = useSelect({
+    resource: "tags",
+    optionLabel: "name",
+    optionValue: "name",
+  });
+
   return (
     <Create saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
+        <ErrorNotifications formProps={formProps} />
         <Form.Item
           label="Code"
           name={["code"]}
@@ -36,6 +46,9 @@ export const ProcessCreate: React.FC<IResourceComponentsProps> = () => {
         >
           <Input.TextArea />
         </Form.Item>
+        <Form.Item label="Tags" name={["tags"]}>
+          <Select {...tagsSelectProps} mode="tags" placeholder="Tags" />
+        </Form.Item>
         <Form.Item
           label="Executor"
           name={"executor"}
@@ -48,7 +61,7 @@ export const ProcessCreate: React.FC<IResourceComponentsProps> = () => {
           <Select {...executorSelectProps} />
         </Form.Item>
         <Form.Item
-          label="System params"
+          label={<SystemParamsTooltip />}
           name={"system_params"}
           rules={[
             {
@@ -56,18 +69,18 @@ export const ProcessCreate: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Input.TextArea disabled />
-        </Form.Item>
-        <Form.Item
-          label="User params"
-          name={"user_params"}
-          rules={[
-            {
-              required: false,
-            },
-          ]}
-        >
-          <Input.TextArea />
+          <Form.Item
+            label={<UserParamsTooltip />}
+            name={"user_params"}
+            rules={[
+              {
+                required: false,
+              },
+            ]}
+          >
+            <JsonField form={form} name="user_params" value={formProps.initialValues?.user_params} />
+          </Form.Item>
+          <JsonField form={form} name="system_params" value={formProps.initialValues?.system_params} />
         </Form.Item>
       </Form>
     </Create>

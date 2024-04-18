@@ -1,0 +1,79 @@
+@import "./global";
+@import "./antd";
+
+$primary: "#30A4FD";
+
+.rjsf-form {
+  .ant-alert {
+    margin-bottom: 20px;
+  }
+
+  .ant-form-item-label > label {
+    height: auto;
+  }
+}
+
+.rjsf-form-dark {
+  .ant-form-item-label > label,
+  span {
+    color: white;
+  }
+
+  .ant-input-affix-wrapper,
+  .ant-input-number-affix-wrapper {
+    background: transparent;
+    border-color: #315895;
+
+    input {
+      color: white;
+    }
+  }
+}
+
+.file-upload-button__text.file-upload-button__text {
+  margin: 0;
+  padding: 20px 0;
+}
+
+.file-upload-button__rjsf-form {
+  margin-top: 20px;
+}
+
+.file-upload-button__modal {
+  .rjsf-form {
+    margin-top: 20px;
+  }
+}
+
+.filter-dropdown__select {
+  min-width: 200px;
+}
+
+.register-form {
+  .ant-btn {
+    width: 100%;
+  }
+
+  .have-account {
+    display: block;
+    font-size: 12px;
+    margin: 20px auto;
+
+    a {
+      color: $primary;
+    }
+  }
+
+  label::before {
+    visibility: hidden;
+    height: 0;
+    width: 0;
+  }
+}
+
+.register-logo-holder {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+  font-size: 20px;
+}

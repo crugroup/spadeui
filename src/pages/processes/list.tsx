@@ -1,49 +1,56 @@
-import {
-  DateField,
-  DeleteButton,
-  EditButton,
-  List,
-  ShowButton,
-  useTable,
-} from "@refinedev/antd";
+import { DeleteButton, EditButton, FilterDropdown, List, ShowButton, useSelect, useTable } from "@refinedev/antd";
 import { BaseRecord, IResourceComponentsProps, useMany } from "@refinedev/core";
-import { Space, Table } from "antd";
+import { Input, Select, Space, Table, Tag } from "antd";
 import React from "react";
+import { ProcessRunButton } from "../../components/process-run-button";
+import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 export const ProcessList: React.FC<IResourceComponentsProps> = () => {
   const { tableProps } = useTable({
     syncWithLocation: true,
+    pagination: {
+      pageSize: DEFAULT_PAGE_SIZE,
+    },
   });
 
-  const { data: executorData, isLoading: executorIsLoading } = useMany({
-    resource: "executors",
-    ids: tableProps?.dataSource?.map((item) => item?.executor) ?? [],
-    queryOptions: {
-      enabled: !!tableProps?.dataSource,
-    },
+  const { selectProps: tagsSelectProps } = useSelect({
+    resource: "tags",
+    optionLabel: "name",
+    optionValue: "name",
   });
 
   return (
     <List>
-      <Table {...tableProps} rowKey="id">
-        <Table.Column dataIndex="id" title="Id" />
-        <Table.Column dataIndex="code" title="Code" />
-        <Table.Column dataIndex="description" title="Description" />
+      <Table {...tableProps} pagination={{ ...tableProps.pagination, showSizeChanger: false }} rowKey="id">
         <Table.Column
-          dataIndex={["created_at"]}
-          title="Created At"
-          render={(value: any) => <DateField value={value} />}
+          dataIndex="code"
+          title="Code"
+          sorter
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input placeholder="Search by code" />
+            </FilterDropdown>
+          )}
         />
         <Table.Column
-          dataIndex={["executor"]}
-          title="Executor"
-          render={(value) =>
-            executorIsLoading ? (
-              <>Loading...</>
-            ) : (
-              executorData?.data?.find((item) => item.id === value)?.name
-            )
-          }
+          dataIndex="description"
+          title="Description"
+          sorter
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Input placeholder="Search by description" />
+            </FilterDropdown>
+          )}
+        />
+        <Table.Column
+          dataIndex="tags"
+          title="Tags"
+          render={(tags: string[]) => tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+          filterDropdown={(props) => (
+            <FilterDropdown {...props}>
+              <Select allowClear {...tagsSelectProps} className="filter-dropdown__select" />
+            </FilterDropdown>
+          )}
         />
         <Table.Column
           title="Actions"
@@ -53,6 +60,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
               <EditButton hideText size="small" recordItemId={record.id} />
               <ShowButton hideText size="small" recordItemId={record.id} />
               <DeleteButton hideText size="small" recordItemId={record.id} />
+              <ProcessRunButton hideText buttonProps={{ size: "small", type: "primary" }} recordItemId={record.id} />
             </Space>
           )}
         />

@@ -1,4 +1,4 @@
-import { NumberField, Show, TextField } from "@refinedev/antd";
+import { Show, TextField } from "@refinedev/antd";
 import { IResourceComponentsProps, useShow } from "@refinedev/core";
 import { Typography } from "antd";
 
@@ -11,11 +11,7 @@ export const FileFormatShow: React.FC<IResourceComponentsProps> = () => {
   const record = data?.data;
 
   return (
-    <Show
-      isLoading={isLoading}
-    >
-      <Title level={5}>Id</Title>
-      <NumberField value={record?.id ?? ""} />
+    <Show isLoading={isLoading}>
       <Title level={5}>Format</Title>
       <TextField value={record?.format ?? ""} />
     </Show>
