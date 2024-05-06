@@ -26,6 +26,7 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
           dataIndex="code"
           title="Code"
           sorter
+          defaultSortOrder="ascend"
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
               <Input placeholder="Search by title" />
