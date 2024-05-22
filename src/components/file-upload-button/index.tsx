@@ -45,6 +45,10 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
     // Upload the file
     setIsLoading(true);
 
+    if (formData == null) {
+      formData = new FormData();
+    }
+
     const form = new FormData();
     form.append("file", selectedFile as FileType);
     form.append("filename", uploadFileName);
