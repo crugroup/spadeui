@@ -11,6 +11,14 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
     },
+    sorters: {
+      initial: [
+        {
+          field: "code",
+          order: "asc",
+        },
+      ]
+    },
   });
 
   const { selectProps: tagsSelectProps } = useSelect({
@@ -26,7 +34,6 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
           dataIndex="code"
           title="Code"
           sorter
-          defaultSortOrder="ascend"
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
               <Input placeholder="Search by title" />
