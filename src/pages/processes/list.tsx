@@ -46,7 +46,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
         <Table.Column
           dataIndex="tags"
           title="Tags"
-          render={(tags: string[]) => tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+          render={(tags: string[]) => tags.toSorted((a, b) => a.localeCompare(b)).map((tag) => <Tag key={tag}>{tag}</Tag>)}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
               <Select allowClear {...tagsSelectProps} className="filter-dropdown__select" />
