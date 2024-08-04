@@ -41,7 +41,8 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
             {
               required: true,
             },
-          ]}>
+          ]}
+        >
           <Input />
         </Form.Item>
         <Form.Item
@@ -51,7 +52,8 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
             {
               required: true,
             },
-          ]}>
+          ]}
+        >
           <Input.TextArea />
         </Form.Item>
         <Form.Item label="Tags" name={["tags"]}>
@@ -64,7 +66,8 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
             {
               required: true,
             },
-          ]}>
+          ]}
+        >
           <Select {...formatSelectProps} />
         </Form.Item>
         <Form.Item
@@ -74,7 +77,8 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
             {
               required: true,
             },
-          ]}>
+          ]}
+        >
           <Select {...processorSelectProps} />
         </Form.Item>
         <Form.Item
@@ -84,7 +88,8 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
             {
               required: false,
             },
-          ]}>
+          ]}
+        >
           <JsonField form={form} name="system_params" value={formProps.initialValues?.system_params} />
         </Form.Item>
         <Form.Item
@@ -94,7 +99,8 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
             {
               required: false,
             },
-          ]}>
+          ]}
+        >
           <JsonField form={form} name="user_params" value={formProps.initialValues?.user_params} />
         </Form.Item>
         <Form.Item
@@ -104,7 +110,8 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
             {
               required: false,
             },
-          ]}>
+          ]}
+        >
           <Select {...linkedProcessSelectProps} />
         </Form.Item>
       </Form>

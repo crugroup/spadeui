@@ -84,7 +84,8 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
         onClick={() => setIsModalOpen(true)}
         disabled={!permissionData?.can}
         title={permissionData?.can ? undefined : "You don't have permissions to access"}
-        icon={<UploadOutlined />}>
+        icon={<UploadOutlined />}
+      >
         {!hideText && "File upload"}
       </Button>
       <Modal
@@ -96,7 +97,8 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
           setSelectedFile(undefined);
         }}
         footer={<></>}
-        className="file-upload-button__modal">
+        className="file-upload-button__modal"
+      >
         <Upload
           showUploadList={false}
           type="drag"
@@ -108,7 +110,8 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
 
             return false;
           }}
-          fileList={selectedFile ? [selectedFile] : []}>
+          fileList={selectedFile ? [selectedFile] : []}
+        >
           <Space>
             <Typography.Title level={5} className="file-upload-button__text">
               {selectedFile

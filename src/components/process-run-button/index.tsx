@@ -71,7 +71,8 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         onClick={() => setIsModalOpen(true)}
         disabled={!permissionData?.can}
         title={permissionData?.can ? undefined : "You don't have permissions to access"}
-        icon={<PlayCircleOutlined />}>
+        icon={<PlayCircleOutlined />}
+      >
         {!hideText && "Run process"}
       </Button>
       <Modal
@@ -81,7 +82,8 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         onCancel={() => {
           setIsModalOpen(false);
         }}
-        footer={<></>}>
+        footer={<></>}
+      >
         <RjsfForm schema={processData?.data?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
           <Space align="start">
             <Button disabled={isLoading} htmlType="submit" type="primary">

@@ -96,7 +96,8 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.format },
                 }) ?? "#"
-              }>
+              }
+            >
               {formatData?.data?.format}
             </Link>
           ))}
@@ -114,7 +115,8 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.processor },
                 }) ?? "#"
-              }>
+              }
+            >
               {processorData?.data?.name}
             </Link>
           ))}
@@ -132,7 +134,8 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.linked_process },
                 }) ?? "#"
-              }>
+              }
+            >
               {processData?.data?.code}
             </Link>
           ))}
@@ -159,7 +162,8 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             ...uploadTableProps.pagination,
             showSizeChanger: false,
           }}
-          rowKey="id">
+          rowKey="id"
+        >
           <Table.Column dataIndex="name" title="Name" sorter />
           <Table.Column
             dataIndex="result"
@@ -205,7 +209,8 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
           {defaultButtons}
           <FileUploadButton buttonProps={{ type: "primary" }} />
         </>
-      )}>
+      )}
+    >
       <Tabs
         defaultActiveKey="1"
         items={[

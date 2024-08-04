@@ -37,7 +37,8 @@ function App() {
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
                   useNewQueryKeys: true,
-                }}>
+                }}
+              >
                 <CustomRoutes />
                 <RefineKbar />
                 <UnsavedChangesNotifier />

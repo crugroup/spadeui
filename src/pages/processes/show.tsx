@@ -82,7 +82,8 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
                   action: "show",
                   meta: { id: record?.executor },
                 }) ?? "#"
-              }>
+              }
+            >
               {executorData?.data?.name}
             </Link>
           ))}
@@ -169,7 +170,8 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
           {defaultButtons}
           <ProcessRunButton buttonProps={{ type: "primary" }} />
         </>
-      )}>
+      )}
+    >
       <Tabs
         defaultActiveKey="1"
         items={[
