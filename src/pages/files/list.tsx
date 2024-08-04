@@ -11,6 +11,14 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
     },
+    sorters: {
+      initial: [
+        {
+          field: "code",
+          order: "asc",
+        },
+      ]
+    },
   });
 
   const { selectProps: tagsSelectProps } = useSelect({

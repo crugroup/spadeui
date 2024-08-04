@@ -173,7 +173,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             filterDropdown={(props) => (
               <FilterDropdown {...props}>
                 <Select allowClear className="filter-dropdown__select">
-                  <Select.Option value="sucess">Success</Select.Option>
+                  <Select.Option value="success">Success</Select.Option>
                   <Select.Option value="warning">Warning</Select.Option>
                   <Select.Option value="error">Error</Select.Option>
                 </Select>
@@ -194,6 +194,11 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             render={(value) =>
               userIsLoading ? <>Loading...</> : userData?.data?.find((item) => item.id === value)?.email
             }
+            sorter
+          />
+          <Table.Column
+            dataIndex="error_message"
+            title="Message"
             sorter
           />
         </Table>
