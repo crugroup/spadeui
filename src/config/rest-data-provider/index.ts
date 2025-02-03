@@ -1,6 +1,6 @@
 import { DataProvider } from "@refinedev/core";
 import { AxiosInstance, isAxiosError } from "axios";
-import { stringify } from "query-string";
+import queryString from "query-string";
 import { generateFilter, generateSort } from "./utils";
 import axiosHelper from "../../helpers/axios-token-interceptor";
 
@@ -37,9 +37,12 @@ export const dataProvider = (
       query.ordering = generatedSort;
     }
 
-    const { data, headers } = await httpClient[requestMethod](`${url}?${stringify(query)}&${stringify(queryFilters)}`, {
-      headers: headersFromMeta,
-    });
+    const { data, headers } = await httpClient[requestMethod](
+      `${url}?${queryString.stringify(query)}&${queryString.stringify(queryFilters)}`,
+      {
+        headers: headersFromMeta,
+      }
+    );
 
     const total = data.count ?? +headers["x-total-count"] ?? data.length;
 
@@ -157,17 +160,17 @@ export const dataProvider = (
         const sortQuery = {
           ordering: generatedSort,
         };
-        requestUrl = `${requestUrl}&${stringify(sortQuery)}`;
+        requestUrl = `${requestUrl}&${queryString.stringify(sortQuery)}`;
       }
     }
 
     if (filters) {
       const filterQuery = generateFilter(filters);
-      requestUrl = `${requestUrl}&${stringify(filterQuery)}`;
+      requestUrl = `${requestUrl}&${queryString.stringify(filterQuery)}`;
     }
 
     if (query) {
-      requestUrl = `${requestUrl}&${stringify(query)}`;
+      requestUrl = `${requestUrl}&${queryString.stringify(query)}`;
     }
 
     let axiosResponse;

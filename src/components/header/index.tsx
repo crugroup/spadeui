@@ -70,7 +70,8 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) =>
             onClick={() => logout()}
             type="text"
             size="small"
-            icon={<LogoutIcon />}>
+            icon={<LogoutIcon />}
+          >
             <span className="logout-text">Logout</span>
           </Button>
         </Space>

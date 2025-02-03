@@ -30,7 +30,8 @@ export const Register = () => {
                   type: "email",
                   message: "Invalid email address",
                 },
-              ]}>
+              ]}
+            >
               <Input placeholder="Email" type="email" size="large" />
             </Form.Item>
             <Form.Item
@@ -40,7 +41,8 @@ export const Register = () => {
                 {
                   required: true,
                 },
-              ]}>
+              ]}
+            >
               <Input placeholder="First name" type="text" size="large" />
             </Form.Item>
             <Form.Item
@@ -50,7 +52,8 @@ export const Register = () => {
                 {
                   required: true,
                 },
-              ]}>
+              ]}
+            >
               <Input placeholder="Last name" type="text" size="large" />
             </Form.Item>
             <Form.Item
@@ -60,7 +63,8 @@ export const Register = () => {
                 {
                   required: true,
                 },
-              ]}>
+              ]}
+            >
               <Input placeholder="Password" type="password" size="large" />
             </Form.Item>
             <Form.Item>

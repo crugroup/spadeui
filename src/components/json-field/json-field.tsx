@@ -38,7 +38,8 @@ export const JsonField: FC<JsonFieldProps> = ({ value: initialValue, form, name,
         onDelete={onChange}
         name={false}
         collapsed={collapsed}
-        theme={mode === "light" ? lightTheme : darkTheme}></ReactJson>
+        theme={mode === "light" ? lightTheme : darkTheme}
+      ></ReactJson>
     </>
   );
 };

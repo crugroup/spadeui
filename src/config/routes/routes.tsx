@@ -76,13 +76,16 @@ const CustomRoutes = () => {
                   <img
                     src={collapsed ? spadeLogos[mode]["single"] : spadeLogos[mode]["full"]}
                     style={!collapsed ? { marginLeft: -13 } : undefined}
-                    alt="Spade logo"></img>
+                    alt="Spade logo"
+                  ></img>
                 </Link>
-              )}>
+              )}
+            >
               <Outlet />
             </ThemedLayoutV2>
           </Authenticated>
-        }>
+        }
+      >
         <Route
           index
           element={
@@ -91,7 +94,8 @@ const CustomRoutes = () => {
               action="list"
               onUnauthorized={() => {
                 navigate("/");
-              }}>
+              }}
+            >
               <NavigateToResource resource="files" />
             </CanAccess>
           }
@@ -274,7 +278,8 @@ const CustomRoutes = () => {
           <Authenticated key="authenticated-outer" fallback={<Outlet />}>
             <NavigateToResource />
           </Authenticated>
-        }>
+        }
+      >
         <Route path="/login" element={<Login />} />
         {ACCOUNT_CONFIRMATION_REQUIRED && (
           <>

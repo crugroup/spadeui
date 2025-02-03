@@ -54,7 +54,8 @@ export const UpdatePasswordLoggedIn = () => {
             {
               required: true,
             },
-          ]}>
+          ]}
+        >
           <Input.Password />
         </Form.Item>
         <Form.Item
@@ -73,7 +74,8 @@ export const UpdatePasswordLoggedIn = () => {
                 return Promise.reject("Passwords do not match");
               },
             }),
-          ]}>
+          ]}
+        >
           <Input.Password />
         </Form.Item>
       </Form>
