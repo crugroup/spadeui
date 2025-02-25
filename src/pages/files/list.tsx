@@ -6,7 +6,7 @@ import { FileUploadButton } from "../../components";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 export const FileList: React.FC<IResourceComponentsProps> = () => {
-  const { tableProps } = useTable({
+  const { tableQuery, tableProps } = useTable({
     syncWithLocation: true,
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
@@ -21,11 +21,9 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { selectProps: tagsSelectProps } = useSelect({
-    resource: "tags",
-    optionLabel: "name",
-    optionValue: "name",
-  });
+  const files = tableQuery.data;
+  const tags: string[] | undefined = files?.data?.map((f: any) => f.tags).flat();
+  const tagSet = [...new Set(tags)].sort();
 
   return (
     <List canCreate={true}>
@@ -47,7 +45,11 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
           render={(tags: string[]) => tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
-              <Select allowClear {...tagsSelectProps} className="filter-dropdown__select" />
+              <Select
+                allowClear
+                options={tagSet.map((name) => ({label: name, value: name}))}
+                className="filter-dropdown__select"
+              />
             </FilterDropdown>
           )}
         />
