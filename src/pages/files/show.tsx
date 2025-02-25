@@ -196,11 +196,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             }
             sorter
           />
-          <Table.Column
-            dataIndex="error_message"
-            title="Message"
-            sorter
-          />
+          <Table.Column dataIndex="error_message" title="Message" sorter />
         </Table>
       </List>
     </CanAccess>

@@ -17,7 +17,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
           field: "code",
           order: "asc",
         },
-      ]
+      ],
     },
   });
 
@@ -56,7 +56,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
             <FilterDropdown {...props}>
               <Select
                 allowClear
-                options={tagSet.map((name) => ({label: name, value: name}))}
+                options={tagSet.map((name) => ({ label: name, value: name }))}
                 className="filter-dropdown__select"
               />
             </FilterDropdown>
