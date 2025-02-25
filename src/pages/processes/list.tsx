@@ -6,7 +6,7 @@ import { ProcessRunButton } from "../../components/process-run-button";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 export const ProcessList: React.FC<IResourceComponentsProps> = () => {
-  const { tableQueryResult, tableProps } = useTable({
+  const { tableQuery, tableProps } = useTable({
     syncWithLocation: true,
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
@@ -21,7 +21,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const processes = tableQueryResult.data;
+  const processes = tableQuery.data;
   const tags: string[] | undefined = processes?.data?.map((f: any) => f.tags).flat();
   const tagSet = [...new Set(tags)].sort();
 
