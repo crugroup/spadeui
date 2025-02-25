@@ -1119,10 +1119,10 @@
     lodash-es "^4.17.21"
     rc-picker "2.7.6"
 
-"@rjsf/core@^5.16.1":
-  version "5.19.4"
-  resolved "https://registry.yarnpkg.com/@rjsf/core/-/core-5.19.4.tgz#d3a1e272c7bc1b4055c3c506b32f846c59eec1e7"
-  integrity sha512-HsbvyBs5TcM5VZgsw6Txk8UOhGG5BbCmeAYlHpzb6tbR3ZsLf1MSiFQKIZXHe+BTOW4FekZMBfGa9BfWQZjyLQ==
+"@rjsf/core@^5.20.0":
+  version "5.20.0"
+  resolved "https://registry.yarnpkg.com/@rjsf/core/-/core-5.20.0.tgz#4e5ab404269ad5699f4c99fea1e8cc049b50012f"
+  integrity sha512-WLxtdNx+KlOXmVpCcyAgXqiQEL9k8ejC8rFYMAhdY7kzuh1e/0y13wHjoTkFXFg/Cxd2faENxf+oQoe1TC3n5g==
   dependencies:
     lodash "^4.17.21"
     lodash-es "^4.17.21"
