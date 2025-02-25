@@ -6,7 +6,7 @@ import { FileUploadButton } from "../../components";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 export const FileList: React.FC<IResourceComponentsProps> = () => {
-  const { tableQuery, tableProps } = useTable({
+  const { tableQueryResult, tableProps } = useTable({
     syncWithLocation: true,
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
@@ -21,7 +21,7 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const files = tableQuery.data;
+  const files = tableQueryResult.data;
   const tags: string[] | undefined = files?.data?.map((f: any) => f.tags).flat();
   const tagSet = [...new Set(tags)].sort();
 
