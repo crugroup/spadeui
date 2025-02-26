@@ -1236,10 +1236,10 @@
     lodash-es "^4.17.21"
     react-is "^18.2.0"
 
-"@rjsf/validator-ajv8@^5.16.1":
-  version "5.19.4"
-  resolved "https://registry.yarnpkg.com/@rjsf/validator-ajv8/-/validator-ajv8-5.19.4.tgz#523a38c2b5da7061f7a144f4fe522413614c3b26"
-  integrity sha512-meatFQFif92mlFUcmywbDElWSOUdLg6rIowisNaquktUxTRce2TL9TPd7vgcMdwFI1h9NiFok5q6V8v3XyyLLQ==
+"@rjsf/validator-ajv8@^5.20.0":
+  version "5.20.0"
+  resolved "https://registry.yarnpkg.com/@rjsf/validator-ajv8/-/validator-ajv8-5.20.0.tgz#c161027ddc115ff2d8e4eaa4c43645231bbd65f0"
+  integrity sha512-0S/KwVdI1rI4joGgVYJGK4NSvw2jtzeLQ6ALCJRLF0Ead7vYKpYqgkkBxCtI0yDwg34phSu35D4n8/Craf/c3g==
   dependencies:
     ajv "^8.12.0"
     ajv-formats "^2.1.1"

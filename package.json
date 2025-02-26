@@ -17,7 +17,7 @@
     "@rjsf/antd": "^5.16.1",
     "@rjsf/core": "^5.20.0",
     "@rjsf/utils": "^5.16.1",
-    "@rjsf/validator-ajv8": "^5.16.1",
+    "@rjsf/validator-ajv8": "^5.20.0",
     "antd": "^5.23.4",
     "axios": "1.7.3",
     "axios-auth-refresh": "^3.3.6",
