@@ -110,7 +110,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ant-design/icons@npm:^5.5.1, @ant-design/icons@npm:^5.6.1":
+"@ant-design/icons@npm:^5.5.1, @ant-design/icons@npm:^5.5.2, @ant-design/icons@npm:^5.6.1":
   version: 5.6.1
   resolution: "@ant-design/icons@npm:5.6.1"
   dependencies:
@@ -1848,7 +1848,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@refinedev/devtools-server@npm:1.1.40":
+"@refinedev/devtools-server@npm:1.1.40, @refinedev/devtools-server@npm:^1.1.40":
   version: 1.1.40
   resolution: "@refinedev/devtools-server@npm:1.1.40"
   dependencies:
@@ -3106,17 +3106,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.7.9":
-  version: 1.7.9
-  resolution: "axios@npm:1.7.9"
-  dependencies:
-    follow-redirects: "npm:^1.15.6"
-    form-data: "npm:^4.0.0"
-    proxy-from-env: "npm:^1.1.0"
-  checksum: 10c0/b7a41e24b59fee5f0f26c1fc844b45b17442832eb3a0fb42dd4f1430eb4abc571fe168e67913e8a1d91c993232bd1d1ab03e20e4d1fee8c6147649b576fc1b0b
-  languageName: node
-  linkType: hard
-
 "axios@npm:^1.6.2":
   version: 1.7.3
   resolution: "axios@npm:1.7.3"
@@ -3125,6 +3114,17 @@ __metadata:
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
   checksum: 10c0/a18cbe559203efa05fb1fec2d1898e23bf6329bd2575784ee32aa11b5bbe1d54b9f472c49a261294125519cf62aa4fe5ef6e647bb7482eafc15bffe15ab314ce
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.8.1":
+  version: 1.8.1
+  resolution: "axios@npm:1.8.1"
+  dependencies:
+    follow-redirects: "npm:^1.15.6"
+    form-data: "npm:^4.0.0"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: 10c0/b2e1d5a61264502deee4b50f0a6df0aa3b174c546ccf68c0dff714a2b8863232e0bd8cb5b84f853303e97f242a98260f9bb9beabeafe451ad5af538e9eb7ac22
   languageName: node
   linkType: hard
 
@@ -3913,6 +3913,13 @@ __metadata:
   version: 1.11.12
   resolution: "dayjs@npm:1.11.12"
   checksum: 10c0/9673d37f3f9ad8a91caaeae9b3fea9a0010c81c7f58599fb9d860bc3359b86632fbff8eb7dddc86c2acaab01c5e6860bc672952f17b58c9286140c52b077c8e4
+  languageName: node
+  linkType: hard
+
+"dayjs@npm:^1.11.13":
+  version: 1.11.13
+  resolution: "dayjs@npm:1.11.13"
+  checksum: 10c0/a3caf6ac8363c7dade9d1ee797848ddcf25c1ace68d9fe8678ecf8ba0675825430de5d793672ec87b24a69bf04a1544b176547b2539982275d5542a7955f35b7
   languageName: node
   linkType: hard
 
@@ -9079,7 +9086,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.0.0":
+"react@npm:^18.0.0, react@npm:^18.2.0":
   version: 18.3.1
   resolution: "react@npm:18.3.1"
   dependencies:
@@ -9887,12 +9894,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "spadeui@workspace:."
   dependencies:
-    "@ant-design/icons": "npm:^5.6.1"
+    "@ant-design/icons": "npm:^5.5.2"
     "@microlink/react-json-view": "npm:^1.26.1"
     "@refinedev/antd": "npm:^5.45.1"
     "@refinedev/cli": "npm:^2.16.42"
     "@refinedev/core": "npm:^4.57.5"
     "@refinedev/devtools": "npm:^1.2.12"
+    "@refinedev/devtools-server": "npm:^1.1.40"
     "@refinedev/inferencer": "npm:^5.0.3"
     "@refinedev/kbar": "npm:^1.3.14"
     "@refinedev/react-router-v6": "npm:^4.6.2"
@@ -9909,8 +9917,9 @@ __metadata:
     "@typescript-eslint/parser": "npm:^8.25.0"
     "@vitejs/plugin-react": "npm:^4.3.4"
     antd: "npm:^5.24.2"
-    axios: "npm:1.7.9"
+    axios: "npm:^1.8.1"
     axios-auth-refresh: "npm:^3.3.6"
+    dayjs: "npm:^1.11.13"
     eslint: "npm:^9.21.0"
     eslint-config-prettier: "npm:^10.0.1"
     eslint-plugin-prettier: "npm:^5.2.3"
@@ -9920,7 +9929,7 @@ __metadata:
     prettier: "npm:^3.5.2"
     pretty-bytes: "npm:^6.1.1"
     query-string: "npm:9.1.1"
-    react: "npm:^18.0.0"
+    react: "npm:^18.2.0"
     react-dom: "npm:^18.0.0"
     react-router-dom: "npm:^6.8.1"
     sass: "npm:^1.85.1"
