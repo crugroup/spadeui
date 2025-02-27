@@ -1225,10 +1225,10 @@
     nanoid "^3.3.7"
     prop-types "^15.8.1"
 
-"@rjsf/utils@^5.16.1":
-  version "5.19.4"
-  resolved "https://registry.yarnpkg.com/@rjsf/utils/-/utils-5.19.4.tgz#aca645f4b183137bc4338b5697c32012bd70e3fe"
-  integrity sha512-853BZuQvl62Xw2Ve07dkOdEzlr7jCBU/XFPhj9tik3s++InY1brBIDBRZKABvWHjymdSvO9gSzQXzj9aFREcFA==
+"@rjsf/utils@^5.24.3":
+  version "5.24.3"
+  resolved "https://registry.yarnpkg.com/@rjsf/utils/-/utils-5.24.3.tgz#56dd6433092f2996b905b4f5041ef49a21661a0c"
+  integrity sha512-IFzMyr6RDRgSi9jdfFBomwc8LMul6zLBsRSAgzD9wAB9laDcYHwPNEL2kZhOkAGrc+4iNQSPsawGFOA6CXH87Q==
   dependencies:
     json-schema-merge-allof "^0.8.1"
     jsonpointer "^5.0.1"
