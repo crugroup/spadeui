@@ -1174,10 +1174,10 @@
   dependencies:
     kbar "^0.1.0-beta.40"
 
-"@refinedev/react-router-v6@^4.1.0":
-  version "4.5.11"
-  resolved "https://registry.yarnpkg.com/@refinedev/react-router-v6/-/react-router-v6-4.5.11.tgz#36e116a77f080c53334fc18d783d74ae0b8f042d"
-  integrity sha512-VxvRqqwAlrXPTTDWb3KBkriGsG03IUxuZy2bGct9N1P+RmQRvpW8Fk6xn6iaEORE1glY/xa8D4cE05tlkevzvw==
+"@refinedev/react-router-v6@^4.6.2":
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/@refinedev/react-router-v6/-/react-router-v6-4.6.2.tgz#e5dca3480647389584ee0a95da6b7153faeb5cc6"
+  integrity sha512-MpIXlcHglfETF2uqAbd9fmv5dfqoeaj9iayebj4IqANJK9fxiKHyai2E5o9+JNkHWuZnAr9QOeDJqbAGihrGTw==
   dependencies:
     qs "^6.10.1"
     react-router-dom "^6.8.1"
