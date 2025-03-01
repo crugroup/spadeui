@@ -14,6 +14,7 @@ import {
 } from "../../pages/fileprocessors";
 import { FileCreate, FileEdit, FileList, FileShow } from "../../pages/files";
 import { GroupCreate, GroupEdit, GroupList, GroupShow } from "../../pages/groups";
+import { UserCreate, UserEdit, UserList, UserShow } from "../../pages/users";
 import { ForgotPassword } from "../../pages/auth/forgotPassword";
 import { Login } from "../../pages/auth/login";
 import { ProcessCreate, ProcessEdit, ProcessList, ProcessShow } from "../../pages/processes";
@@ -301,6 +302,40 @@ const CustomRoutes = () => {
             element={
               <CanAccess resource="groups" action="show" onUnauthorized={() => navigate("/")}>
                 <GroupShow />
+              </CanAccess>
+            }
+          />
+        </Route>
+        <Route path="/users">
+          <Route
+            index
+            element={
+              <CanAccess resource="users" action="list" onUnauthorized={() => navigate("/")}>
+                <UserList />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="create"
+            element={
+              <CanAccess resource="users" action="create" onUnauthorized={() => navigate("/")}>
+                <UserCreate />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="edit/:id"
+            element={
+              <CanAccess resource="users" action="edit" onUnauthorized={() => navigate("/")}>
+                <UserEdit />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="show/:id"
+            element={
+              <CanAccess resource="users" action="show" onUnauthorized={() => navigate("/")}>
+                <UserShow />
               </CanAccess>
             }
           />

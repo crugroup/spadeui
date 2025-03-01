@@ -1,7 +1,7 @@
 import { Edit, useForm } from "@refinedev/antd";
 import { IResourceComponentsProps, useList } from "@refinedev/core";
 import { Form, Input, Transfer } from "antd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export const GroupEdit: React.FC<IResourceComponentsProps> = () => {
   const { formProps, saveButtonProps, query } = useForm();
@@ -17,6 +17,14 @@ export const GroupEdit: React.FC<IResourceComponentsProps> = () => {
   });
 
   const permissions = permissionsData?.data || [];
+
+  // Set initial selected permissions from record
+  useEffect(() => {
+    if (record?.permissions) {
+      const initialPermissionKeys = record.permissions.map((permission: string) => permission);
+      setSelectedPermissions(initialPermissionKeys);
+    }
+  }, [record]);
 
   return (
     <Edit saveButtonProps={saveButtonProps} isLoading={isLoading || permissionsLoading}>

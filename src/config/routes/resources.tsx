@@ -6,7 +6,7 @@ import ProcessesIcon from "../../../public/icons/processes-icon";
 import SettingsIcon from "../../../public/icons/settings-icon";
 import FormatListIcon from "../../../public/icons/format-list-icon";
 import GroupIcon from "../../../public/icons/group-icon";
-
+import UserIcon from "../../../public/icons/user-icon";
 export const MENU_ADMIN_TAB = "admin";
 export const MENU_USER_TAB = "work";
 
@@ -85,6 +85,18 @@ export default [
     meta: {
       canDelete: true,
       icon: <ExecutorsIcon />,
+    },
+  },
+  {
+    name: "users",
+    parentName: "admin",
+    list: "/users",
+    create: "/users/create",
+    edit: "/users/edit/:id",
+    show: "/users/show/:id",
+    meta: {
+      canDelete: true,
+      icon: <UserIcon />,
     },
   },
   {
