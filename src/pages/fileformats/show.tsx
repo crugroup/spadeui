@@ -5,8 +5,8 @@ import { Typography } from "antd";
 const { Title } = Typography;
 
 export const FileFormatShow: React.FC<IResourceComponentsProps> = () => {
-  const { queryResult } = useShow();
-  const { data, isLoading } = queryResult;
+  const { query } = useShow();
+  const { data, isLoading } = query;
 
   const record = data?.data;
 

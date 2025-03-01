@@ -37,7 +37,7 @@ export const authProvider: AuthBindings = {
                 authorization: authToken,
               },
             }),
-            axios.get(`${API_URL}/permissions`, {
+            axios.get(`${API_URL}/users/me/permissions`, {
               headers: {
                 authorization: authToken,
               },

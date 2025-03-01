@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 const { Text } = Typography;
 const { useToken } = theme;
 
-export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky }) => {
+export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = () => {
   const { token } = useToken();
   const { data: user } = useGetIdentity<UserData>();
   const { mode, setMode } = useContext(ThemeProviderContext);

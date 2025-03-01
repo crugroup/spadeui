@@ -7,7 +7,7 @@ import { ErrorNotifications } from "../../components/error-notifications";
 import { JsonField } from "../../components/json-field/json-field";
 
 export const FileEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, form, saveButtonProps, queryResult } = useForm();
+  const { formProps, form, saveButtonProps } = useForm();
 
   const { selectProps: formatSelectProps } = useSelect({
     resource: "fileformats",
