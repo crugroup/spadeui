@@ -9,10 +9,10 @@ export const UserEdit: React.FC<IResourceComponentsProps> = () => {
   const record = data?.data;
 
   // State to manage selected permissions
-  const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
+  const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
 
   // State to manage selected groups
-  const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+  const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
 
   // Fetch permissions using useList hook
   const { data: permissionsData, isLoading: permissionsLoading } = useList({
@@ -30,16 +30,14 @@ export const UserEdit: React.FC<IResourceComponentsProps> = () => {
   // Set initial selected groups from record
   useEffect(() => {
     if (record?.groups) {
-      const initialGroupKeys = record.groups.map((group: string) => group);
-      setSelectedGroups(initialGroupKeys);
+      setSelectedGroups(record.groups);
     }
   }, [record]);
 
   // Set initial selected permissions from record
   useEffect(() => {
-    if (record?.permissions) {
-      const initialPermissionKeys = record.permissions.map((permission: string) => permission);
-      setSelectedPermissions(initialPermissionKeys);
+    if (record?.user_permissions) {
+      setSelectedPermissions(record.user_permissions);
     }
   }, [record]);
 
@@ -72,7 +70,7 @@ export const UserEdit: React.FC<IResourceComponentsProps> = () => {
         </Form.Item>
 
         {/* Transfer component for groups */}
-        <Form.Item label="Groups">
+        <Form.Item label="Groups" name="groups">
           <Transfer
             dataSource={groups}
             titles={["Available", "Selected"]}
@@ -88,14 +86,14 @@ export const UserEdit: React.FC<IResourceComponentsProps> = () => {
         </Form.Item>
 
         {/* Transfer component for permissions */}
-        <Form.Item label="Permissions">
+        <Form.Item label="Permissions" name="user_permissions">
           <Transfer
             dataSource={permissions}
             titles={["Available", "Selected"]}
             targetKeys={selectedPermissions}
             onChange={setSelectedPermissions}
             render={(item) => item.name}
-            rowKey={(item) => item.codename}
+            rowKey={(item) => item.id}
             style={{ width: "100%" }}
             listStyle={{
               width: "100%",

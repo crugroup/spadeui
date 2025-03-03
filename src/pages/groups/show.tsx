@@ -18,7 +18,7 @@ export const GroupShow: React.FC<IResourceComponentsProps> = () => {
 
   // Map permission IDs to names
   const permissionNames = record?.permissions?.map((permissionId: string) => {
-    const permission = permissionsData?.data.find((p: any) => p.codename === permissionId);
+    const permission = permissionsData?.data.find((p: any) => p.id === permissionId);
     return permission ? permission.name : permissionId;
   });
 

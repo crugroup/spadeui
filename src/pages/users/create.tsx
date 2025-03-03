@@ -7,10 +7,10 @@ export const UserCreate: React.FC<IResourceComponentsProps> = () => {
   const { formProps, saveButtonProps } = useForm();
 
   // State to manage selected permissions
-  const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
+  const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
 
   // State to manage selected groups
-  const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+  const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
 
   // Fetch permissions using useList hook
   const { data: permissionsData, isLoading: permissionsLoading } = useList({
@@ -54,7 +54,7 @@ export const UserCreate: React.FC<IResourceComponentsProps> = () => {
         </Form.Item>
 
         {/* Transfer component for groups */}
-        <Form.Item label="Groups">
+        <Form.Item label="Groups" name="groups">
           <Transfer
             dataSource={groups}
             titles={["Available", "Selected"]}
@@ -70,14 +70,14 @@ export const UserCreate: React.FC<IResourceComponentsProps> = () => {
         </Form.Item>
 
         {/* Transfer component for permissions */}
-        <Form.Item label="Permissions">
+        <Form.Item label="Permissions" name="permissions">
           <Transfer
             dataSource={permissions}
             titles={["Available", "Selected"]}
             targetKeys={selectedPermissions}
             onChange={setSelectedPermissions}
             render={(item) => item.name}
-            rowKey={(item) => item.codename}
+            rowKey={(item) => item.id}
             style={{ width: "100%" }}
             listStyle={{
               width: "100%",

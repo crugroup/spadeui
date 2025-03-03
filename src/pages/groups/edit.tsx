@@ -9,7 +9,7 @@ export const GroupEdit: React.FC<IResourceComponentsProps> = () => {
   const record = data?.data;
 
   // State to manage selected permissions
-  const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
+  const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
 
   // Fetch permissions using useList hook
   const { data: permissionsData, isLoading: permissionsLoading } = useList({
@@ -34,14 +34,14 @@ export const GroupEdit: React.FC<IResourceComponentsProps> = () => {
         </Form.Item>
 
         {/* Transfer component for permissions */}
-        <Form.Item label="Permissions">
+        <Form.Item label="Permissions" name="permissions">
           <Transfer
             dataSource={permissions}
             titles={["Available", "Selected"]}
             targetKeys={selectedPermissions}
             onChange={setSelectedPermissions}
             render={(item) => item.name}
-            rowKey={(item) => item.codename}
+            rowKey={(item) => item.id}
             style={{ width: "100%" }}
             listStyle={{
               width: "100%",
