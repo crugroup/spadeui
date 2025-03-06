@@ -7,7 +7,7 @@ import { ErrorNotifications } from "../../components/error-notifications";
 import JsonField from "../../components/json-field/json-field";
 
 export const ProcessCreate: React.FC<IResourceComponentsProps> = () => {
-  const { form, formProps, saveButtonProps, queryResult } = useForm();
+  const { form, formProps, saveButtonProps } = useForm();
 
   const { selectProps: executorSelectProps } = useSelect({
     resource: "executors",
