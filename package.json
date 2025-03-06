@@ -26,7 +26,7 @@
     "pretty-bytes": "^6.1.1",
     "query-string": "9.1.1",
     "react": "^18.2.0",
-    "react-dom": "^19.0.0",
+    "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.1",
     "sass": "^1.85.1"
   },
