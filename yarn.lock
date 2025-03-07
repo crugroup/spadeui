@@ -1841,9 +1841,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rjsf/core@npm:^5.24.3":
-  version: 5.24.3
-  resolution: "@rjsf/core@npm:5.24.3"
+"@rjsf/core@npm:^5.24.7":
+  version: 5.24.7
+  resolution: "@rjsf/core@npm:5.24.7"
   dependencies:
     lodash: "npm:^4.17.21"
     lodash-es: "npm:^4.17.21"
@@ -1853,7 +1853,7 @@ __metadata:
   peerDependencies:
     "@rjsf/utils": ^5.24.x
     react: ^16.14.0 || >=17
-  checksum: 10c0/8f69191f98d69baaf57fc9cff0d3f8ef6f33c7818a33543204f95473f301cb8a10056409fcc65dec5c48e8e693c701e59c06769bc24316fef1f9a98b81e2bbff
+  checksum: 10c0/bed53378662557e8b0288097537a86f7d3d224a747f1f7ec7eb098d495b33cf54d8a319f6258067978447e63f90903af78b719096eac35088a6815981e555f95
   languageName: node
   linkType: hard
 
@@ -8712,7 +8712,7 @@ __metadata:
     "@refinedev/react-router-v6": "npm:^4.6.2"
     "@refinedev/simple-rest": "npm:^5.0.10"
     "@rjsf/antd": "npm:^5.24.3"
-    "@rjsf/core": "npm:^5.24.3"
+    "@rjsf/core": "npm:^5.24.7"
     "@rjsf/utils": "npm:^5.24.3"
     "@rjsf/validator-ajv8": "npm:^5.24.3"
     "@types/node": "npm:^22.13.5"
