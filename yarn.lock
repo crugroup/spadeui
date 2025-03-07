@@ -1647,9 +1647,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@refinedev/devtools@npm:^1.2.12":
-  version: 1.2.12
-  resolution: "@refinedev/devtools@npm:1.2.12"
+"@refinedev/devtools@npm:^1.2.14":
+  version: 1.2.14
+  resolution: "@refinedev/devtools@npm:1.2.14"
   dependencies:
     "@aliemir/dom-to-fiber-utils": "npm:^0.4.0"
     "@refinedev/devtools-shared": "npm:1.1.14"
@@ -1657,14 +1657,14 @@ __metadata:
     lodash: "npm:^4.17.21"
     lodash-es: "npm:^4.17.21"
   peerDependencies:
-    "@refinedev/cli": 2.16.42
+    "@refinedev/cli": 2.16.44
     "@refinedev/core": ^4.46.1
     "@refinedev/devtools-server": 1.1.40
     "@types/react": ^17.0.0 || ^18.0.0
     "@types/react-dom": ^17.0.0 || ^18.0.0
     react: ^17.0.0 || ^18.0.0
     react-dom: ^17.0.0 || ^18.0.0
-  checksum: 10c0/716eabc8384a6069cc41861347b5f25399e521301ed23f9d3b58dc0328103c06f141227db2e95dcf8a36f58897a7b974bf16f87aacbd09283eaef6a9d3cbfa16
+  checksum: 10c0/bfc9287ff468ac39882e56d530527603d408338b56ca971cbf36d00ae9f41a4795990912cdf935f27f3ef153fd9d17d897940cb21425b8d7fe6eef4832f169c1
   languageName: node
   linkType: hard
 
@@ -8705,7 +8705,7 @@ __metadata:
     "@refinedev/antd": "npm:^5.45.1"
     "@refinedev/cli": "npm:^2.16.42"
     "@refinedev/core": "npm:^4.57.5"
-    "@refinedev/devtools": "npm:^1.2.12"
+    "@refinedev/devtools": "npm:^1.2.14"
     "@refinedev/devtools-server": "npm:^1.1.40"
     "@refinedev/inferencer": "npm:^5.0.3"
     "@refinedev/kbar": "npm:^1.3.14"
