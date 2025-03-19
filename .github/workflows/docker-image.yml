@@ -39,7 +39,7 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Github Registry
         id: meta_ghcr
-        uses: docker/metadata-action@v5.6.1
+        uses: docker/metadata-action@v5.7.0
         with:
           images: ghcr.io/crugroup/spadeui
           tags: |
@@ -50,7 +50,7 @@ jobs:
             type=raw,value=latest,enable={{is_default_branch}}
   
       - name: Build and push Docker image to Github Registry
-        uses: docker/build-push-action@v6.14.0
+        uses: docker/build-push-action@v6.15.0
         with:
           context: .
           file: ./docker/production.Dockerfile
