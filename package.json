@@ -16,7 +16,7 @@
     "@refinedev/react-router-v6": "^4.6.2",
     "@refinedev/simple-rest": "^5.0.10",
     "@rjsf/antd": "^5.24.3",
-    "@rjsf/core": "^5.24.3",
+    "@rjsf/core": "^5.24.10",
     "@rjsf/utils": "^5.24.3",
     "@rjsf/validator-ajv8": "^5.24.3",
     "antd": "^5.24.2",
