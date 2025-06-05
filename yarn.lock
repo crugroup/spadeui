@@ -1883,9 +1883,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rjsf/validator-ajv8@npm:^5.24.3":
-  version: 5.24.3
-  resolution: "@rjsf/validator-ajv8@npm:5.24.3"
+"@rjsf/validator-ajv8@npm:^5.24.11":
+  version: 5.24.11
+  resolution: "@rjsf/validator-ajv8@npm:5.24.11"
   dependencies:
     ajv: "npm:^8.12.0"
     ajv-formats: "npm:^2.1.1"
@@ -1893,7 +1893,7 @@ __metadata:
     lodash-es: "npm:^4.17.21"
   peerDependencies:
     "@rjsf/utils": ^5.24.x
-  checksum: 10c0/716af457f238d6938122a8fb73fbb2fd58f2c679a185bdd542840e03f5fa619b1b746a30d8ec1ca760c056983fea06efbfc0820e4e47a76ec2f484a37964d5c3
+  checksum: 10c0/fc95de0fcdd0a16fdee558f0ae78028186384710e0027a26aef371f45f247322328ca06f23d30c4954678e791a9d0850cea125992457108a0edddb237eb24836
   languageName: node
   linkType: hard
 
@@ -8813,7 +8813,7 @@ __metadata:
     "@rjsf/antd": "npm:^5.24.3"
     "@rjsf/core": "npm:^5.24.10"
     "@rjsf/utils": "npm:^5.24.3"
-    "@rjsf/validator-ajv8": "npm:^5.24.3"
+    "@rjsf/validator-ajv8": "npm:^5.24.11"
     "@types/node": "npm:^22.13.5"
     "@types/pluralize": "npm:^0.0.33"
     "@types/react": "npm:^18.0.0"
