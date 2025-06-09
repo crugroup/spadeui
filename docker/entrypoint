@@ -3,7 +3,7 @@
 BASE_URL=${VITE_BACKEND_BASE_URL:-__VITE_BACKEND_BASE_URL__}
 EMAIL_CONFIRMATION_REQUIRED=${VITE_EMAIL_CONFIRMATION_REQUIRED:-__VITE_EMAIL_CONFIRMATION_REQUIRED__}
 
-sed -i "s#__VITE_BACKEND_BASE_URL__#${BASE_URL}#" /etc/nginx/html/public/env.js
-sed -i "s#__VITE_EMAIL_CONFIRMATION_REQUIRED__#${EMAIL_CONFIRMATION_REQUIRED}#" /etc/nginx/html/public/env.js
+sed -i "s#__VITE_BACKEND_BASE_URL__#${BASE_URL}#" /etc/nginx/html/env.js
+sed -i "s#__VITE_EMAIL_CONFIRMATION_REQUIRED__#${EMAIL_CONFIRMATION_REQUIRED}#" /etc/nginx/html/env.js
 
 nginx -g "daemon off;"
