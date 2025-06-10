@@ -30,6 +30,11 @@ export const FileCreate: React.FC<IResourceComponentsProps> = () => {
     optionValue: "name",
   });
 
+  const { selectProps: variableSetSelectProps } = useSelect({
+    resource: "variable-sets",
+    optionLabel: "name",
+  });
+
   return (
     <Create saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
@@ -80,6 +85,23 @@ export const FileCreate: React.FC<IResourceComponentsProps> = () => {
           ]}
         >
           <Select {...processorSelectProps} />
+        </Form.Item>
+        <Form.Item
+          label="Variable Sets"
+          name={"variable_sets"}
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+          tooltip="Select variable sets to make variables available during file processing"
+        >
+          <Select
+            {...variableSetSelectProps}
+            mode="multiple"
+            placeholder="Select variable sets (optional)"
+            allowClear
+          />
         </Form.Item>
         <Form.Item
           label={<SystemParamsTooltip />}

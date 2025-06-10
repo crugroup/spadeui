@@ -33,6 +33,14 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
+  const { data: variableSetsData, isLoading: variableSetsIsLoading } = useMany({
+    resource: "variable-sets",
+    ids: record?.variable_sets || [],
+    queryOptions: {
+      enabled: !!record?.variable_sets?.length,
+    },
+  });
+
   const { tableProps: processRunsTableProps } = useTable({
     syncWithLocation: false,
     resource: "processruns",
@@ -60,6 +68,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
 
   const getToPath = useGetToPath();
   const executorResource = useResource("executors").resource;
+  const variableSetResource = useResource("variable-sets").resource;
 
   const definitionsTab = (
     <>
@@ -87,6 +96,35 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
               {executorData?.data?.name}
             </Link>
           ))}
+      </Typography.Paragraph>
+      <Title level={5}>Variable Sets</Title>
+      <Typography.Paragraph>
+        {record?.variable_sets?.length ? (
+          variableSetsIsLoading ? (
+            <>Loading...</>
+          ) : (
+            <div>
+              {variableSetsData?.data?.map((variableSet, index) => (
+                <span key={variableSet.id}>
+                  <Link
+                    to={
+                      getToPath({
+                        resource: variableSetResource,
+                        action: "show",
+                        meta: { id: variableSet.id },
+                      }) ?? "#"
+                    }
+                  >
+                    {variableSet.name}
+                  </Link>
+                  {index < variableSetsData.data.length - 1 && ", "}
+                </span>
+              ))}
+            </div>
+          )
+        ) : (
+          "No variable sets assigned"
+        )}
       </Typography.Paragraph>
       <Title level={5}>
         <SystemParamsTooltip />

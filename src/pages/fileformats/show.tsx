@@ -1,6 +1,7 @@
 import { Show, TextField } from "@refinedev/antd";
 import { IResourceComponentsProps, useShow } from "@refinedev/core";
 import { Typography } from "antd";
+import React from "react";
 
 const { Title } = Typography;
 
