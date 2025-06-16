@@ -26,6 +26,12 @@ export const FileFormatList: React.FC<IResourceComponentsProps> = () => {
           )}
         />
         <Table.Column
+          title="Has Schema"
+          dataIndex="frictionless_schema"
+          align="center"
+          render={(value: any) => <input type="checkbox" checked={!!value} readOnly />}
+        />
+        <Table.Column
           title="Actions"
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
