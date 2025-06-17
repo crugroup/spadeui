@@ -23,6 +23,12 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
     optionValue: "name",
   });
 
+  const { selectProps: variableSetSelectProps } = useSelect({
+    resource: "variable-sets",
+    defaultValue: processesData?.variable_sets,
+    optionLabel: "name",
+  });
+
   return (
     <Edit saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
@@ -62,6 +68,23 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
           ]}
         >
           <Select {...executorSelectProps} />
+        </Form.Item>
+        <Form.Item
+          label="Variable Sets"
+          name={"variable_sets"}
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+          tooltip="Select variable sets to make variables available during process execution"
+        >
+          <Select
+            {...variableSetSelectProps}
+            mode="multiple"
+            placeholder="Select variable sets (optional)"
+            allowClear
+          />
         </Form.Item>
         <Form.Item
           label={<SystemParamsTooltip />}

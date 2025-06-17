@@ -26,3 +26,7 @@ export const UserParamsTooltip = () => (
     text="react-jsonschema-form configuration of a dynamic form displayed on file upload or process execution"
   />
 );
+
+export const FormatSchemaParamsTooltip = () => (
+  <Tooltip header="Frictionless schema" text="JSON schema of the file format" />
+);

@@ -61,6 +61,14 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
+  const { data: variableSetsData, isLoading: variableSetsIsLoading } = useMany({
+    resource: "variable-sets",
+    ids: record?.variable_sets || [],
+    queryOptions: {
+      enabled: !!record?.variable_sets?.length,
+    },
+  });
+
   const { data: userData, isLoading: userIsLoading } = useMany({
     resource: "users",
     ids: uploadTableProps?.dataSource?.map((item) => item?.user) ?? [],
@@ -74,6 +82,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
   const fileFormatResource = useResource("fileformats").resource;
   const processResource = useResource("processes").resource;
   const fileProcessorResource = useResource("fileprocessors").resource;
+  const variableSetResource = useResource("variable-sets").resource;
 
   const definitionsTab = (
     <>
@@ -139,6 +148,35 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
               {processData?.data?.code}
             </Link>
           ))}
+      </Typography.Paragraph>
+      <Title level={5}>Variable Sets</Title>
+      <Typography.Paragraph>
+        {record?.variable_sets?.length ? (
+          variableSetsIsLoading ? (
+            <>Loading...</>
+          ) : (
+            <div>
+              {variableSetsData?.data?.map((variableSet, index) => (
+                <span key={variableSet.id}>
+                  <Link
+                    to={
+                      getToPath({
+                        resource: variableSetResource,
+                        action: "show",
+                        meta: { id: variableSet.id },
+                      }) ?? "#"
+                    }
+                  >
+                    {variableSet.name}
+                  </Link>
+                  {index < variableSetsData.data.length - 1 && ", "}
+                </span>
+              ))}
+            </div>
+          )
+        ) : (
+          "No variable sets assigned"
+        )}
       </Typography.Paragraph>
       <Title level={5}>
         <UserParamsTooltip />
