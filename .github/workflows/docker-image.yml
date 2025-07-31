@@ -43,6 +43,7 @@ jobs:
         with:
           images: ghcr.io/crugroup/spadeui
           tags: |
+            type=raw,value=${{ github.base_ref }}-${{ github.run_number }}
             type=ref,event=branch
             type=ref,event=pr
             type=semver,pattern={{version}}
