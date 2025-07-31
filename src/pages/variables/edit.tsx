@@ -44,9 +44,12 @@ export const VariableEdit: React.FC<IResourceComponentsProps> = () => {
           label="Secret Variable"
           name="is_secret"
           valuePropName="checked"
-          tooltip="Secret variables will be encrypted and hidden in the interface"
+          tooltip="Secret variables will be encrypted and hidden in the interface\nThis cannot be edited after creation"
         >
-          <Switch />
+          {/* this field cannot be edited after creation; user must
+            * delete and recreate variable to edit this
+            */}
+          <Switch disabled />
         </Form.Item>
       </Form>
     </Edit>
