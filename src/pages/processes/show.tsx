@@ -124,7 +124,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
                     >
                       {variableSet.name}
                     </Link>
-                    {index < variableSetsData.data.length - 1 && ", "}
+                    {index < record.variable_sets.length - 1 && ", "}
                   </span>
                 );
               })}
