@@ -156,26 +156,30 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       <Title level={5}>Variable Sets</Title>
       <Typography.Paragraph>
         {record?.variable_sets?.length ? (
-          variableSetsIsLoading ? (
+          variableSetsIsLoading || (variableSetsData?.data == null) ? (
             <>Loading...</>
           ) : (
             <div>
-              {variableSetsData?.data?.map((variableSet, index) => (
-                <span key={variableSet.id}>
-                  <Link
-                    to={
-                      getToPath({
-                        resource: variableSetResource,
-                        action: "show",
-                        meta: { id: variableSet.id },
-                      }) ?? "#"
-                    }
-                  >
-                    {variableSet.name}
-                  </Link>
-                  {index < variableSetsData.data.length - 1 && ", "}
-                </span>
-              ))}
+              {record?.variable_sets?.map((variableSetId: number, index: number) => {
+                const variableSet = variableSetsData.data.find((item) => item.id === variableSetId);
+                if (!variableSet) return "undefined";
+                return (
+                  <span key={variableSet.id}>
+                    <Link
+                      to={
+                        getToPath({
+                          resource: variableSetResource,
+                          action: "show",
+                          meta: { id: variableSet.id },
+                        }) ?? "#"
+                      }
+                    >
+                      {variableSet.name}
+                    </Link>
+                    {index < variableSetsData.data.length - 1 && ", "}
+                  </span>
+                );
+              })}
             </div>
           )
         ) : (
