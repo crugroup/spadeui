@@ -104,7 +104,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       <Title level={5}>Variable Sets</Title>
       <Typography.Paragraph>
         {record?.variable_sets?.length ? (
-          variableSetsIsLoading || (variableSetsData?.data == null) ? (
+          variableSetsIsLoading || variableSetsData?.data == null ? (
             <>Loading...</>
           ) : (
             <div>
