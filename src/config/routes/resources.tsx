@@ -7,6 +7,8 @@ import SettingsIcon from "../../../public/icons/settings-icon";
 import FormatListIcon from "../../../public/icons/format-list-icon";
 import GroupIcon from "../../../public/icons/group-icon";
 import UserIcon from "../../../public/icons/user-icon";
+import VariablesIcon from "../../../public/icons/variables-icon";
+import VariableSetsIcon from "../../../public/icons/variable-sets-icon";
 export const MENU_ADMIN_TAB = "admin";
 export const MENU_USER_TAB = "work";
 
@@ -109,6 +111,31 @@ export default [
     meta: {
       canDelete: true,
       icon: <GroupIcon />,
+    },
+  },
+  {
+    name: "variables",
+    parentName: "admin",
+    list: "/variables",
+    create: "/variables/create",
+    edit: "/variables/edit/:id",
+    show: "/variables/show/:id",
+    meta: {
+      canDelete: true,
+      icon: <VariablesIcon />,
+    },
+  },
+  {
+    name: "variable-sets",
+    parentName: "admin",
+    list: "/variable-sets",
+    create: "/variable-sets/create",
+    edit: "/variable-sets/edit/:id",
+    show: "/variable-sets/show/:id",
+    meta: {
+      canDelete: true,
+      label: "Variable Sets",
+      icon: <VariableSetsIcon />,
     },
   },
   {

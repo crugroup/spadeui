@@ -25,6 +25,8 @@ import { Register } from "../../pages/auth/register";
 import { AccountCreated } from "../../pages/auth/accountCreated";
 import { ConfirmEmail } from "../../pages/auth/confirmEmail";
 import { UpdatePasswordLoggedIn } from "../../pages/updatePasswordLoggedIn";
+import { VariableCreate, VariableEdit, VariableList, VariableShow } from "../../pages/variables";
+import { VariableSetCreate, VariableSetEdit, VariableSetList, VariableSetShow } from "../../pages/variablesets";
 import { ACCOUNT_CONFIRMATION_REQUIRED } from "../constants";
 
 const spadeLogos: { [key: string]: { single: string; full: string } } = {
@@ -336,6 +338,74 @@ const CustomRoutes = () => {
             element={
               <CanAccess resource="users" action="show" onUnauthorized={() => navigate("/")}>
                 <UserShow />
+              </CanAccess>
+            }
+          />
+        </Route>
+        <Route path="/variables">
+          <Route
+            index
+            element={
+              <CanAccess resource="variables" action="list" onUnauthorized={() => navigate("/")}>
+                <VariableList />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="create"
+            element={
+              <CanAccess resource="variables" action="create" onUnauthorized={() => navigate("/")}>
+                <VariableCreate />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="edit/:id"
+            element={
+              <CanAccess resource="variables" action="edit" onUnauthorized={() => navigate("/")}>
+                <VariableEdit />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="show/:id"
+            element={
+              <CanAccess resource="variables" action="show" onUnauthorized={() => navigate("/")}>
+                <VariableShow />
+              </CanAccess>
+            }
+          />
+        </Route>
+        <Route path="/variable-sets">
+          <Route
+            index
+            element={
+              <CanAccess resource="variable-sets" action="list" onUnauthorized={() => navigate("/")}>
+                <VariableSetList />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="create"
+            element={
+              <CanAccess resource="variable-sets" action="create" onUnauthorized={() => navigate("/")}>
+                <VariableSetCreate />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="edit/:id"
+            element={
+              <CanAccess resource="variable-sets" action="edit" onUnauthorized={() => navigate("/")}>
+                <VariableSetEdit />
+              </CanAccess>
+            }
+          />
+          <Route
+            path="show/:id"
+            element={
+              <CanAccess resource="variable-sets" action="show" onUnauthorized={() => navigate("/")}>
+                <VariableSetShow />
               </CanAccess>
             }
           />
