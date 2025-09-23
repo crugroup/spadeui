@@ -10,7 +10,7 @@ import {
 } from "@refinedev/core";
 import { Select, Table, Tabs, Tag, Typography } from "antd";
 import prettyBytes from "pretty-bytes";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { FileUploadButton } from "../../components";
 import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
 import { JsonField } from "../../components/json-field/json-field";

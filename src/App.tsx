@@ -5,13 +5,13 @@ import resources from "./config/routes/resources";
 import CustomRoutes from "./config/routes/routes";
 import accessControlProvider from "./config/access-control-provider";
 import { spadeTitleHandler } from "./helpers/title-handler";
-import routerBindings, { DocumentTitleHandler, UnsavedChangesNotifier } from "@refinedev/react-router-v6";
+import routerBindings, { DocumentTitleHandler, UnsavedChangesNotifier } from "@refinedev/react-router";
 import { useNotificationProvider } from "@refinedev/antd";
 import { Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import { App as AntdApp } from "antd";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import { authProvider } from "./config/auth-provider";
 import { ThemeProvider } from "./contexts/theme-provider";
 import { dataProvider } from "./config/rest-data-provider";
@@ -36,7 +36,6 @@ function App() {
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
-                  useNewQueryKeys: true,
                 }}
               >
                 <CustomRoutes />

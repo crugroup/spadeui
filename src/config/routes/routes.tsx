@@ -1,8 +1,8 @@
-import { ErrorComponent, ThemedLayoutV2, ThemedSiderV2 } from "@refinedev/antd";
+import { ErrorComponent, ThemedLayout, ThemedSider } from "@refinedev/antd";
 import { Authenticated, CanAccess } from "@refinedev/core";
-import { NavigateToResource } from "@refinedev/react-router-v6";
+import { NavigateToResource } from "@refinedev/react-router";
 import { Image, Space } from "antd";
-import { Link, Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Outlet, Route, Routes, useNavigate } from "react-router";
 import { useContext } from "react";
 import { ExecutorCreate, ExecutorEdit, ExecutorList, ExecutorShow } from "../../pages/executors";
 import { FileFormatCreate, FileFormatEdit, FileFormatList, FileFormatShow } from "../../pages/fileformats";
@@ -49,10 +49,10 @@ const CustomRoutes = () => {
       <Route
         element={
           <Authenticated key="authenticated-inner" appendCurrentPathToQuery={false}>
-            <ThemedLayoutV2
+            <ThemedLayout
               Header={() => <Header sticky />}
               Sider={(props) => (
-                <ThemedSiderV2
+                <ThemedSider
                   {...props}
                   fixed
                   render={(p) => (
@@ -86,7 +86,7 @@ const CustomRoutes = () => {
               )}
             >
               <Outlet />
-            </ThemedLayoutV2>
+            </ThemedLayout>
           </Authenticated>
         }
       >
@@ -427,17 +427,17 @@ const CustomRoutes = () => {
             <Route
               path="/account-created"
               element={
-                <ThemedLayoutV2 Sider={() => null}>
+                <ThemedLayout Sider={() => null}>
                   <AccountCreated />
-                </ThemedLayoutV2>
+                </ThemedLayout>
               }
             />
             <Route
               path="/confirm-email/:token"
               element={
-                <ThemedLayoutV2 Sider={() => null}>
+                <ThemedLayout Sider={() => null}>
                   <ConfirmEmail />
-                </ThemedLayoutV2>
+                </ThemedLayout>
               }
             />
           </>

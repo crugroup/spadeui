@@ -7,7 +7,7 @@ import { ThemeProviderContext } from "../../contexts/theme-provider";
 import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
 import { SettingOutlined } from "@ant-design/icons";
 import { MenuProps } from "antd/lib";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 const { Text } = Typography;
 const { useToken } = theme;

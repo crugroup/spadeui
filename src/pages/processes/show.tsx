@@ -10,7 +10,7 @@ import {
 } from "@refinedev/core";
 import { Select, Table, Tabs, Tag, Typography } from "antd";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
 import IconStatusMapper from "../../components/icon-status-mapper/icon-status-mapper";
 import JsonField from "../../components/json-field/json-field";
