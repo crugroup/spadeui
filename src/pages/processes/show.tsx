@@ -5,7 +5,7 @@ import {
   useGetToPath,
   useMany,
   useOne,
-  useResource,
+  useResourceParams,
   useShow,
 } from "@refinedev/core";
 import { Select, Table, Tabs, Tag, Typography } from "antd";
@@ -25,7 +25,10 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
 
   const record = data?.data;
 
-  const { data: executorData, isLoading: executorIsLoading } = useOne({
+  const {
+    result: executorData,
+    query: { isLoading: executorIsLoading },
+  } = useOne({
     resource: "executors",
     id: record?.executor || "",
     queryOptions: {
@@ -33,7 +36,10 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: variableSetsData, isLoading: variableSetsIsLoading } = useMany({
+  const {
+    result: variableSetsData,
+    query: { isLoading: variableSetsIsLoading },
+  } = useMany({
     resource: "variable-sets",
     ids: record?.variable_sets || [],
     queryOptions: {
@@ -58,7 +64,10 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: userData, isLoading: userIsLoading } = useMany({
+  const {
+    result: userData,
+    query: { isLoading: userIsLoading },
+  } = useMany({
     resource: "users",
     ids: processRunsTableProps?.dataSource?.map((item) => item?.user) ?? [],
     queryOptions: {
@@ -67,8 +76,12 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
   });
 
   const getToPath = useGetToPath();
-  const executorResource = useResource("executors").resource;
-  const variableSetResource = useResource("variable-sets").resource;
+  const executorResource = useResourceParams({
+    resource: "executors",
+  }).resource;
+  const variableSetResource = useResourceParams({
+    resource: "variable-sets",
+  }).resource;
 
   const definitionsTab = (
     <>
@@ -97,7 +110,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
                 }) ?? "#"
               }
             >
-              {executorData?.data?.name}
+              {executorData?.name}
             </Link>
           ))}
       </Typography.Paragraph>

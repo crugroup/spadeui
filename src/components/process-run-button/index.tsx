@@ -1,5 +1,5 @@
 import { PlayCircleOutlined } from "@ant-design/icons";
-import { BaseKey, useCan, useCustomMutation, useInvalidate, useOne, useResource } from "@refinedev/core";
+import { BaseKey, useCan, useCustomMutation, useInvalidate, useOne, useResourceParams } from "@refinedev/core";
 import validator from "@rjsf/validator-ajv8";
 import { Button, Modal, Space } from "antd";
 import { ButtonProps } from "antd/lib";
@@ -14,11 +14,14 @@ type ProcessRunButtonProps = {
 };
 
 const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId, hideText }) => {
-  const { id } = useResource();
-  const { isLoading, mutate } = useCustomMutation();
+  const { id } = useResourceParams();
+  const {
+    mutate,
+    mutation: { isPending },
+  } = useCustomMutation();
   const invalidate = useInvalidate();
 
-  const { data: processData } = useOne({
+  const { result: processData } = useOne({
     resource: "processes",
     id: recordItemId ?? id,
   });
@@ -84,9 +87,9 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         }}
         footer={<></>}
       >
-        <RjsfForm schema={processData?.data?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
+        <RjsfForm schema={processData?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
           <Space align="start">
-            <Button disabled={isLoading} htmlType="submit" type="primary">
+            <Button disabled={isPending} htmlType="submit" type="primary">
               Submit
             </Button>
           </Space>

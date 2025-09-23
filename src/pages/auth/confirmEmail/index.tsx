@@ -9,7 +9,10 @@ import { API_URL } from "../../../config/constants";
 
 export const ConfirmEmail = () => {
   const navigate = useNavigate();
-  const { mutate, isError } = useCustomMutation();
+  const {
+    mutate,
+    mutation: { isError },
+  } = useCustomMutation();
   const { token } = useParams<{ token: string }>();
 
   useEffect(() => {

@@ -7,7 +7,7 @@ import { ErrorNotifications } from "../../components/error-notifications";
 import JsonField from "../../components/json-field/json-field";
 
 export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, form, saveButtonProps, queryResult } = useForm();
+  const { formProps, form, saveButtonProps, query: queryResult } = useForm();
 
   const processesData = queryResult?.data?.data;
 

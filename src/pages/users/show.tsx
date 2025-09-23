@@ -12,12 +12,12 @@ export const UserShow: React.FC<IResourceComponentsProps> = () => {
   const record = data?.data;
 
   // Fetch groups
-  const { data: groupsData } = useList({
+  const { result: groupsData } = useList({
     resource: "groups",
   });
 
   // Fetch permissions
-  const { data: permissionsData } = useList({
+  const { result: permissionsData } = useList({
     resource: "permissions",
   });
 

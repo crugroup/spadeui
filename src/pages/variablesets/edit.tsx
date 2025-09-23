@@ -4,11 +4,14 @@ import { Form, Input, Transfer, TransferProps } from "antd";
 import React, { useState, useEffect } from "react";
 
 export const VariableSetEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm();
+  const { formProps, saveButtonProps, query: queryResult } = useForm();
   const [selectedVariables, setSelectedVariables] = useState<React.Key[]>([]);
 
   // Fetch variables using useList hook
-  const { data: variablesData, isLoading: variablesLoading } = useList({
+  const {
+    result: variablesData,
+    query: { isLoading: variablesLoading },
+  } = useList({
     resource: "variables",
     pagination: { mode: "off" },
   });

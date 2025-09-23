@@ -12,7 +12,7 @@ export const VariableSetShow: React.FC<IResourceComponentsProps> = () => {
   const record = data?.data;
 
   // Fetch variables to get details for the variables in this set
-  const { data: variablesData } = useList({
+  const { result: variablesData } = useList({
     resource: "variables",
     pagination: { mode: "off" },
     queryOptions: {

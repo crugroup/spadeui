@@ -8,7 +8,10 @@ export const VariableSetCreate: React.FC<IResourceComponentsProps> = () => {
   const [selectedVariables, setSelectedVariables] = useState<React.Key[]>([]);
 
   // Fetch variables using useList hook
-  const { data: variablesData, isLoading: variablesLoading } = useList({
+  const {
+    result: variablesData,
+    query: { isLoading: variablesLoading },
+  } = useList({
     resource: "variables",
     pagination: { mode: "off" },
   });

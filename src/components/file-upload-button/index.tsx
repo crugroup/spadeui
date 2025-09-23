@@ -1,5 +1,5 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { BaseKey, useCan, useInvalidate, useOne, useResource } from "@refinedev/core";
+import { BaseKey, useCan, useInvalidate, useOne, useResourceParams } from "@refinedev/core";
 import validator from "@rjsf/validator-ajv8";
 import type { GetProp } from "antd";
 import { Button, Modal, Space, Typography, Upload, UploadFile, UploadProps, notification } from "antd";
@@ -19,10 +19,10 @@ type FileUploadButtonProps = {
 };
 
 const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId, hideText }) => {
-  const { id } = useResource();
+  const { id } = useResourceParams();
   const invalidate = useInvalidate();
 
-  const { data: fileData } = useOne({
+  const { result: fileData } = useOne({
     resource: "files",
     id: recordItemId ?? id,
   });
@@ -125,7 +125,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
           </Space>
         </Upload>
         {selectedFile && (
-          <RjsfForm schema={fileData?.data?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
+          <RjsfForm schema={fileData?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
             <Space align="start">
               <Button disabled={isLoading} htmlType="submit" type="primary">
                 Submit

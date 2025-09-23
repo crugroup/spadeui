@@ -5,7 +5,7 @@ import {
   useGetToPath,
   useMany,
   useOne,
-  useResource,
+  useResourceParams,
   useShow,
 } from "@refinedev/core";
 import { Select, Table, Tabs, Tag, Typography } from "antd";
@@ -37,7 +37,10 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: formatData, isLoading: formatIsLoading } = useOne({
+  const {
+    result: formatData,
+    query: { isLoading: formatIsLoading },
+  } = useOne({
     resource: "fileformats",
     id: record?.format ?? "",
     queryOptions: {
@@ -45,7 +48,10 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: processorData, isLoading: processorIsLoading } = useOne({
+  const {
+    result: processorData,
+    query: { isLoading: processorIsLoading },
+  } = useOne({
     resource: "fileprocessors",
     id: record?.processor ?? "",
     queryOptions: {
@@ -53,7 +59,10 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: processData, isLoading: processIsLoading } = useOne({
+  const {
+    result: processData,
+    query: { isLoading: processIsLoading },
+  } = useOne({
     resource: "processes",
     id: record?.linked_process ?? "",
     queryOptions: {
@@ -61,7 +70,10 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: variableSetsData, isLoading: variableSetsIsLoading } = useMany({
+  const {
+    result: variableSetsData,
+    query: { isLoading: variableSetsIsLoading },
+  } = useMany({
     resource: "variable-sets",
     ids: record?.variable_sets || [],
     queryOptions: {
@@ -69,7 +81,10 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: userData, isLoading: userIsLoading } = useMany({
+  const {
+    result: userData,
+    query: { isLoading: userIsLoading },
+  } = useMany({
     resource: "users",
     ids: uploadTableProps?.dataSource?.map((item) => item?.user) ?? [],
     queryOptions: {
@@ -79,10 +94,18 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
 
   const getToPath = useGetToPath();
 
-  const fileFormatResource = useResource("fileformats").resource;
-  const processResource = useResource("processes").resource;
-  const fileProcessorResource = useResource("fileprocessors").resource;
-  const variableSetResource = useResource("variable-sets").resource;
+  const fileFormatResource = useResourceParams({
+    resource: "fileformats",
+  }).resource;
+  const processResource = useResourceParams({
+    resource: "processes",
+  }).resource;
+  const fileProcessorResource = useResourceParams({
+    resource: "fileprocessors",
+  }).resource;
+  const variableSetResource = useResourceParams({
+    resource: "variable-sets",
+  }).resource;
 
   const definitionsTab = (
     <>
@@ -111,7 +134,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                 }) ?? "#"
               }
             >
-              {formatData?.data?.format}
+              {formatData?.format}
             </Link>
           ))}
       </Typography.Paragraph>
@@ -130,7 +153,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                 }) ?? "#"
               }
             >
-              {processorData?.data?.name}
+              {processorData?.name}
             </Link>
           ))}
       </Typography.Paragraph>
@@ -149,7 +172,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                 }) ?? "#"
               }
             >
-              {processData?.data?.code}
+              {processData?.code}
             </Link>
           ))}
       </Typography.Paragraph>
