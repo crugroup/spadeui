@@ -2840,6 +2840,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axios@npm:^1.13.0":
+  version: 1.13.0
+  resolution: "axios@npm:1.13.0"
+  dependencies:
+    follow-redirects: "npm:^1.15.6"
+    form-data: "npm:^4.0.4"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: 10c0/2af09f8ad9db9565bf97055eb0ddd2fd4abd9a03d23157b409348c9589370a88c3ede02e11fd1268becb780a77b62bdf9488650dd7208eda57edceca1d65622e
+  languageName: node
+  linkType: hard
+
 "babel-core@npm:^7.0.0-bridge.0":
   version: 7.0.0-bridge.0
   resolution: "babel-core@npm:7.0.0-bridge.0"
@@ -8800,7 +8811,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^8.41.0"
     "@vitejs/plugin-react": "npm:^4.7.0"
     antd: "npm:^5.27.1"
-    axios: "npm:^1.11.0"
+    axios: "npm:^1.13.0"
     axios-auth-refresh: "npm:^3.3.6"
     dayjs: "npm:^1.11.18"
     eslint: "npm:^9.34.0"
