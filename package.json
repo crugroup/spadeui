@@ -20,7 +20,7 @@
     "@rjsf/utils": "^5.24.13",
     "@rjsf/validator-ajv8": "^5.24.13",
     "antd": "^5.27.1",
-    "axios": "^1.11.0",
+    "axios": "^1.13.1",
     "axios-auth-refresh": "^3.3.6",
     "dayjs": "^1.11.18",
     "pretty-bytes": "^6.1.1",
