@@ -111,6 +111,9 @@ yarn up '@refinedev/*' '@rjsf/*' '@types/*' '@typescript-eslint/*' antd axios da
 - [ ] Frontend connects to backend API successfully
 
 
+**Important**: Keep React 18.3 and ensure `@types/react` matches React 18 (not 19). The Refine v4 core + v5 UI combination is officially supported during the transition period.
+
+
 ## Learn More
 
 For additional resources and further information, visit the links below:
