@@ -19,7 +19,7 @@
     "@rjsf/core": "^6.1.2",
     "@rjsf/utils": "^6.1.2",
     "@rjsf/validator-ajv8": "^6.1.2",
-    "antd": "^6.0.1",
+    "antd": "^5.21.6",
     "axios": "^1.13.2",
     "axios-auth-refresh": "^3.3.6",
     "dayjs": "^1.11.19",
@@ -46,7 +46,7 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "prettier": "^3.6.2",
     "typescript": "^5.9.2",
-    "vite": "^6.3.5"
+    "vite": "^6.4"
   },
   "scripts": {
     "dev": "refine dev",
