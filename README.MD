@@ -147,13 +147,13 @@ yarn up vite@^6.4
 - [ ] Frontend connects to backend API successfully
 
 ### Tech Stack & Compatibility Notes
-- **Framework**: React 18.3 (stay on v18, not v19)
-- **TypeScript**: 5.9
-- **Build Tool**: Vite 6.4+
-- **UI Library**: Ant Design 5.29+ (v5, not v6), Refine v4.58 (core) + v5.47 (UI)
-- **Forms**: React JSON Schema Form (RJSF) 6.1
-- **HTTP Client**: Axios 1.13
-- **Package Manager**: Yarn 4.6
+- **Framework**: React 18.3.1 (stay on v18, not v19)
+- **TypeScript**: 5.9.2
+- **Build Tool**: Vite 6.4.1+
+- **UI Library**: Ant Design 5.21.6+ (v5, not v6), Refine v4.58 (core) + v5.47 (UI)
+- **Forms**: React JSON Schema Form (RJSF) 6.1.2
+- **HTTP Client**: Axios 1.13.2
+- **Package Manager**: Yarn 4.6.0
 
 **Important**: Keep React 18.3 and ensure `@types/react` matches React 18 (not 19). Keep Ant Design on v5 (not v6). The Refine v4 core + v5 UI combination is officially supported during the transition period.
 
