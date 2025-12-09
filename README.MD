@@ -29,14 +29,87 @@ This tool is built with **TypeScript** and leverages the capabilities of **Refin
 #### Running the development server
 
 ```bash
-    yarn dev
+yarn dev
 ```
 
 #### Building for production
 
 ```bash
-    yarn build
+yarn build
 ```
+
+## Maintenance
+
+### Prerequisites
+- Node.js (latest LTS)
+- Yarn 4.6.0+ (enable with `corepack enable`)
+- Backend API running on `http://localhost:8081`
+
+### Development Workflow
+
+#### 1. Install dependencies
+```bash
+yarn install
+```
+This regenerates `yarn.lock` automatically - never edit it manually.
+
+#### 2. Start development server
+```bash
+yarn dev
+```
+Runs on `http://localhost:5173` with hot reload enabled.
+
+#### 3. Environment configuration
+Create `.env` file in the root:
+```bash
+VITE_API_URL=http://localhost:8081/api/v1
+```
+
+### Quality Checks
+
+#### Run linter
+```bash
+yarn lint
+```
+Checks for ESLint and TypeScript errors.
+
+#### Type checking
+```bash
+npx tsc --noEmit
+```
+Validates TypeScript types without building.
+
+#### Build for production
+```bash
+yarn build
+```
+Outputs to `dist/` folder. Should complete without errors.
+
+### Dependency Management
+
+#### Check current versions
+```bash
+yarn info <package-name>
+```
+
+#### Upgrade specific packages
+```bash
+yarn up '@refinedev/*' '@rjsf/*' '@types/*' '@typescript-eslint/*' antd axios dayjs eslint-plugin-react-hooks '@vitejs/plugin-react'
+```
+
+#### After upgrading:
+1. Run `yarn install` to regenerate `yarn.lock`
+2. Test with `yarn build`
+3. Test with `yarn dev`
+4. Run `npx tsc --noEmit` for type checking
+
+### Testing Checklist
+- [ ] `yarn install` completes without errors
+- [ ] `yarn build` succeeds (target: < 5s build time)
+- [ ] `yarn dev` starts on port 5173
+- [ ] `npx tsc --noEmit` shows no type errors
+- [ ] Frontend connects to backend API successfully
+
 
 ## Learn More
 
