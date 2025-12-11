@@ -1944,16 +1944,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@refinedev/kbar@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "@refinedev/kbar@npm:2.0.1"
+"@refinedev/kbar@npm:1.3.17":
+  version: 1.3.17
+  resolution: "@refinedev/kbar@npm:1.3.17"
   dependencies:
     kbar: "npm:0.1.0-beta.40"
   peerDependencies:
-    "@refinedev/core": ^5.0.0
-    react: ^18.0.0 || ^19.0.0
-    react-dom: ^18.0.0 || ^19.0.0
-  checksum: 10c0/423b3349c44cf4a83864d27b8cf2c156c90e6e20bbb493f4fa9b30049e0646f41fa35681bd5a0c2b1711175d06b32669281f0a1d6a039350fb1932e75fb862c4
+    "@refinedev/core": ^4.46.1
+    react: ^17.0.0 || ^18.0.0
+    react-dom: ^17.0.0 || ^18.0.0
+  checksum: 10c0/040545631670d603fddf65b2f1537b39e28c15ee9b030450ff84d5bd9a8df65af8a6c2e4226460851663cda6486f4f716d09c805b850d582c82d8a3bf048cdb0
   languageName: node
   linkType: hard
 
@@ -8982,7 +8982,7 @@ __metadata:
     "@refinedev/devtools": "npm:^2.0.3"
     "@refinedev/devtools-server": "npm:^2.0.1"
     "@refinedev/inferencer": "npm:^6.0.2"
-    "@refinedev/kbar": "npm:^2.0.1"
+    "@refinedev/kbar": "npm:1.3.17"
     "@refinedev/react-router-v6": "npm:^4.6.2"
     "@refinedev/simple-rest": "npm:^6.0.1"
     "@rjsf/antd": "npm:^6.1.2"
