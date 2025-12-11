@@ -62,7 +62,7 @@ Runs on `http://localhost:5173` with hot reload enabled.
 #### 3. Environment configuration
 Create `.env` file in the root:
 ```bash
-VITE_API_URL=http://localhost:8081/api/v1
+VITE_BACKEND_BASE_URL=http://localhost:8081/api/v1
 ```
 
 ### Quality Checks
