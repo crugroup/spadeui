@@ -24,8 +24,8 @@ export const UserEdit: React.FC<IResourceComponentsProps> = () => {
     resource: "groups",
   });
 
-  const permissions = permissionsData?.data || [];
-  const groups = groupsData?.data || [];
+  const permissions = permissionsData?.data.sort((a: any, b: any) => a.name.localeCompare(b.name)) || [];
+  const groups = groupsData?.data.sort((a: any, b: any) => a.name.localeCompare(b.name)) || [];
 
   // Set initial selected groups from record
   useEffect(() => {
