@@ -1,4 +1,4 @@
-import { DateField, FilterDropdown, List, Show, TextField, useTable } from "@refinedev/antd";
+import { DateField, FilterDropdown, Show, TextField, useTable } from "@refinedev/antd";
 import {
   CanAccess,
   IResourceComponentsProps,
@@ -8,11 +8,10 @@ import {
   useResource,
   useShow,
 } from "@refinedev/core";
-import { Select, Table, Tabs, Tag, Typography } from "antd";
+import { Select, Space, Table, Tabs, Tag, Typography } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
-import IconStatusMapper from "../../components/icon-status-mapper/icon-status-mapper";
 import JsonField from "../../components/json-field/json-field";
 import { ProcessRunButton } from "../../components/process-run-button";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
@@ -70,16 +69,34 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
   const executorResource = useResource("executors").resource;
   const variableSetResource = useResource("variable-sets").resource;
 
+  const getRunState = (status?: string, result?: string) => {
+    const normalizedStatus = status?.toLowerCase();
+    const normalizedResult = result?.toLowerCase();
+
+    if (normalizedStatus === "running" || normalizedStatus === "new") return "running";
+    if (
+      normalizedStatus === "error" ||
+      normalizedResult === "failed" ||
+      normalizedResult === "error" ||
+      normalizedResult === "warning"
+    )
+      return "failed";
+    if (normalizedResult === "success" || normalizedStatus === "finished") return "success";
+    return "failed";
+  };
+
   const definitionsTab = (
-    <>
-      <Title level={5}>Code</Title>
+    <div className="entity-show-shell">
+      <Title level={5}>Name</Title>
       <TextField value={record?.code} />
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
       <Title level={5}>Tags</Title>
       <Typography.Paragraph>
         {record?.tags?.map((tag: string) => (
-          <Tag key={tag}>{tag}</Tag>
+          <Tag className="entity-tag" key={tag}>
+            {tag}
+          </Tag>
         ))}
       </Typography.Paragraph>
       <Title level={5}>Executor</Title>
@@ -144,17 +161,29 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
         <UserParamsTooltip />
       </Title>
       <Typography.Paragraph>{record?.user_params && <JsonField value={record?.user_params} />}</Typography.Paragraph>
-    </>
+    </div>
   );
 
   const historyTab = (
     <CanAccess resource="processruns" action="show">
-      <List title={<></>} breadcrumb={false} canCreate={false} resource="processruns">
-        <Table {...processRunsTableProps} pagination={false} rowKey="id">
+      <div className="entity-table-shell entity-table-shell--flat">
+        <Table
+          {...processRunsTableProps}
+          pagination={{ ...processRunsTableProps.pagination, showSizeChanger: false }}
+          rowKey="id"
+          rowClassName={() => "entity-table-row"}
+        >
           <Table.Column
             dataIndex="status"
             title="Status"
-            render={(value) => <IconStatusMapper status={value} />}
+            render={(value, record: { status?: string; result?: string }) => {
+              const state = getRunState(record?.status || value, record?.result);
+              return (
+                <Space size={8}>
+                  <Tag className={`run-status-chip run-status-chip--${state}`}>{state}</Tag>
+                </Space>
+              );
+            }}
             sorter
             filterDropdown={(props) => (
               <FilterDropdown {...props}>
@@ -170,7 +199,14 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
           <Table.Column
             dataIndex="result"
             title="Result"
-            render={(value) => <IconStatusMapper status={value} />}
+            render={(value, record: { status?: string; result?: string }) => {
+              const state = getRunState(record?.status, record?.result || value);
+              return (
+                <Space size={8}>
+                  <Tag className={`run-status-chip run-status-chip--${state}`}>{state}</Tag>
+                </Space>
+              );
+            }}
             sorter
             filterDropdown={(props) => (
               <FilterDropdown {...props}>
@@ -204,7 +240,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
           />
           <Table.Column dataIndex="error_message" title="Message" sorter />
         </Table>
-      </List>
+      </div>
     </CanAccess>
   );
 
@@ -219,6 +255,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       )}
     >
       <Tabs
+        className="entity-tabs"
         defaultActiveKey="1"
         items={[
           {

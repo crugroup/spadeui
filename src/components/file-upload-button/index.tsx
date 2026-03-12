@@ -101,7 +101,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
           setSelectedFile(undefined);
         }}
         footer={<></>}
-        className="file-upload-button__modal"
+        className="file-upload-button__modal workflow-modal"
       >
         <Upload
           showUploadList={false}
@@ -126,7 +126,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
         </Upload>
         {selectedFile && (
           <RjsfForm schema={fileData?.data?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
-            <Space align="start">
+            <Space align="start" className="workflow-modal__actions">
               <Button disabled={isLoading} htmlType="submit" type="primary">
                 Submit
               </Button>

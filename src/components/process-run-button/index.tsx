@@ -31,12 +31,14 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onSubmit = async ({ formData }: { formData?: FormData }) => {
+    const serializedParams = JSON.stringify(formData ?? {});
+
     mutate(
       {
         url: `${API_URL}/processes/${recordItemId ?? id}/run`,
         method: "post",
         values: {
-          params: JSON.stringify(formData) ?? {},
+          params: serializedParams,
         },
         successNotification: () => ({
           message: "The process was launched successfuly",
@@ -45,7 +47,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         }),
         errorNotification: (err) => {
           return {
-            message: err?.response.data.error_message || err?.message || "Something went wrong",
+            message: err?.response?.data?.error_message || err?.message || "Something went wrong",
             type: "error",
             description: "Error",
           };
@@ -83,9 +85,10 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
           setIsModalOpen(false);
         }}
         footer={<></>}
+        className="workflow-modal"
       >
         <RjsfForm schema={processData?.data?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
-          <Space align="start">
+          <Space align="start" className="workflow-modal__actions">
             <Button disabled={isLoading} htmlType="submit" type="primary">
               Submit
             </Button>

@@ -244,7 +244,6 @@ export const authProvider: AuthBindings = {
     return null;
   },
   onError: async (error) => {
-    console.error(error);
     return { error };
   },
 };

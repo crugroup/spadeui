@@ -18,6 +18,7 @@ import { dataProvider } from "./config/rest-data-provider";
 import { API_URL } from "./config/constants";
 
 axiosHelper.setAxiosTokenInterceptor();
+const enableRefineDevtools = import.meta.env.VITE_ENABLE_REFINE_DEVTOOLS === "true";
 
 function App() {
   return (
@@ -44,7 +45,7 @@ function App() {
                 <UnsavedChangesNotifier />
                 <DocumentTitleHandler handler={spadeTitleHandler as any} />
               </Refine>
-              <DevtoolsPanel />
+              {enableRefineDevtools ? <DevtoolsPanel /> : null}
             </DevtoolsProvider>
           </AntdApp>
         </ThemeProvider>
