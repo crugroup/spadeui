@@ -21,6 +21,7 @@ const { Title } = Typography;
 export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
   const { queryResult } = useShow();
   const { data, isLoading } = queryResult;
+  const [activeTabKey, setActiveTabKey] = React.useState("1");
 
   const record = data?.data;
 
@@ -43,6 +44,9 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
   const { tableProps: processRunsTableProps } = useTable({
     syncWithLocation: false,
     resource: "processruns",
+    queryOptions: {
+      enabled: activeTabKey === "2" && !!record?.id,
+    },
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
     },
@@ -61,7 +65,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     resource: "users",
     ids: processRunsTableProps?.dataSource?.map((item) => item?.user) ?? [],
     queryOptions: {
-      enabled: !!processRunsTableProps?.dataSource,
+      enabled: activeTabKey === "2" && !!processRunsTableProps?.dataSource?.length,
     },
   });
 
@@ -257,6 +261,8 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       <Tabs
         className="entity-tabs"
         defaultActiveKey="1"
+        activeKey={activeTabKey}
+        onChange={setActiveTabKey}
         items={[
           {
             key: "1",

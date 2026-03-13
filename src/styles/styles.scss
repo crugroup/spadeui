@@ -530,10 +530,18 @@ body {
   border-radius: 12px;
   border: 1px solid rgba(151, 170, 198, 0.24);
   box-shadow: 0 10px 26px rgba(19, 37, 70, 0.12);
+  background: var(--spade-surface);
 }
 
 .workflow-modal .ant-modal-header {
+  background: transparent;
   padding-bottom: 8px;
+}
+
+.workflow-modal .ant-modal-title,
+.workflow-modal .ant-modal-body,
+.workflow-modal .ant-modal-footer {
+  background: transparent;
 }
 
 .workflow-modal__actions {
@@ -548,6 +556,27 @@ body {
   border-radius: 12px;
   border-color: rgba(48, 164, 253, 0.34);
   background: linear-gradient(180deg, rgba(48, 164, 253, 0.04), rgba(48, 164, 253, 0.02));
+}
+
+.workflow-modal .rjsf-form fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  min-width: 0;
+}
+
+.workflow-modal .rjsf-form legend {
+  padding: 0;
+  margin: 0 0 10px;
+  width: 100%;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--spade-muted);
+  border: 0;
 }
 
 .rjsf-form .react-json-view,

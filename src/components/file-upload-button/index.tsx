@@ -21,20 +21,23 @@ type FileUploadButtonProps = {
 const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId, hideText }) => {
   const { id } = useResource();
   const invalidate = useInvalidate();
+  const targetId = recordItemId ?? id;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<UploadFile | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { data: fileData } = useOne({
     resource: "files",
-    id: recordItemId ?? id,
+    id: targetId,
+    queryOptions: {
+      enabled: isModalOpen && !!targetId,
+    },
   });
 
   const { data: permissionData } = useCan({
     action: "create",
     resource: "fileuploads",
   });
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<UploadFile | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(false);
 
   const uploadFileName = useMemo(
     () => selectedFile?.name ?? `File uploaded at ${new Date().toISOString()}`,
@@ -55,7 +58,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
     form.append("params", JSON.stringify(formData));
 
     try {
-      const resp = await axios.post(`${API_URL}/files/${recordItemId ?? id}/upload`, form, {
+      const resp = await axios.post(`${API_URL}/files/${targetId}/upload`, form, {
         headers: {
           authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN_KEY)}`,
           "Content-Disposition": `attachment; filename="${uploadFileName}"`,

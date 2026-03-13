@@ -17,10 +17,15 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
   const { id } = useResource();
   const { isLoading, mutate } = useCustomMutation();
   const invalidate = useInvalidate();
+  const targetId = recordItemId ?? id;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: processData } = useOne({
     resource: "processes",
-    id: recordItemId ?? id,
+    id: targetId,
+    queryOptions: {
+      enabled: isModalOpen && !!targetId,
+    },
   });
 
   const { data: permissionData } = useCan({
@@ -28,14 +33,12 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
     resource: "processruns",
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const onSubmit = async ({ formData }: { formData?: FormData }) => {
     const serializedParams = JSON.stringify(formData ?? {});
 
     mutate(
       {
-        url: `${API_URL}/processes/${recordItemId ?? id}/run`,
+        url: `${API_URL}/processes/${targetId}/run`,
         method: "post",
         values: {
           params: serializedParams,
