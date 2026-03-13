@@ -81,6 +81,10 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
       resource: "fileuploads",
       invalidates: ["list"],
     });
+    invalidate({
+      resource: "files",
+      invalidates: ["list", "detail"],
+    });
     setIsLoading(false);
   };
 

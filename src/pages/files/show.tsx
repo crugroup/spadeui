@@ -14,20 +14,28 @@ import { Link } from "react-router-dom";
 import { FileUploadButton } from "../../components";
 import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
 import { JsonField } from "../../components/json-field/json-field";
+import { HISTORY_QUERY_OPTIONS, STATIC_QUERY_OPTIONS } from "../../config/query-cache";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 import React from "react";
 
 const { Title } = Typography;
 
 export const FileShow: React.FC<IResourceComponentsProps> = () => {
-  const { query } = useShow();
+  const { query } = useShow({
+    queryOptions: STATIC_QUERY_OPTIONS,
+  });
   const { data, isLoading } = query;
+  const [activeTabKey, setActiveTabKey] = React.useState("1");
 
   const record = data?.data;
 
   const { tableProps: uploadTableProps } = useTable({
     syncWithLocation: false,
     resource: "fileuploads",
+    queryOptions: {
+      ...HISTORY_QUERY_OPTIONS,
+      enabled: activeTabKey === "2" && !!record?.id,
+    },
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
     },
@@ -40,6 +48,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     resource: "fileformats",
     id: record?.format ?? "",
     queryOptions: {
+      ...STATIC_QUERY_OPTIONS,
       enabled: !!record?.format,
     },
   });
@@ -48,6 +57,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     resource: "fileprocessors",
     id: record?.processor ?? "",
     queryOptions: {
+      ...STATIC_QUERY_OPTIONS,
       enabled: !!record?.processor,
     },
   });
@@ -56,6 +66,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     resource: "processes",
     id: record?.linked_process ?? "",
     queryOptions: {
+      ...STATIC_QUERY_OPTIONS,
       enabled: !!record?.linked_process,
     },
   });
@@ -64,6 +75,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     resource: "variable-sets",
     ids: record?.variable_sets || [],
     queryOptions: {
+      ...STATIC_QUERY_OPTIONS,
       enabled: !!record?.variable_sets?.length,
     },
   });
@@ -72,7 +84,8 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     resource: "users",
     ids: uploadTableProps?.dataSource?.map((item) => item?.user) ?? [],
     queryOptions: {
-      enabled: !!uploadTableProps?.dataSource,
+      ...HISTORY_QUERY_OPTIONS,
+      enabled: activeTabKey === "2" && !!uploadTableProps?.dataSource?.length,
     },
   });
 
@@ -288,6 +301,8 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       <Tabs
         className="entity-tabs"
         defaultActiveKey="1"
+        activeKey={activeTabKey}
+        onChange={setActiveTabKey}
         items={[
           {
             key: "1",
