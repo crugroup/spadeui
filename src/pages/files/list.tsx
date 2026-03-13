@@ -6,7 +6,7 @@ import { FileUploadButton } from "../../components";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 export const FileList: React.FC<IResourceComponentsProps> = () => {
-  const { tableQuery, tableProps } = useTable({
+  const { filters, setFilters, tableQuery, tableProps } = useTable({
     syncWithLocation: true,
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
@@ -24,17 +24,44 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
   const files = tableQuery.data;
   const tags: string[] | undefined = files?.data?.map((f: any) => f.tags).flat();
   const tagSet = [...new Set(tags)].sort();
+  const activeTagFilter = filters.find((filter) => "field" in filter && filter.field === "tags");
+
+  const applyTagFilter = (tag: string) => {
+    const nextFilters = filters.filter((filter) => !("field" in filter && filter.field === "tags"));
+    const isSameTag = activeTagFilter?.value === tag;
+
+    setFilters(
+      isSameTag
+        ? nextFilters
+        : [
+            ...nextFilters,
+            {
+              field: "tags",
+              operator: "eq",
+              value: tag,
+            },
+          ],
+      "replace"
+    );
+  };
 
   return (
     <List canCreate={true}>
-      <Table {...tableProps} pagination={{ ...tableProps.pagination, showSizeChanger: false }} rowKey="id">
+      <div className="entity-table-shell entity-table-shell--flat">
+        <Table
+          className="files-table"
+          {...tableProps}
+          pagination={{ ...tableProps.pagination, showSizeChanger: false }}
+          rowKey="id"
+          rowClassName={() => "entity-table-row"}
+        >
         <Table.Column
           dataIndex="code"
-          title="Code"
+          title="Name"
           sorter
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
-              <Input placeholder="Search by title" />
+              <Input placeholder="Search by name" />
             </FilterDropdown>
           )}
         />
@@ -42,11 +69,26 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
         <Table.Column
           dataIndex="tags"
           title="Tags"
-          render={(tags: string[]) => tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
+          render={(tags: string[]) => (
+            <div className="file-tags-wrap">
+              {tags.map((tag) => (
+                <Tag
+                  className={`entity-tag entity-tag--interactive ${activeTagFilter?.value === tag ? "entity-tag--active" : ""}`}
+                  key={tag}
+                  onClick={() => applyTagFilter(tag)}
+                >
+                  {tag}
+                </Tag>
+              ))}
+            </div>
+          )}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
               <Select
                 allowClear
+                showSearch
+                optionFilterProp="label"
+                placeholder="Search tags"
                 options={tagSet.map((name) => ({ label: name, value: name }))}
                 className="filter-dropdown__select"
               />
@@ -57,7 +99,7 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
           title="Actions"
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
-            <Space>
+            <Space className="entity-table-actions">
               <EditButton hideText size="small" recordItemId={record.id} />
               <ShowButton hideText size="small" recordItemId={record.id} />
               <DeleteButton hideText size="small" recordItemId={record.id} />
@@ -65,7 +107,8 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
             </Space>
           )}
         />
-      </Table>
+        </Table>
+      </div>
     </List>
   );
 };

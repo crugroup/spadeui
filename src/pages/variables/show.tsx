@@ -36,7 +36,7 @@ export const VariableShow: React.FC<IResourceComponentsProps> = () => {
       </Tag>
 
       <Title level={5}>Value</Title>
-      <Card size="small" style={{ marginBottom: 16 }}>
+      <Card size="small" variant="outlined" style={{ marginBottom: 16 }}>
         <Space direction="vertical" style={{ width: "100%" }}>
           {record?.is_secret ? (
             <Text type="secondary">••••••••••••••••</Text>

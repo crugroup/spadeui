@@ -1,4 +1,4 @@
-import { DateField, FilterDropdown, List, Show, TextField, useTable } from "@refinedev/antd";
+import { DateField, FilterDropdown, Show, TextField, useTable } from "@refinedev/antd";
 import {
   CanAccess,
   IResourceComponentsProps,
@@ -8,14 +8,13 @@ import {
   useResource,
   useShow,
 } from "@refinedev/core";
-import { Select, Table, Tabs, Tag, Typography } from "antd";
+import { Select, Space, Table, Tabs, Tag, Typography } from "antd";
 import prettyBytes from "pretty-bytes";
 import { Link } from "react-router-dom";
 import { FileUploadButton } from "../../components";
 import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
 import { JsonField } from "../../components/json-field/json-field";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
-import IconStatusMapper from "../../components/icon-status-mapper/icon-status-mapper";
 import React from "react";
 
 const { Title } = Typography;
@@ -84,17 +83,37 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
   const fileProcessorResource = useResource("fileprocessors").resource;
   const variableSetResource = useResource("variable-sets").resource;
 
+  const getRunState = (status?: string, result?: string) => {
+    const normalizedStatus = status?.toLowerCase();
+    const normalizedResult = result?.toLowerCase();
+
+    if (normalizedStatus === "running" || normalizedStatus === "new") return "running";
+    if (
+      normalizedStatus === "error" ||
+      normalizedResult === "failed" ||
+      normalizedResult === "error" ||
+      normalizedResult === "warning"
+    )
+      return "failed";
+    if (normalizedResult === "success" || normalizedStatus === "finished") return "success";
+    return "failed";
+  };
+
   const definitionsTab = (
-    <>
-      <Title level={5}>Code</Title>
+    <div className="entity-show-shell">
+      <Title level={5}>Name</Title>
       <TextField value={record?.code ?? ""} />
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
       <Title level={5}>Tags</Title>
       <Typography.Paragraph>
-        {record?.tags?.map((tag: string) => (
-          <Tag key={tag}>{tag}</Tag>
-        ))}
+        <div className="file-tags-wrap">
+          {record?.tags?.map((tag: string) => (
+            <Tag className="entity-tag" key={tag}>
+              {tag}
+            </Tag>
+          ))}
+        </div>
       </Typography.Paragraph>
       <Title level={5}>Format</Title>
       <Typography.Paragraph>
@@ -196,12 +215,12 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       <Typography.Paragraph>
         {record?.system_params && <JsonField value={record?.system_params} />}
       </Typography.Paragraph>
-    </>
+    </div>
   );
 
   const historyTab = (
     <CanAccess resource="fileuploads" action="show">
-      <List title={<></>} breadcrumb={false} canCreate={false} resource="fileuploads">
+      <div className="entity-table-shell entity-table-shell--flat">
         <Table
           {...uploadTableProps}
           pagination={{
@@ -209,12 +228,20 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             showSizeChanger: false,
           }}
           rowKey="id"
+          rowClassName={() => "entity-table-row"}
         >
           <Table.Column dataIndex="name" title="Name" sorter />
           <Table.Column
             dataIndex="result"
             title="Result"
-            render={(value) => <IconStatusMapper status={value} />}
+            render={(value, record: { status?: string; result?: string }) => {
+              const state = getRunState(record?.status, record?.result || value);
+              return (
+                <Space size={8}>
+                  <Tag className={`run-status-chip run-status-chip--${state}`}>{state}</Tag>
+                </Space>
+              );
+            }}
             sorter
             filterDropdown={(props) => (
               <FilterDropdown {...props}>
@@ -244,7 +271,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
           />
           <Table.Column dataIndex="error_message" title="Message" sorter />
         </Table>
-      </List>
+      </div>
     </CanAccess>
   );
 
@@ -259,6 +286,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       )}
     >
       <Tabs
+        className="entity-tabs"
         defaultActiveKey="1"
         items={[
           {

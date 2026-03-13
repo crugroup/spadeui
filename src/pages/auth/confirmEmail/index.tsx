@@ -66,7 +66,9 @@ export const ConfirmEmail = () => {
   return (
     <Row justify="center" align="middle" style={{ minHeight: "80vh" }}>
       <Col span={12}>
-        <Card className="text-center">{isError ? errorContent : loadingContent}</Card>
+        <Card className="text-center" variant="outlined">
+          {isError ? errorContent : loadingContent}
+        </Card>
       </Col>
     </Row>
   );

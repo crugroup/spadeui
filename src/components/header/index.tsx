@@ -17,6 +17,8 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = () => {
   const { data: user } = useGetIdentity<UserData>();
   const { mode, setMode } = useContext(ThemeProviderContext);
   const { mutate: logout } = useLogout();
+  const userLabel = user?.fullName || user?.email || "User";
+  const userInitial = userLabel?.trim()?.[0]?.toUpperCase() || "U";
 
   const items: MenuProps["items"] = [
     {
@@ -56,17 +58,27 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = () => {
   ];
 
   return (
-    <AntdLayout.Header style={{ backgroundColor: token.colorBgElevated }}>
-      <Space>
+    <AntdLayout.Header className="app-header" style={{ backgroundColor: token.colorBgElevated }}>
+      <Space className="app-header__content" size="middle">
+        <div className="app-header__identity">
+          <span className="app-header__avatar">{userInitial}</span>
+          <Text strong className="app-header__name">
+            {userLabel}
+          </Text>
+        </div>
         <Space size="middle">
-          <Text strong>{user?.fullName || user?.email}</Text>
           <Space>
             <Dropdown menu={{ items }} placement="bottom">
-              <Button className="btn-vertical-align" type="text" size="small" icon={<SettingOutlined />}></Button>
+              <Button
+                className="btn-vertical-align app-header__icon-btn"
+                type="text"
+                size="small"
+                icon={<SettingOutlined />}
+              ></Button>
             </Dropdown>
           </Space>
           <Button
-            className="btn-vertical-align"
+            className="btn-vertical-align app-header__logout"
             onClick={() => logout()}
             type="text"
             size="small"

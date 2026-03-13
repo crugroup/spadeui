@@ -50,7 +50,7 @@ export const AccountCreated = () => {
   return (
     <Row justify="center" align="middle" style={{ minHeight: "80vh" }}>
       <Col span={12}>
-        <Card className="text-center">
+        <Card className="text-center" variant="outlined">
           <EmailIcon />
           <Typography.Title level={3}>Congratulations! Your account has been created.</Typography.Title>
           <Typography.Paragraph>Email message didn't reach you? You can send it again.</Typography.Paragraph>

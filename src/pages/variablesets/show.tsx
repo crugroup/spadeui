@@ -40,7 +40,7 @@ export const VariableSetShow: React.FC<IResourceComponentsProps> = () => {
       <TextField value={record?.description || "No description provided"} />
 
       <Title level={5}>Variables ({setVariables.length})</Title>
-      <Card size="small">
+      <Card size="small" variant="outlined">
         <List
           dataSource={setVariables}
           renderItem={(variable) => (

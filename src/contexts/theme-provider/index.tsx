@@ -41,7 +41,7 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
           ...RefineThemes.Blue,
           algorithm: mode === "light" ? defaultAlgorithm : darkAlgorithm,
           token: {
-            fontFamily: "Inter, sans-serif",
+            fontFamily: "Manrope, Avenir Next, Segoe UI, sans-serif",
             ...(mode === "light" ? lightColors : darkColors),
           },
         }}

@@ -27,8 +27,8 @@ axiosInstance.interceptors.response.use(
   (error): Promise<HttpError> =>
     Promise.reject({
       ...error,
-      message: error.response.data?.message,
-      statusCode: error.response.status,
+      message: error?.response?.data?.message || error?.message || "Request failed",
+      statusCode: error?.response?.status ?? 0,
     })
 );
 

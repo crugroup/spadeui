@@ -93,12 +93,12 @@ export const Register = () => {
           });
 
           return (
-            <>
+            <div className="auth-surface auth-surface--register">
               <div className="register-logo-holder">
                 <Logo />
               </div>
               {cloneElement(content, (content as ReactElement).props, newChildren)}
-            </>
+            </div>
           );
         }
 
