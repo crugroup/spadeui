@@ -6,7 +6,23 @@ import { ProcessRunButton } from "../../components/process-run-button";
 import { LIVE_LIST_QUERY_OPTIONS } from "../../config/query-cache";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
-const ACTIVE_RUN_POLL_INTERVAL = 15_000;
+const ACTIVE_RUN_POLL_INTERVAL = 30_000;
+
+const extractProcessRows = (dataOrQuery: any, maybeQuery?: any) => {
+  if (Array.isArray(dataOrQuery?.data)) {
+    return dataOrQuery.data as Array<{ latest_run?: { status?: string; result?: string } }>;
+  }
+
+  if (Array.isArray(maybeQuery?.state?.data?.data)) {
+    return maybeQuery.state.data.data as Array<{ latest_run?: { status?: string; result?: string } }>;
+  }
+
+  if (Array.isArray(dataOrQuery?.state?.data?.data)) {
+    return dataOrQuery.state.data.data as Array<{ latest_run?: { status?: string; result?: string } }>;
+  }
+
+  return [];
+};
 
 const getRunState = (latestRun?: { status?: string; result?: string }) => {
   const status = latestRun?.status?.toLowerCase();
@@ -26,9 +42,9 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
     queryOptions: {
       ...LIVE_LIST_QUERY_OPTIONS,
       // Poll only while a visible process is actively running.
-      refetchInterval: (query: any) => {
-        const rows = query.state.data?.data as Array<{ latest_run?: { status?: string; result?: string } }> | undefined;
-        const hasActiveRun = rows?.some((process) => getRunState(process?.latest_run) === "running") ?? false;
+      refetchInterval: (dataOrQuery: any, maybeQuery?: any) => {
+        const rows = extractProcessRows(dataOrQuery, maybeQuery);
+        const hasActiveRun = rows.some((process) => getRunState(process?.latest_run) === "running");
 
         return hasActiveRun ? ACTIVE_RUN_POLL_INTERVAL : false;
       },
@@ -74,7 +90,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
   return (
     <List>
       <div className="processes-live-hint-wrap">
-        <div className="processes-live-hint">Live updates every 15 seconds while runs are active</div>
+        <div className="processes-live-hint">Live updates every 30 seconds while runs are active</div>
         {runningCount > 0 && (
           <Tag className="processes-live-counter">
             <span className="processes-live-counter__pulse" />
