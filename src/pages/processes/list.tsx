@@ -3,24 +3,35 @@ import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
 import { Input, Select, Space, Table, Tag, Tooltip } from "antd";
 import React from "react";
 import { ProcessRunButton } from "../../components/process-run-button";
+import { LIVE_LIST_QUERY_OPTIONS } from "../../config/query-cache";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
+
+const ACTIVE_RUN_POLL_INTERVAL = 15_000;
 
 const getRunState = (latestRun?: { status?: string; result?: string }) => {
   const status = latestRun?.status?.toLowerCase();
   const result = latestRun?.result?.toLowerCase();
 
+  if (!status && !result) return "idle";
+
   if (status === "running" || status === "new") return "running";
   if (status === "error" || result === "failed" || result === "error" || result === "warning") return "failed";
   if (result === "success" || status === "finished") return "success";
-  return "failed";
+  return "idle";
 };
 
 export const ProcessList: React.FC<IResourceComponentsProps> = () => {
   const { filters, setFilters, tableQuery, tableProps } = useTable({
     syncWithLocation: true,
     queryOptions: {
-      // Poll for latest run updates so status changes are visible while Airflow is executing.
-      refetchInterval: 5000,
+      ...LIVE_LIST_QUERY_OPTIONS,
+      // Poll only while a visible process is actively running.
+      refetchInterval: (query: any) => {
+        const rows = query.state.data?.data as Array<{ latest_run?: { status?: string; result?: string } }> | undefined;
+        const hasActiveRun = rows?.some((process) => getRunState(process?.latest_run) === "running") ?? false;
+
+        return hasActiveRun ? ACTIVE_RUN_POLL_INTERVAL : false;
+      },
     },
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
@@ -63,7 +74,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
   return (
     <List>
       <div className="processes-live-hint-wrap">
-        <div className="processes-live-hint">Live updates every 5 seconds while runs are active</div>
+        <div className="processes-live-hint">Live updates every 15 seconds while runs are active</div>
         {runningCount > 0 && (
           <Tag className="processes-live-counter">
             <span className="processes-live-counter__pulse" />
@@ -141,7 +152,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
           dataIndex="latest_run"
           title="Latest run"
           render={(latestRun?: { status?: string; result?: string; created_at?: string }) => {
-            if (!latestRun) return <span>-</span>;
+            if (!latestRun) return <span className="run-status-meta">Not run yet</span>;
 
             const state = getRunState(latestRun);
             const subtitle = latestRun.created_at

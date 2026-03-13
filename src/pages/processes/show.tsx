@@ -14,12 +14,15 @@ import { Link } from "react-router-dom";
 import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
 import JsonField from "../../components/json-field/json-field";
 import { ProcessRunButton } from "../../components/process-run-button";
+import { HISTORY_QUERY_OPTIONS, STATIC_QUERY_OPTIONS } from "../../config/query-cache";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 const { Title } = Typography;
 
 export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
-  const { queryResult } = useShow();
+  const { queryResult } = useShow({
+    queryOptions: STATIC_QUERY_OPTIONS,
+  });
   const { data, isLoading } = queryResult;
   const [activeTabKey, setActiveTabKey] = React.useState("1");
 
@@ -29,6 +32,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     resource: "executors",
     id: record?.executor || "",
     queryOptions: {
+      ...STATIC_QUERY_OPTIONS,
       enabled: !!record?.executor,
     },
   });
@@ -37,6 +41,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     resource: "variable-sets",
     ids: record?.variable_sets || [],
     queryOptions: {
+      ...STATIC_QUERY_OPTIONS,
       enabled: !!record?.variable_sets?.length,
     },
   });
@@ -45,6 +50,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     syncWithLocation: false,
     resource: "processruns",
     queryOptions: {
+      ...HISTORY_QUERY_OPTIONS,
       enabled: activeTabKey === "2" && !!record?.id,
     },
     pagination: {
@@ -65,6 +71,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     resource: "users",
     ids: processRunsTableProps?.dataSource?.map((item) => item?.user) ?? [],
     queryOptions: {
+      ...HISTORY_QUERY_OPTIONS,
       enabled: activeTabKey === "2" && !!processRunsTableProps?.dataSource?.length,
     },
   });

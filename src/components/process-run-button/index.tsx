@@ -1,7 +1,7 @@
 import { PlayCircleOutlined } from "@ant-design/icons";
 import { BaseKey, useCan, useCustomMutation, useInvalidate, useOne, useResource } from "@refinedev/core";
 import validator from "@rjsf/validator-ajv8";
-import { Button, Modal, Space } from "antd";
+import { Button, Modal, Space, notification } from "antd";
 import { ButtonProps } from "antd/lib";
 import { FC, useState } from "react";
 import { RjsfForm } from "../rjsf-form/rjsf-form";
@@ -43,11 +43,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         values: {
           params: serializedParams,
         },
-        successNotification: () => ({
-          message: "The process was launched successfuly",
-          type: "success",
-          description: "Success",
-        }),
+        successNotification: false,
         errorNotification: (err) => {
           return {
             message: err?.response?.data?.error_message || err?.message || "Something went wrong",
@@ -58,6 +54,10 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
       },
       {
         onSuccess: () => {
+          notification.warning({
+            message: "Process started",
+            description: "Running",
+          });
           setIsModalOpen(false);
         },
       }
@@ -66,6 +66,10 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
     invalidate({
       resource: "processruns",
       invalidates: ["list"],
+    });
+    invalidate({
+      resource: "processes",
+      invalidates: ["list", "detail"],
     });
   };
 

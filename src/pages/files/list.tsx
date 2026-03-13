@@ -3,11 +3,13 @@ import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
 import { Input, Select, Space, Table, Tag } from "antd";
 import React from "react";
 import { FileUploadButton } from "../../components";
+import { STATIC_QUERY_OPTIONS } from "../../config/query-cache";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 export const FileList: React.FC<IResourceComponentsProps> = () => {
   const { filters, setFilters, tableQuery, tableProps } = useTable({
     syncWithLocation: true,
+    queryOptions: STATIC_QUERY_OPTIONS,
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
     },
