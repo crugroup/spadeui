@@ -3,26 +3,14 @@ import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
 import { Input, Select, Space, Table, Tag, Tooltip } from "antd";
 import React from "react";
 import { ProcessRunButton } from "../../components/process-run-button";
-import { LIVE_LIST_QUERY_OPTIONS } from "../../config/query-cache";
+import { API_URL } from "../../config/constants";
+import { STATIC_QUERY_OPTIONS } from "../../config/query-cache";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
+import axiosHelper from "../../helpers/axios-token-interceptor";
 
 const ACTIVE_RUN_POLL_INTERVAL = 30_000;
 
-const extractProcessRows = (dataOrQuery: any, maybeQuery?: any) => {
-  if (Array.isArray(dataOrQuery?.data)) {
-    return dataOrQuery.data as Array<{ latest_run?: { status?: string; result?: string } }>;
-  }
-
-  if (Array.isArray(maybeQuery?.state?.data?.data)) {
-    return maybeQuery.state.data.data as Array<{ latest_run?: { status?: string; result?: string } }>;
-  }
-
-  if (Array.isArray(dataOrQuery?.state?.data?.data)) {
-    return dataOrQuery.state.data.data as Array<{ latest_run?: { status?: string; result?: string } }>;
-  }
-
-  return [];
-};
+type LatestRun = { status?: string; result?: string; created_at?: string };
 
 const getRunState = (latestRun?: { status?: string; result?: string }) => {
   const status = latestRun?.status?.toLowerCase();
@@ -39,16 +27,7 @@ const getRunState = (latestRun?: { status?: string; result?: string }) => {
 export const ProcessList: React.FC<IResourceComponentsProps> = () => {
   const { filters, setFilters, tableQuery, tableProps } = useTable({
     syncWithLocation: true,
-    queryOptions: {
-      ...LIVE_LIST_QUERY_OPTIONS,
-      // Poll only while a visible process is actively running.
-      refetchInterval: (dataOrQuery: any, maybeQuery?: any) => {
-        const rows = extractProcessRows(dataOrQuery, maybeQuery);
-        const hasActiveRun = rows.some((process) => getRunState(process?.latest_run) === "running");
-
-        return hasActiveRun ? ACTIVE_RUN_POLL_INTERVAL : false;
-      },
-    },
+    queryOptions: STATIC_QUERY_OPTIONS,
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
     },
@@ -63,10 +42,83 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
   });
 
   const processes = tableQuery.data;
+  const [latestRunsByProcessId, setLatestRunsByProcessId] = React.useState<Record<number, LatestRun | undefined>>({});
+  const [latestRunsLoaded, setLatestRunsLoaded] = React.useState(false);
+  const processIds = (processes?.data ?? []).map((process: any) => process.id).filter(Boolean);
+  const processIdsKey = processIds.join(",");
   const tags: string[] | undefined = processes?.data?.map((f: any) => f.tags).flat();
   const tagSet = [...new Set(tags)].sort();
-  const runningCount = processes?.data?.filter((process: any) => getRunState(process?.latest_run) === "running").length ?? 0;
+  const runningCount = processIds.filter((id) => getRunState(latestRunsByProcessId[id]) === "running").length;
   const activeTagFilter = filters.find((filter) => "field" in filter && filter.field === "tags");
+
+  React.useEffect(() => {
+    let cancelled = false;
+
+    const fetchLatestRuns = async () => {
+      if (!processIdsKey) {
+        if (!cancelled) {
+          setLatestRunsByProcessId({});
+          setLatestRunsLoaded(true);
+        }
+        return;
+      }
+
+      try {
+        const { data } = await axiosHelper.axiosInstance.get(`${API_URL}/processes/latest_runs`, {
+          params: { ids: processIdsKey },
+        });
+
+        if (cancelled) return;
+
+        setLatestRunsByProcessId(
+          Object.fromEntries(
+            (data ?? []).map((item: { process_id: number; latest_run?: LatestRun | null }) => [
+              item.process_id,
+              item.latest_run ?? undefined,
+            ])
+          )
+        );
+        setLatestRunsLoaded(true);
+      } catch {
+        if (!cancelled) {
+          setLatestRunsLoaded(true);
+        }
+      }
+    };
+
+    void fetchLatestRuns();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [processIdsKey, tableQuery.dataUpdatedAt]);
+
+  React.useEffect(() => {
+    if (!processIdsKey || runningCount === 0) return;
+
+    const interval = window.setInterval(async () => {
+      try {
+        const { data } = await axiosHelper.axiosInstance.get(`${API_URL}/processes/latest_runs`, {
+          params: { ids: processIdsKey },
+        });
+
+        setLatestRunsByProcessId(
+          Object.fromEntries(
+            (data ?? []).map((item: { process_id: number; latest_run?: LatestRun | null }) => [
+              item.process_id,
+              item.latest_run ?? undefined,
+            ])
+          )
+        );
+      } catch {
+        // Keep the last successful status snapshot if the refresh fails.
+      }
+    }, ACTIVE_RUN_POLL_INTERVAL);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [processIdsKey, runningCount]);
 
   const applyTagFilter = (tag: string) => {
     const nextFilters = filters.filter((filter) => !("field" in filter && filter.field === "tags"));
@@ -102,6 +154,10 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
         <Table
           className="processes-table"
           {...tableProps}
+          dataSource={(tableProps.dataSource ?? []).map((record) => ({
+            ...record,
+            latest_run: latestRunsByProcessId[(record as BaseRecord).id as number],
+          }))}
           pagination={{ ...tableProps.pagination, showSizeChanger: false }}
           rowKey="id"
           rowClassName={(record) => {
@@ -168,7 +224,9 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
           dataIndex="latest_run"
           title="Latest run"
           render={(latestRun?: { status?: string; result?: string; created_at?: string }) => {
-            if (!latestRun) return <span className="run-status-meta">Not run yet</span>;
+            if (!latestRun) {
+              return <span className="run-status-meta">{latestRunsLoaded ? "Not run yet" : "Checking..."}</span>;
+            }
 
             const state = getRunState(latestRun);
             const subtitle = latestRun.created_at
