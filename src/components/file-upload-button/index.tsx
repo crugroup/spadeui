@@ -1,5 +1,5 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { BaseKey, useCan, useInvalidate, useOne, useResource } from "@refinedev/core";
+import { BaseKey, useCan, useInvalidate, useOne, useParsed } from "@refinedev/core";
 import validator from "@rjsf/validator-ajv8";
 import type { GetProp } from "antd";
 import { Button, Modal, Space, Typography, Upload, UploadFile, UploadProps, notification } from "antd";
@@ -19,9 +19,9 @@ type FileUploadButtonProps = {
 };
 
 const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId, hideText }) => {
-  const { id } = useResource();
+  const { identifier } = useParsed();
   const invalidate = useInvalidate();
-  const targetId = recordItemId ?? id;
+  const targetId = recordItemId ?? identifier;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<UploadFile | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);

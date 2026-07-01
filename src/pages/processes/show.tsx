@@ -5,12 +5,11 @@ import {
   useGetToPath,
   useMany,
   useOne,
-  useResource,
   useShow,
 } from "@refinedev/core";
 import { Select, Space, Table, Tabs, Tag, Typography } from "antd";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
 import JsonField from "../../components/json-field/json-field";
 import { ProcessRunButton } from "../../components/process-run-button";
@@ -77,8 +76,6 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
   });
 
   const getToPath = useGetToPath();
-  const executorResource = useResource("executors").resource;
-  const variableSetResource = useResource("variable-sets").resource;
 
   const getRunState = (status?: string, result?: string) => {
     const normalizedStatus = status?.toLowerCase();
@@ -119,7 +116,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
             <Link
               to={
                 getToPath({
-                  resource: executorResource,
+                  resource: "executors",
                   action: "show",
                   meta: { id: record?.executor },
                 }) ?? "#"
@@ -144,7 +141,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
                     <Link
                       to={
                         getToPath({
-                          resource: variableSetResource,
+                          resource: "variable-sets",
                           action: "show",
                           meta: { id: variableSet.id },
                         }) ?? "#"

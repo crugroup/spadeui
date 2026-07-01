@@ -4,15 +4,15 @@ import { useGetIdentity, useLogout } from "@refinedev/core";
 import { UserData } from "../../config/auth-provider";
 import { Layout as AntdLayout, Space, Typography, Switch, theme, Button, Dropdown } from "antd";
 import { ThemeProviderContext } from "../../contexts/theme-provider";
-import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
+import type { RefineThemedLayoutHeaderProps } from "@refinedev/antd";
 import { SettingOutlined } from "@ant-design/icons";
 import { MenuProps } from "antd/lib";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 const { Text } = Typography;
 const { useToken } = theme;
 
-export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = () => {
+export const Header: React.FC<RefineThemedLayoutHeaderProps> = () => {
   const { token } = useToken();
   const { data: user } = useGetIdentity<UserData>();
   const { mode, setMode } = useContext(ThemeProviderContext);

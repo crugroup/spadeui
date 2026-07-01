@@ -5,12 +5,11 @@ import {
   useGetToPath,
   useMany,
   useOne,
-  useResource,
   useShow,
 } from "@refinedev/core";
 import { Select, Space, Table, Tabs, Tag, Typography } from "antd";
 import prettyBytes from "pretty-bytes";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { FileUploadButton } from "../../components";
 import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
 import { JsonField } from "../../components/json-field/json-field";
@@ -91,11 +90,6 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
 
   const getToPath = useGetToPath();
 
-  const fileFormatResource = useResource("fileformats").resource;
-  const processResource = useResource("processes").resource;
-  const fileProcessorResource = useResource("fileprocessors").resource;
-  const variableSetResource = useResource("variable-sets").resource;
-
   const getRunState = (status?: string, result?: string) => {
     const normalizedStatus = status?.toLowerCase();
     const normalizedResult = result?.toLowerCase();
@@ -137,7 +131,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             <Link
               to={
                 getToPath({
-                  resource: fileFormatResource,
+                  resource: "fileformats",
                   action: "show",
                   meta: { id: record?.format },
                 }) ?? "#"
@@ -156,7 +150,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             <Link
               to={
                 getToPath({
-                  resource: fileProcessorResource,
+                  resource: "fileprocessors",
                   action: "show",
                   meta: { id: record?.processor },
                 }) ?? "#"
@@ -175,7 +169,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             <Link
               to={
                 getToPath({
-                  resource: processResource,
+                  resource: "processes",
                   action: "show",
                   meta: { id: record?.linked_process },
                 }) ?? "#"
@@ -200,7 +194,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                     <Link
                       to={
                         getToPath({
-                          resource: variableSetResource,
+                          resource: "variable-sets",
                           action: "show",
                           meta: { id: variableSet.id },
                         }) ?? "#"
