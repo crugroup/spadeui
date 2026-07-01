@@ -1,4 +1,3 @@
-import { useList } from "@refinedev/core";
 import { Card, Col, Row, Statistic, Typography, Tag, Space, Button, Modal, List, Input } from "antd";
 import {
   FileOutlined,
@@ -18,7 +17,6 @@ import axiosHelper from "../../helpers/axios-token-interceptor";
 import { API_URL } from "../../config/constants";
 import { useFavorites } from "../../hooks/useFavorites";
 import { FileUploadButton } from "../../components/file-upload-button";
-import { STATIC_QUERY_OPTIONS } from "../../config/query-cache";
 
 const { Title, Text } = Typography;
 
@@ -57,25 +55,40 @@ export const Dashboard = () => {
   const [quickUploadSearch, setQuickUploadSearch] = useState("");
   const [showAllFavorites, setShowAllFavorites] = useState(false);
 
-  const { data: files, isLoading: filesLoading } = useList({ resource: "files", queryOptions: STATIC_QUERY_OPTIONS });
-  const { data: processes, isLoading: processesLoading } = useList({ resource: "processes", queryOptions: STATIC_QUERY_OPTIONS });
+  // --- fetch files & processes stats via axios (bypasses Refine caching issues) ---
+  const [fileList, setFileList] = useState<any[] | null>(null);
+  const [processList, setProcessList] = useState<any[]>([]);
+  const [isStatsLoading, setIsStatsLoading] = useState(true);
 
-  const isStatsLoading = filesLoading || processesLoading;
+  useEffect(() => {
+    let cancelled = false;
+    setIsStatsLoading(true);
+    Promise.all([
+      axiosHelper.axiosInstance.get(`${API_URL}/files`),
+      axiosHelper.axiosInstance.get(`${API_URL}/processes`),
+    ])
+      .then(([fRes, pRes]) => {
+        if (cancelled) return;
+        setFileList(Array.isArray(fRes.data) ? fRes.data : fRes.data?.results ?? []);
+        const procs = Array.isArray(pRes.data) ? pRes.data : pRes.data?.results ?? [];
+        setProcessList(procs);
+        setIsStatsLoading(false);
+      })
+      .catch(() => { if (!cancelled) setIsStatsLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
   const latestRunsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const allFavorites = getAllFavorites();
   const fileFavorites = allFavorites.filter((f) => f.resource === "files");
   const favoriteFileIds = new Set(fileFavorites.map((f) => f.id));
 
-  const fileList = files?.data as any[];
   const quickUploadFiles = useMemo(() => {
     if (!fileList) return [];
     const favs = fileList.filter((f: any) => favoriteFileIds.has(f.id));
     const others = fileList.filter((f: any) => !favoriteFileIds.has(f.id));
     return [...favs, ...others];
   }, [fileList, favoriteFileIds]);
-
-  const processList = (processes?.data ?? []) as any[];
 
   // --- latest runs for favorited processes ---
   const [latestRunsByProcessId, setLatestRunsByProcessId] = useState<Record<number, any>>({});
@@ -163,8 +176,8 @@ export const Dashboard = () => {
   /* ---------- render ---------- */
 
   const statCards = [
-    { title: "Files", value: files?.total ?? 0, icon: <FileOutlined />, color: "#30A4FD", bg: "rgba(48,164,253,0.10)" },
-    { title: "Processes", value: processes?.total ?? 0, icon: <NodeIndexOutlined />, color: "#8b5cf6", bg: "rgba(139,92,246,0.10)" },
+    { title: "Files", value: fileList?.length ?? 0, icon: <FileOutlined />, color: "#30A4FD", bg: "rgba(48,164,253,0.10)" },
+    { title: "Processes", value: processList.length, icon: <NodeIndexOutlined />, color: "#8b5cf6", bg: "rgba(139,92,246,0.10)" },
     { title: "Running", value: runningCount, icon: <SyncOutlined spin={runningCount > 0} />, color: runningCount > 0 ? "#cc8b1f" : undefined, bg: runningCount > 0 ? "rgba(204,139,31,0.10)" : undefined },
     { title: "Failed", value: failedCount, icon: <CloseCircleOutlined />, color: failedCount > 0 ? "#d8484b" : undefined, bg: failedCount > 0 ? "rgba(216,72,75,0.10)" : undefined },
   ];
@@ -398,7 +411,7 @@ export const Dashboard = () => {
                   />
                 </List.Item>
               )}
-              locale={{ emptyText: filesLoading ? "Loading files..." : "No files found" }}
+              locale={{ emptyText: fileList === null ? "Loading files..." : "No files found" }}
             />
           </>
         )}
