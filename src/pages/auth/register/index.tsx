@@ -2,7 +2,7 @@ import { AuthPage, useForm } from "@refinedev/antd";
 import { useRegister } from "@refinedev/core";
 import { Button, Form, Input } from "antd";
 import { Children, ReactElement, ReactNode, cloneElement, isValidElement } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Logo } from "../../../components/logo";
 
 export const Register = () => {

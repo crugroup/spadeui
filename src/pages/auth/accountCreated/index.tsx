@@ -3,7 +3,7 @@ import formatAxiosErrors from "../../../helpers/format-axios-errors";
 import { Button, Card, Col, Row, Typography } from "antd";
 import { useCustomMutation } from "@refinedev/core";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { USER_TEMP_DATA_KEY, API_URL } from "../../../config/constants";
 
 export const AccountCreated = () => {
