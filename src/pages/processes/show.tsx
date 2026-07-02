@@ -27,7 +27,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
 
   const record = data?.data;
 
-  const { data: executorData, isLoading: executorIsLoading } = useOne({
+  const { result: executorData, isLoading: executorIsLoading } = useOne({
     resource: "executors",
     id: record?.executor || "",
     queryOptions: {
@@ -36,7 +36,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: variableSetsData, isLoading: variableSetsIsLoading } = useMany({
+  const { result: variableSetsResult, isLoading: variableSetsIsLoading } = useMany({
     resource: "variable-sets",
     ids: record?.variable_sets || [],
     queryOptions: {
@@ -44,6 +44,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       enabled: !!record?.variable_sets?.length,
     },
   });
+  const variableSetsData = variableSetsResult?.data;
 
   const { tableProps: processRunsTableProps } = useTable({
     syncWithLocation: false,

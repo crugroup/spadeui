@@ -26,7 +26,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
   const [selectedFile, setSelectedFile] = useState<UploadFile | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data: fileData } = useOne({
+  const { result: fileData } = useOne({
     resource: "files",
     id: targetId,
     queryOptions: {
@@ -132,7 +132,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
           </Space>
         </Upload>
         {selectedFile && (
-          <RjsfForm schema={fileData?.data?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
+          <RjsfForm schema={fileData?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
             <Space align="start" className="workflow-modal__actions">
               <Button disabled={isLoading} htmlType="submit" type="primary">
                 Submit
