@@ -15,17 +15,17 @@ export const UserEdit: React.FC<IResourceComponentsProps> = () => {
   const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
 
   // Fetch permissions using useList hook
-  const { data: permissionsData, isLoading: permissionsLoading } = useList({
+  const { result: permissionsResult, isLoading: permissionsLoading } = useList({
     resource: "permissions",
   });
 
   // Fetch groups using useList hook
-  const { data: groupsData, isLoading: groupsLoading } = useList({
+  const { result: groupsResult, isLoading: groupsLoading } = useList({
     resource: "groups",
   });
 
-  const permissions = permissionsData?.data.sort((a: any, b: any) => a.name.localeCompare(b.name)) || [];
-  const groups = groupsData?.data.sort((a: any, b: any) => a.name.localeCompare(b.name)) || [];
+  const permissions = permissionsResult?.data.sort((a: any, b: any) => a.name.localeCompare(b.name)) || [];
+  const groups = groupsResult?.data.sort((a: any, b: any) => a.name.localeCompare(b.name)) || [];
 
   // Set initial selected groups from record
   useEffect(() => {

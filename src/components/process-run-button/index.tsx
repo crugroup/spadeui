@@ -1,7 +1,7 @@
 import { PlayCircleOutlined } from "@ant-design/icons";
 import { BaseKey, useCan, useCustomMutation, useInvalidate, useOne, useParsed } from "@refinedev/core";
 import validator from "@rjsf/validator-ajv8";
-import { Button, Modal, Space, notification } from "antd";
+import { Button, Modal, Space, App } from "antd";
 import { ButtonProps } from "antd/lib";
 import { FC, useState } from "react";
 import { RjsfForm } from "../rjsf-form/rjsf-form";
@@ -14,10 +14,11 @@ type ProcessRunButtonProps = {
 };
 
 const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId, hideText }) => {
-  const { identifier } = useParsed();
+  const { notification } = App.useApp();
+  const { id } = useParsed();
   const { isLoading, mutate } = useCustomMutation();
   const invalidate = useInvalidate();
-  const targetId = recordItemId ?? identifier;
+  const targetId = recordItemId ?? id;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: processData } = useOne({
