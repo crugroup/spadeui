@@ -21,7 +21,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
   const targetId = recordItemId ?? id;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: processData } = useOne({
+  const { result: processData } = useOne({
     resource: "processes",
     id: targetId,
     queryOptions: {
@@ -95,7 +95,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         footer={<></>}
         className="workflow-modal"
       >
-        <RjsfForm schema={processData?.data?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
+        <RjsfForm schema={processData?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
           <Space align="start" className="workflow-modal__actions">
             <Button disabled={isLoading} htmlType="submit" type="primary">
               Submit
