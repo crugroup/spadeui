@@ -12,14 +12,16 @@ export const UserShow: React.FC<IResourceComponentsProps> = () => {
   const record = data?.data;
 
   // Fetch groups
-  const { data: groupsData } = useList({
+  const { result: groupsResult } = useList({
     resource: "groups",
   });
+  const groupsData = groupsResult?.data;
 
   // Fetch permissions
-  const { data: permissionsData } = useList({
+  const { result: permissionsResult } = useList({
     resource: "permissions",
   });
+  const permissionsData = permissionsResult?.data;
 
   // Map group IDs to names
   const groupNames = record?.groups?.map((groupId: number) => {
