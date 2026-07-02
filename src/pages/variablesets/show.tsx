@@ -12,7 +12,7 @@ export const VariableSetShow: React.FC<IResourceComponentsProps> = () => {
   const record = data?.data;
 
   // Fetch variables to get details for the variables in this set
-  const { data: variablesData } = useList({
+  const { result: variablesResult } = useList({
     resource: "variables",
     pagination: { mode: "off" },
     queryOptions: {
@@ -20,7 +20,7 @@ export const VariableSetShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const allVariables = variablesData?.data || [];
+  const allVariables = variablesResult?.data || [];
   const setVariables = allVariables.filter((variable) => record?.variables?.includes(variable.id));
 
   return (

@@ -67,7 +67,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: userData, isLoading: userIsLoading } = useMany({
+  const { result: userResult, isLoading: userIsLoading } = useMany({
     resource: "users",
     ids: processRunsTableProps?.dataSource?.map((item) => item?.user) ?? [],
     queryOptions: {
@@ -75,6 +75,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       enabled: activeTabKey === "2" && !!processRunsTableProps?.dataSource?.length,
     },
   });
+  const userData = userResult?.data;
 
   const getToPath = useGetToPath();
 

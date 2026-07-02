@@ -13,17 +13,17 @@ export const UserCreate: React.FC<IResourceComponentsProps> = () => {
   const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
 
   // Fetch permissions using useList hook
-  const { data: permissionsData, isLoading: permissionsLoading } = useList({
+  const { result: permissionsResult, isLoading: permissionsLoading } = useList({
     resource: "permissions",
   });
 
   // Fetch groups using useList hook
-  const { data: groupsData, isLoading: groupsLoading } = useList({
+  const { result: groupsResult, isLoading: groupsLoading } = useList({
     resource: "groups",
   });
 
-  const permissions = permissionsData?.data || [];
-  const groups = groupsData?.data || [];
+  const permissions = permissionsResult?.data || [];
+  const groups = groupsResult?.data || [];
 
   return (
     <Create saveButtonProps={saveButtonProps} isLoading={permissionsLoading || groupsLoading}>
