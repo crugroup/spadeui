@@ -12,8 +12,7 @@ import {
   FileProcessorList,
   FileProcessorShow,
 } from "../../pages/fileprocessors";
-import { FileList, FileCreate, FileEdit, FileShow } from "../../pages/files";
-import { Dashboard } from "../../pages/dashboard";
+import { FileCreate, FileEdit, FileList, FileShow } from "../../pages/files";
 import { GroupCreate, GroupEdit, GroupList, GroupShow } from "../../pages/groups";
 import { UserCreate, UserEdit, UserList, UserShow } from "../../pages/users";
 import { ForgotPassword } from "../../pages/auth/forgotPassword";
@@ -93,7 +92,17 @@ const CustomRoutes = () => {
       >
         <Route
           index
-          element={<Dashboard />}
+          element={
+            <CanAccess
+              resource="files"
+              action="list"
+              onUnauthorized={() => {
+                navigate("/");
+              }}
+            >
+              <NavigateToResource resource="files" />
+            </CanAccess>
+          }
         />
         <Route path="/files">
           <Route

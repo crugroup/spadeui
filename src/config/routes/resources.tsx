@@ -1,4 +1,3 @@
-import { HomeOutlined } from "@ant-design/icons";
 import FilesIcon from "../../../public/icons/files-icon";
 import FileIcon from "../../../public/icons/file-icon";
 import FileProcessorsIcon from "../../../public/icons/file-processors-icon";
@@ -26,15 +25,6 @@ export default [
     meta: {
       label: "Admin",
       icon: <SettingsIcon />,
-    },
-  },
-  {
-    name: "dashboard",
-    list: "/",
-    meta: {
-      parent: "work",
-      label: "Dashboard",
-      icon: <HomeOutlined />,
     },
   },
   {
