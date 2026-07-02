@@ -1,14 +1,16 @@
 import { DeleteButton, EditButton, FilterDropdown, List, ShowButton, useTable } from "@refinedev/antd";
 import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
-import { Input, Select, Space, Table, Tag } from "antd";
+import { Input, Select, Space, Table, Tag, Tooltip } from "antd";
 import { StarFilled, StarOutlined } from "@ant-design/icons";
 import React from "react";
+import { useNavigate } from "react-router";
 import { FileUploadButton, SkeletonList } from "../../components";
 import { useFavorites } from "../../hooks/useFavorites";
 import { STATIC_QUERY_OPTIONS } from "../../config/query-cache";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 export const FileList: React.FC<IResourceComponentsProps> = () => {
+  const navigate = useNavigate();
   const { isFavorite, toggleFavorite } = useFavorites();
   const { filters, setFilters, tableQuery, tableProps } = useTable({
     syncWithLocation: true,
@@ -60,24 +62,30 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
           pagination={{ ...tableProps.pagination, showSizeChanger: false }}
           rowKey="id"
           rowClassName={() => "entity-table-row"}
+          onRow={(record) => ({
+            onClick: () => navigate(`/files/show/${record.id}`),
+            style: { cursor: "pointer" },
+          })}
         >
         <Table.Column
           title=""
           width={40}
           render={(_, record: any) => (
-            <span
-              style={{ cursor: "pointer", fontSize: 16 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleFavorite("files", record.id, record.code);
-              }}
-            >
-              {isFavorite("files", record.id) ? (
-                <StarFilled style={{ color: "#cc8b1f" }} />
-              ) : (
-                <StarOutlined style={{ color: "var(--spade-muted)" }} />
-              )}
-            </span>
+            <Tooltip title={isFavorite("files", record.id) ? "Remove from favorites" : "Add to favorites"}>
+              <span
+                style={{ cursor: "pointer", fontSize: 16 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavorite("files", record.id, record.code);
+                }}
+              >
+                {isFavorite("files", record.id) ? (
+                  <StarFilled style={{ color: "#cc8b1f" }} />
+                ) : (
+                  <StarOutlined style={{ color: "var(--spade-muted)" }} />
+                )}
+              </span>
+            </Tooltip>
           )}
         />
         <Table.Column

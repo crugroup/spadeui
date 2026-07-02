@@ -3,6 +3,7 @@ import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
 import { Input, Select, Space, Table, Tag, Tooltip } from "antd";
 import { StarFilled, StarOutlined } from "@ant-design/icons";
 import React from "react";
+import { useNavigate } from "react-router";
 import { ProcessRunButton } from "../../components/process-run-button";
 import { SkeletonList } from "../../components";
 import { useFavorites } from "../../hooks/useFavorites";
@@ -28,6 +29,7 @@ const getRunState = (latestRun?: { status?: string; result?: string }) => {
 };
 
 export const ProcessList: React.FC<IResourceComponentsProps> = () => {
+  const navigate = useNavigate();
   const { isFavorite, toggleFavorite } = useFavorites();
   const { filters, setFilters, tableQuery, tableProps } = useTable({
     syncWithLocation: true,
@@ -174,24 +176,30 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
 
             return "entity-table-row";
           }}
+          onRow={(record) => ({
+            onClick: () => navigate(`/processes/show/${(record as BaseRecord).id}`),
+            style: { cursor: "pointer" },
+          })}
         >
         <Table.Column
           title=""
           width={40}
           render={(_, record: any) => (
-            <span
-              style={{ cursor: "pointer", fontSize: 16 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleFavorite("processes", record.id, record.code);
-              }}
-            >
-              {isFavorite("processes", record.id) ? (
-                <StarFilled style={{ color: "#cc8b1f" }} />
-              ) : (
-                <StarOutlined style={{ color: "var(--spade-muted)" }} />
-              )}
-            </span>
+            <Tooltip title={isFavorite("processes", record.id) ? "Remove from favorites" : "Add to favorites"}>
+              <span
+                style={{ cursor: "pointer", fontSize: 16 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavorite("processes", record.id, record.code);
+                }}
+              >
+                {isFavorite("processes", record.id) ? (
+                  <StarFilled style={{ color: "#cc8b1f" }} />
+                ) : (
+                  <StarOutlined style={{ color: "var(--spade-muted)" }} />
+                )}
+              </span>
+            </Tooltip>
           )}
         />
         <Table.Column

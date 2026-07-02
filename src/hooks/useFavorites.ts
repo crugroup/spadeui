@@ -41,6 +41,8 @@ export function useFavorites() {
       localStorage.setItem("spade_favorite_labels", JSON.stringify(labels));
       saveFavorites(current);
       setFavorites({ ...current });
+      // Notify other components (e.g. sidebar badge)
+      window.dispatchEvent(new Event("spade-favorites-changed"));
     },
     []
   );
