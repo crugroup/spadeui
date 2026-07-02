@@ -17,14 +17,11 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     window.localStorage.setItem("colorMode", mode);
+    document.documentElement.setAttribute("data-theme", mode);
   }, [mode]);
 
-  const setColorMode = () => {
-    if (mode === "light") {
-      setMode("dark");
-    } else {
-      setMode("light");
-    }
+  const toggleColorMode = () => {
+    setMode((prev) => (prev === "light" ? "dark" : "light"));
   };
 
   const { darkAlgorithm, defaultAlgorithm } = theme;
@@ -32,7 +29,7 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <ThemeProviderContext.Provider
       value={{
-        setMode: setColorMode,
+        setMode: toggleColorMode,
         mode,
       }}
     >

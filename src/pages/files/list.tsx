@@ -1,12 +1,15 @@
 import { DeleteButton, EditButton, FilterDropdown, List, ShowButton, useTable } from "@refinedev/antd";
 import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
 import { Input, Select, Space, Table, Tag } from "antd";
+import { StarFilled, StarOutlined } from "@ant-design/icons";
 import React from "react";
-import { FileUploadButton } from "../../components";
+import { FileUploadButton, SkeletonList } from "../../components";
+import { useFavorites } from "../../hooks/useFavorites";
 import { STATIC_QUERY_OPTIONS } from "../../config/query-cache";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 
 export const FileList: React.FC<IResourceComponentsProps> = () => {
+  const { isFavorite, toggleFavorite } = useFavorites();
   const { filters, setFilters, tableQuery, tableProps } = useTable({
     syncWithLocation: true,
     queryOptions: STATIC_QUERY_OPTIONS,
@@ -50,6 +53,7 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
   return (
     <List canCreate={true}>
       <div className="entity-table-shell entity-table-shell--flat">
+        <SkeletonList loading={tableQuery.isLoading}>
         <Table
           className="files-table"
           {...tableProps}
@@ -57,6 +61,25 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
           rowKey="id"
           rowClassName={() => "entity-table-row"}
         >
+        <Table.Column
+          title=""
+          width={40}
+          render={(_, record: any) => (
+            <span
+              style={{ cursor: "pointer", fontSize: 16 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFavorite("files", record.id, record.code);
+              }}
+            >
+              {isFavorite("files", record.id) ? (
+                <StarFilled style={{ color: "#cc8b1f" }} />
+              ) : (
+                <StarOutlined style={{ color: "var(--spade-muted)" }} />
+              )}
+            </span>
+          )}
+        />
         <Table.Column
           dataIndex="code"
           title="Name"
@@ -110,6 +133,7 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
           )}
         />
         </Table>
+        </SkeletonList>
       </div>
     </List>
   );
