@@ -43,7 +43,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: formatData, isLoading: formatIsLoading } = useOne({
+  const { result: formatData, isLoading: formatIsLoading } = useOne({
     resource: "fileformats",
     id: record?.format ?? "",
     queryOptions: {
@@ -52,7 +52,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: processorData, isLoading: processorIsLoading } = useOne({
+  const { result: processorData, isLoading: processorIsLoading } = useOne({
     resource: "fileprocessors",
     id: record?.processor ?? "",
     queryOptions: {
@@ -61,7 +61,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: processData, isLoading: processIsLoading } = useOne({
+  const { result: processData, isLoading: processIsLoading } = useOne({
     resource: "processes",
     id: record?.linked_process ?? "",
     queryOptions: {
@@ -70,7 +70,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: variableSetsData, isLoading: variableSetsIsLoading } = useMany({
+  const { result: variableSetsResult, isLoading: variableSetsIsLoading } = useMany({
     resource: "variable-sets",
     ids: record?.variable_sets || [],
     queryOptions: {
@@ -78,8 +78,9 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       enabled: !!record?.variable_sets?.length,
     },
   });
+  const variableSetsData = variableSetsResult?.data;
 
-  const { data: userData, isLoading: userIsLoading } = useMany({
+  const { result: userResult, isLoading: userIsLoading } = useMany({
     resource: "users",
     ids: uploadTableProps?.dataSource?.map((item) => item?.user) ?? [],
     queryOptions: {
@@ -87,6 +88,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       enabled: activeTabKey === "2" && !!uploadTableProps?.dataSource?.length,
     },
   });
+  const userData = userResult?.data;
 
   const getToPath = useGetToPath();
 
