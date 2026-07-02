@@ -2,10 +2,10 @@ import React, { useContext } from "react";
 import LogoutIcon from "../../../public/icons/logout-icon";
 import { useGetIdentity, useLogout } from "@refinedev/core";
 import { UserData } from "../../config/auth-provider";
-import { Layout as AntdLayout, Space, Typography, theme, Button, Dropdown } from "antd";
+import { Layout as AntdLayout, Space, Typography, Switch, theme, Button, Dropdown } from "antd";
 import { ThemeProviderContext } from "../../contexts/theme-provider";
 import type { RefineThemedLayoutHeaderProps } from "@refinedev/antd";
-import { SettingOutlined, SunOutlined, MoonOutlined } from "@ant-design/icons";
+import { SettingOutlined } from "@ant-design/icons";
 import { MenuProps } from "antd/lib";
 import { Link } from "react-router";
 
@@ -41,6 +41,20 @@ export const Header: React.FC<RefineThemedLayoutHeaderProps> = () => {
         </Link>
       ),
     },
+    {
+      key: "4",
+      label: (
+        <>
+          Toggle theme:&nbsp;
+          <Switch
+            checkedChildren="☾"
+            unCheckedChildren="☼"
+            onChange={() => setMode(mode === "light" ? "dark" : "light")}
+            defaultChecked={mode === "dark"}
+          />
+        </>
+      ),
+    },
   ];
 
   return (
@@ -53,14 +67,6 @@ export const Header: React.FC<RefineThemedLayoutHeaderProps> = () => {
           </Text>
         </div>
         <Space size="middle">
-          <Button
-            className="btn-vertical-align app-header__icon-btn"
-            type="text"
-            size="small"
-            icon={mode === "dark" ? <SunOutlined /> : <MoonOutlined />}
-            onClick={() => setMode()}
-            title={mode === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-          />
           <Space>
             <Dropdown menu={{ items }} placement="bottom">
               <Button

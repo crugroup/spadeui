@@ -6,9 +6,9 @@
 $primary: "#30A4FD";
 
 :root {
-  --spade-bg: #f4f6fa;
+  --spade-bg: radial-gradient(circle at 12% -5%, #dff0ff 0%, #f6f9fc 42%, #f4f6fa 100%);
   --spade-surface: #ffffff;
-  --spade-surface-soft: #ffffff;
+  --spade-surface-soft: #f7f9fc;
   --spade-text: #18253d;
   --spade-muted: #5c6b83;
   --spade-border: #d7deea;
@@ -17,40 +17,6 @@ $primary: "#30A4FD";
   --spade-running-rgb: 204, 139, 31;
   --spade-failed-text: #b8373a;
   --spade-failed-rgb: 216, 72, 75;
-}
-
-[data-theme="dark"] {
-  --spade-bg: #081224;
-  --spade-surface: #11223f;
-  --spade-surface-soft: #11223f;
-  --spade-text: #f2f6ff;
-  --spade-muted: #8899bb;
-  --spade-border: #233f65;
-  --spade-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-  --spade-running-text: #e8a838;
-  --spade-running-rgb: 232, 168, 56;
-  --spade-failed-text: #e06063;
-  --spade-failed-rgb: 224, 96, 99;
-}
-
-/* Page transition animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.ant-layout-content > * {
-  animation: fadeIn 0.2s ease-out;
-}
-
-/* Favorites list hover */
-.favorite-link {
-  display: block;
-  border-radius: 10px;
-  transition: background 0.15s ease;
-}
-.favorite-link:hover {
-  background: var(--spade-surface-soft);
 }
 
 html,
@@ -584,35 +550,6 @@ body {
 
 .workflow-modal .ant-upload-wrapper {
   border-radius: 12px;
-}
-
-/* ---- Quick Upload Modal ---- */
-
-.quick-upload-modal .ant-modal-content {
-  border-radius: 12px;
-  border: 1px solid rgba(151, 170, 198, 0.24);
-  box-shadow: 0 10px 26px rgba(19, 37, 70, 0.12);
-  background: var(--spade-surface);
-}
-
-.quick-upload-modal .ant-modal-header {
-  background: transparent;
-  padding-bottom: 8px;
-}
-
-.quick-upload-modal .ant-modal-title,
-.quick-upload-modal .ant-modal-body,
-.quick-upload-modal .ant-modal-footer {
-  background: transparent;
-}
-
-.quick-upload-modal .ant-list-item {
-  background: transparent !important;
-  border-color: var(--spade-border) !important;
-}
-
-.quick-upload-modal .ant-list-empty-text {
-  color: var(--spade-muted);
 }
 
 .workflow-modal .ant-upload-wrapper .ant-upload-drag {

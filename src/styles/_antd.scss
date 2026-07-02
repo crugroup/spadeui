@@ -5,7 +5,7 @@ $smallDevice: 576px;
 }
 
 .ant-layout-sider {
-  border-right: 1px solid var(--spade-border);
+  border-right: 1px solid rgba(151, 170, 198, 0.26);
   box-shadow: none;
 }
 
@@ -67,7 +67,7 @@ $smallDevice: 576px;
   position: sticky;
   top: 0;
   z-index: 10;
-  border-bottom: 1px solid var(--spade-border);
+  border-bottom: 1px solid rgba(151, 170, 198, 0.24);
   backdrop-filter: blur(8px);
 
   @media (max-width: $smallDevice) {
@@ -92,11 +92,11 @@ $smallDevice: 576px;
 .ant-card {
   border-radius: 10px;
   box-shadow: none;
-  border: 1px solid var(--spade-border);
+  border: 1px solid rgba(151, 170, 198, 0.24);
 }
 
 .ant-card .ant-card-head {
-  border-bottom: 1px solid var(--spade-border);
+  border-bottom: 1px solid rgba(151, 170, 198, 0.2);
 }
 
 .ant-table-wrapper,
@@ -106,7 +106,7 @@ $smallDevice: 576px;
 }
 
 .ant-table-wrapper .ant-table {
-  border: 1px solid var(--spade-border);
+  border: 1px solid rgba(151, 170, 198, 0.24);
 }
 
 .ant-table-thead > tr > th {
@@ -114,15 +114,6 @@ $smallDevice: 576px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--spade-muted);
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
-.ant-table-thead {
-  position: sticky;
-  top: 0;
-  z-index: 2;
 }
 
 .ant-form-item-label > label {
