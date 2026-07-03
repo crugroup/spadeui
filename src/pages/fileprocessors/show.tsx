@@ -7,7 +7,7 @@ const { Title } = Typography;
 
 export const FileProcessorShow: React.FC<IResourceComponentsProps> = () => {
   const { queryResult } = useShow();
-  const { data, isLoading } = queryResult;
+  const { data, isLoading } = queryResult ?? {};
 
   const record = data?.data;
 

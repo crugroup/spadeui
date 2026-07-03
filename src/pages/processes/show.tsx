@@ -22,7 +22,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
   const { queryResult } = useShow({
     queryOptions: STATIC_QUERY_OPTIONS,
   });
-  const { data, isLoading } = queryResult;
+  const { data, isLoading } = queryResult ?? {};
   const [activeTabKey, setActiveTabKey] = React.useState("1");
 
   const record = data?.data;
