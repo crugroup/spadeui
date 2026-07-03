@@ -389,7 +389,7 @@ export const Dashboard = () => {
           </div>
         ) : (
           (() => {
-            const q = quickUploadSearch.toLowerCase();
+            const q = quickUploadSearch.trim().toLowerCase();
             const filtered = quickUploadFiles.filter((f: any) =>
               !q ||
               f.code?.toLowerCase().includes(q) ||
