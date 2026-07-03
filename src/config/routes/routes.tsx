@@ -1,7 +1,7 @@
 import { ErrorComponent, ThemedLayout, ThemedSider } from "@refinedev/antd";
 import { Authenticated, CanAccess } from "@refinedev/core";
 import { NavigateToResource } from "@refinedev/react-router";
-import { Image, Space } from "antd";
+import { Image, Result, Space } from "antd";
 import { Link, Outlet, Route, Routes, useNavigate } from "react-router";
 import { useContext } from "react";
 import { ExecutorCreate, ExecutorEdit, ExecutorList, ExecutorShow } from "../../pages/executors";
@@ -93,7 +93,15 @@ const CustomRoutes = () => {
       >
         <Route
           index
-          element={<Dashboard />}
+          element={
+            <CanAccess
+              resource="dashboard"
+              action="list"
+              fallback={<Result status="403" title="403" subTitle="Sorry, you are not authorized to access this page." />}
+            >
+              <Dashboard />
+            </CanAccess>
+          }
         />
         <Route path="/files">
           <Route
