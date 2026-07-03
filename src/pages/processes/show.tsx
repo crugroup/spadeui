@@ -19,10 +19,10 @@ import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 const { Title } = Typography;
 
 export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
-  const { queryResult } = useShow({
+  const { query } = useShow({
     queryOptions: STATIC_QUERY_OPTIONS,
   });
-  const { data, isLoading } = queryResult ?? {};
+  const { data, isLoading } = query ?? {};
   const [activeTabKey, setActiveTabKey] = React.useState("1");
 
   const record = data?.data;
