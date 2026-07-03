@@ -389,10 +389,11 @@ export const Dashboard = () => {
           </div>
         ) : (
           (() => {
+            const q = quickUploadSearch.toLowerCase();
             const filtered = quickUploadFiles.filter((f: any) =>
-              !quickUploadSearch ||
-              f.code?.toLowerCase().includes(quickUploadSearch.toLowerCase()) ||
-              f.description?.toLowerCase().includes(quickUploadSearch.toLowerCase())
+              !q ||
+              f.code?.toLowerCase().includes(q) ||
+              f.description?.toLowerCase().includes(q)
             );
             const favFiles = filtered.filter((f: any) => favoriteFileIds.has(f.id));
             const otherFiles = filtered.filter((f: any) => !favoriteFileIds.has(f.id));
@@ -418,7 +419,7 @@ export const Dashboard = () => {
                   <div style={{ textAlign: "center", padding: "32px 0", color: "var(--spade-muted)" }}>
                     <SearchOutlined style={{ fontSize: 28, marginBottom: 8, display: "block" }} />
                     <Text type="secondary">
-                      {fileList === null ? "Loading files..." : searching ? `No files match "${quickUploadSearch}"` : "No files available"}
+                      {fileList === null ? "Loading files..." : searching ? `No files match "${q}"` : "No files available"}
                     </Text>
                   </div>
                 ) : (
@@ -457,6 +458,8 @@ export const Dashboard = () => {
                             }}
                             onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(48,164,253,0.06)")}
                             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                            onFocus={(e) => (e.currentTarget.style.background = "rgba(48,164,253,0.06)")}
+                            onBlur={(e) => (e.currentTarget.style.background = "transparent")}
                             onClick={() => { setSelectedFileId(file.id); setQuickUploadSearch(""); }}
                             onKeyDown={(e) => {
                               if (e.key === "Enter" || e.key === " ") {
@@ -512,6 +515,8 @@ export const Dashboard = () => {
                             }}
                             onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(48,164,253,0.06)")}
                             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                            onFocus={(e) => (e.currentTarget.style.background = "rgba(48,164,253,0.06)")}
+                            onBlur={(e) => (e.currentTarget.style.background = "transparent")}
                             onClick={() => { setSelectedFileId(file.id); setQuickUploadSearch(""); }}
                             onKeyDown={(e) => {
                               if (e.key === "Enter" || e.key === " ") {
