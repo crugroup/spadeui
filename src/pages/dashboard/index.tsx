@@ -95,44 +95,13 @@ export const Dashboard = () => {
     return [...favs, ...others];
   }, [fileList, favoriteFileIds]);
 
-  // --- latest runs for favorited processes ---
+  // --- latest runs for ALL processes (shared with processes page cache) ---
   const processFavoriteIds = allFavorites
     .filter((f) => f.resource === "processes")
     .map((f) => f.id);
-
-  const { data: favRunsRaw, isLoading: favRunsLoading, isError: favRunsError } = useQuery({
-    queryKey: ["dashboard", "latest_runs", "favorites", processFavoriteIds.join(",")],
-    queryFn: () => axiosHelper.axiosInstance
-      .get(`${API_URL}/processes/latest_runs`, { params: { ids: processFavoriteIds.join(",") }, timeout: 8000 })
-      .then(r => r.data),
-    enabled: processFavoriteIds.length > 0,
-    staleTime: 10_000,
-    placeholderData: (prev: any) => prev,
-    refetchOnMount: true,
-    refetchInterval: (query) => {
-      if (!query.state.data) return false;
-      const hasRunning = (query.state.data as any[]).some((item: any) =>
-        item.latest_run?.status === "running" || item.latest_run?.status === "new"
-      );
-      return hasRunning ? 30_000 : false;
-    },
-    retry: 0,
-  });
-
-  const latestRunsByProcessId = useMemo(() => {
-    const map: Record<number, any> = {};
-    (favRunsRaw ?? []).forEach((item: any) => {
-      if (item.latest_run) map[item.process_id] = item.latest_run;
-    });
-    return map;
-  }, [favRunsRaw]);
-  const latestRunsLoaded = processFavoriteIds.length === 0 || !favRunsLoading;
-  const latestRunsTimedOut = favRunsError;
-
-  // --- recent activity: latest runs across ALL processes ---
   const allProcessIdsKey = processList.map((p: any) => p.id).filter(Boolean).join(",");
 
-  const { data: recentRunsRaw, isLoading: recentRunsQueryLoading } = useQuery({
+  const { data: latestRunsRaw, isLoading: latestRunsLoading, isError: latestRunsError } = useQuery({
     queryKey: ["dashboard", "latest_runs", "all", allProcessIdsKey],
     queryFn: () => axiosHelper.axiosInstance
       .get(`${API_URL}/processes/latest_runs`, { params: { ids: allProcessIdsKey } })
@@ -148,13 +117,23 @@ export const Dashboard = () => {
       );
       return hasRunning ? 30_000 : false;
     },
+    retry: 0,
   });
 
-  const recentRunsLoading = processesLoading || recentRunsQueryLoading;
+  const latestRunsByProcessId = useMemo(() => {
+    const map: Record<number, any> = {};
+    (latestRunsRaw ?? []).forEach((item: any) => {
+      if (item.latest_run) map[item.process_id] = item.latest_run;
+    });
+    return map;
+  }, [latestRunsRaw]);
+  const latestRunsLoaded = !latestRunsLoading;
 
+  // --- recent activity: derived from the same latest_runs data ---
+  const recentRunsLoading = processesLoading || latestRunsLoading;
   const recentRuns = useMemo(() => {
     const runs: any[] = [];
-    (recentRunsRaw ?? []).forEach((item: any) => {
+    (latestRunsRaw ?? []).forEach((item: any) => {
       if (item.latest_run && item.latest_run.created_at) {
         runs.push({
           process_id: item.process_id,
@@ -165,7 +144,7 @@ export const Dashboard = () => {
     });
     runs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
     return runs.slice(0, 5);
-  }, [recentRunsRaw, processList]);
+  }, [latestRunsRaw, processList]);
 
   // --- stats ---
   const runningCount = processList.filter((p: any) => {
@@ -269,7 +248,7 @@ export const Dashboard = () => {
                               <Tag className={`run-status-chip run-status-chip--${state}`}>{state}</Tag>
                             ) : (
                               <Text type="secondary" style={{ fontSize: 11, whiteSpace: "nowrap" }}>
-                                {latestRunsLoaded ? (latestRunsTimedOut ? "Unknown" : "Not run yet") : "Checking..."}
+                                {latestRunsLoaded ? (latestRunsError ? "Unknown" : "Not run yet") : "Checking..."}
                               </Text>
                             )
                           )}
