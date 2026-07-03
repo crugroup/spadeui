@@ -2,8 +2,9 @@ import { DeleteButton, EditButton, FilterDropdown, List, ShowButton, useTable } 
 import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
 import { Input, Select, Space, Table, Tag, Tooltip } from "antd";
 import { StarFilled, StarOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useMemo } from "react";
 import { useNavigate } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 import { ProcessRunButton } from "../../components/process-run-button";
 import { useFavorites } from "../../hooks/useFavorites";
 import { API_URL } from "../../config/constants";
@@ -47,83 +48,43 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
   });
 
   const processes = tableQuery.data;
-  const [latestRunsByProcessId, setLatestRunsByProcessId] = React.useState<Record<number, LatestRun | undefined>>({});
-  const [latestRunsLoaded, setLatestRunsLoaded] = React.useState(false);
   const processIds = (processes?.data ?? []).map((process: any) => process.id).filter(Boolean);
   const processIdsKey = processIds.join(",");
   const tags: string[] | undefined = processes?.data?.map((f: any) => f.tags).flat();
   const tagSet = [...new Set(tags)].sort();
+
+  // Shared cache key with dashboard — navigating between pages is instant
+  const { data: latestRunsRaw, isLoading: latestRunsLoading } = useQuery({
+    queryKey: ["dashboard", "latest_runs", "all", processIdsKey],
+    queryFn: () => axiosHelper.axiosInstance
+      .get(`${API_URL}/processes/latest_runs`, { params: { ids: processIdsKey } })
+      .then(r => r.data),
+    enabled: !!processIdsKey,
+    staleTime: 10_000,
+    placeholderData: (prev: any) => prev,
+    refetchOnMount: true,
+    refetchInterval: (query) => {
+      if (!query.state.data) return false;
+      const data = query.state.data as any[];
+      const hasRunning = data.some((item: any) =>
+        item.latest_run?.status === "running" || item.latest_run?.status === "new"
+      );
+      return hasRunning ? ACTIVE_RUN_POLL_INTERVAL : false;
+    },
+  });
+
+  const latestRunsByProcessId = useMemo(() =>
+    Object.fromEntries(
+      (latestRunsRaw ?? []).map((item: { process_id: number; latest_run?: LatestRun | null }) => [
+        item.process_id,
+        item.latest_run ?? undefined,
+      ])
+    ),
+    [latestRunsRaw]
+  );
+  const latestRunsLoaded = processIdsKey.length === 0 || !latestRunsLoading;
   const runningCount = processIds.filter((id) => getRunState(latestRunsByProcessId[id]) === "running").length;
   const activeTagFilter = filters.find((filter) => "field" in filter && filter.field === "tags");
-
-  React.useEffect(() => {
-    let cancelled = false;
-
-    const fetchLatestRuns = async () => {
-      if (!processIdsKey) {
-        if (!cancelled) {
-          setLatestRunsByProcessId({});
-          setLatestRunsLoaded(true);
-        }
-        return;
-      }
-
-      try {
-        const { data } = await axiosHelper.axiosInstance.get(`${API_URL}/processes/latest_runs`, {
-          params: { ids: processIdsKey },
-        });
-
-        if (cancelled) return;
-
-        setLatestRunsByProcessId(
-          Object.fromEntries(
-            (data ?? []).map((item: { process_id: number; latest_run?: LatestRun | null }) => [
-              item.process_id,
-              item.latest_run ?? undefined,
-            ])
-          )
-        );
-        setLatestRunsLoaded(true);
-      } catch {
-        if (!cancelled) {
-          setLatestRunsLoaded(true);
-        }
-      }
-    };
-
-    void fetchLatestRuns();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [processIdsKey, tableQuery.dataUpdatedAt]);
-
-  React.useEffect(() => {
-    if (!processIdsKey || runningCount === 0) return;
-
-    const interval = window.setInterval(async () => {
-      try {
-        const { data } = await axiosHelper.axiosInstance.get(`${API_URL}/processes/latest_runs`, {
-          params: { ids: processIdsKey },
-        });
-
-        setLatestRunsByProcessId(
-          Object.fromEntries(
-            (data ?? []).map((item: { process_id: number; latest_run?: LatestRun | null }) => [
-              item.process_id,
-              item.latest_run ?? undefined,
-            ])
-          )
-        );
-      } catch {
-        // Keep the last successful status snapshot if the refresh fails.
-      }
-    }, ACTIVE_RUN_POLL_INTERVAL);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, [processIdsKey, runningCount]);
 
   const applyTagFilter = (tag: string) => {
     const nextFilters = filters.filter((filter) => !("field" in filter && filter.field === "tags"));
