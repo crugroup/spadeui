@@ -30,15 +30,29 @@ export function useFavorites() {
     (resource: string, id: number, label: string) => {
       const current = loadFavorites();
       const ids = current[resource] || [];
-      if (ids.includes(id)) {
+      const wasFavorite = ids.includes(id);
+
+      if (wasFavorite) {
         current[resource] = ids.filter((i) => i !== id);
       } else {
         current[resource] = [...ids, id];
       }
+
       // Also store label for display
-      const labels = JSON.parse(localStorage.getItem("spade_favorite_labels") || "{}");
-      labels[`${resource}:${id}`] = label;
+      let labels: Record<string, string> = {};
+      try {
+        labels = JSON.parse(localStorage.getItem("spade_favorite_labels") || "{}");
+      } catch {
+        labels = {};
+      }
+
+      if (wasFavorite) {
+        delete labels[`${resource}:${id}`];
+      } else {
+        labels[`${resource}:${id}`] = label;
+      }
       localStorage.setItem("spade_favorite_labels", JSON.stringify(labels));
+
       saveFavorites(current);
       setFavorites({ ...current });
       // Notify other components (e.g. sidebar badge)
