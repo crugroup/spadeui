@@ -374,7 +374,7 @@ export const Dashboard = () => {
         className="quick-upload-modal"
       >
         {selectedFileId ? (
-          <div style={{ background: "var(--spade-bg)", borderRadius: 10, padding: 16 }}>
+          <div style={{ background: "var(--spade-surface-soft)", borderRadius: 10, padding: 16 }}>
             <Text type="secondary" style={{ display: "block", marginBottom: 12 }}>
               Uploading to: <Text strong>{fileList?.find((f: any) => f.id === selectedFileId)?.code}</Text>
             </Text>
@@ -388,36 +388,149 @@ export const Dashboard = () => {
             </Button>
           </div>
         ) : (
-          <>
-            <Input
-              prefix={<SearchOutlined />}
-              placeholder="Search files..."
-              allowClear
-              value={quickUploadSearch}
-              onChange={(e) => setQuickUploadSearch(e.target.value)}
-              style={{ marginBottom: 12 }}
-            />
-            <List
-              size="small"
-              dataSource={quickUploadFiles
-                .filter((f: any) =>
-                  !quickUploadSearch ||
-                  f.code?.toLowerCase().includes(quickUploadSearch.toLowerCase()) ||
-                  f.description?.toLowerCase().includes(quickUploadSearch.toLowerCase())
-                )
-                .slice(0, 15)}
-              renderItem={(file: any) => (
-                <List.Item style={{ cursor: "pointer" }} onClick={() => { setSelectedFileId(file.id); setQuickUploadSearch(""); }}>
-                  <List.Item.Meta
-                    avatar={favoriteFileIds.has(file.id) ? <StarFilled style={{ color: "#cc8b1f" }} /> : <FileOutlined />}
-                    title={file.code}
-                    description={file.description}
+          (() => {
+            const filtered = quickUploadFiles.filter((f: any) =>
+              !quickUploadSearch ||
+              f.code?.toLowerCase().includes(quickUploadSearch.toLowerCase()) ||
+              f.description?.toLowerCase().includes(quickUploadSearch.toLowerCase())
+            );
+            const favFiles = filtered.filter((f: any) => favoriteFileIds.has(f.id));
+            const otherFiles = filtered.filter((f: any) => !favoriteFileIds.has(f.id));
+            const searching = quickUploadSearch.length > 0;
+
+            return (
+              <>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+                  <Input
+                    prefix={<SearchOutlined />}
+                    placeholder="Search files..."
+                    allowClear
+                    value={quickUploadSearch}
+                    onChange={(e) => setQuickUploadSearch(e.target.value)}
+                    style={{ flex: 1 }}
                   />
-                </List.Item>
-              )}
-              locale={{ emptyText: fileList === null ? "Loading files..." : "No files found" }}
-            />
-          </>
+                  <Text type="secondary" style={{ whiteSpace: "nowrap", fontSize: 12 }}>
+                    {fileList === null ? "Loading…" : searching ? `${filtered.length} result${filtered.length !== 1 ? "s" : ""}` : `${quickUploadFiles.length} files`}
+                  </Text>
+                </div>
+
+                {filtered.length === 0 ? (
+                  <div style={{ textAlign: "center", padding: "32px 0", color: "var(--spade-muted)" }}>
+                    <SearchOutlined style={{ fontSize: 28, marginBottom: 8, display: "block" }} />
+                    <Text type="secondary">
+                      {fileList === null ? "Loading files..." : searching ? `No files match "${quickUploadSearch}"` : "No files available"}
+                    </Text>
+                  </div>
+                ) : (
+                  <div style={{ maxHeight: 360, overflow: "auto", position: "relative" }}>
+                    {/* Favorites section */}
+                    {favFiles.length > 0 && (
+                      <>
+                        <div style={{
+                          padding: "6px 12px 4px",
+                          marginBottom: 2,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 6,
+                          borderBottom: "1px solid var(--spade-border)",
+                        }}>
+                          <StarFilled style={{ color: "#cc8b1f", fontSize: 12 }} />
+                          <Text strong style={{ fontSize: 12, color: "var(--spade-muted)", textTransform: "uppercase", letterSpacing: 0.5 }}>
+                            Favorites
+                          </Text>
+                          <Text type="secondary" style={{ fontSize: 11 }}>({favFiles.length})</Text>
+                        </div>
+                        {favFiles.map((file: any) => (
+                          <div
+                            key={`fav-${file.id}`}
+                            style={{
+                              cursor: "pointer",
+                              padding: "8px 12px",
+                              borderRadius: 8,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 10,
+                              transition: "background 0.15s",
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(48,164,253,0.06)")}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                            onClick={() => { setSelectedFileId(file.id); setQuickUploadSearch(""); }}
+                          >
+                            <StarFilled style={{ color: "#cc8b1f", fontSize: 14 }} />
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <Text ellipsis style={{ fontWeight: 500, display: "block" }}>{file.code}</Text>
+                              {file.description && <Text type="secondary" style={{ fontSize: 12 }} ellipsis>{file.description}</Text>}
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    )}
+
+                    {/* All files section */}
+                    {otherFiles.length > 0 && (
+                      <>
+                        {favFiles.length > 0 && (
+                          <div style={{
+                            padding: "6px 12px 4px",
+                            margin: "4px 0 2px",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                            borderBottom: "1px solid var(--spade-border)",
+                          }}>
+                            <FileOutlined style={{ color: "var(--spade-muted)", fontSize: 12 }} />
+                            <Text strong style={{ fontSize: 12, color: "var(--spade-muted)", textTransform: "uppercase", letterSpacing: 0.5 }}>
+                              All files
+                            </Text>
+                            <Text type="secondary" style={{ fontSize: 11 }}>({otherFiles.length})</Text>
+                          </div>
+                        )}
+                        {otherFiles.map((file: any) => (
+                          <div
+                            key={`file-${file.id}`}
+                            style={{
+                              cursor: "pointer",
+                              padding: "8px 12px",
+                              borderRadius: 8,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 10,
+                              transition: "background 0.15s",
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(48,164,253,0.06)")}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                            onClick={() => { setSelectedFileId(file.id); setQuickUploadSearch(""); }}
+                          >
+                            <FileOutlined style={{ color: "var(--spade-muted)", fontSize: 14 }} />
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <Text ellipsis style={{ fontWeight: 500, display: "block" }}>{file.code}</Text>
+                              {file.description && <Text type="secondary" style={{ fontSize: 12 }} ellipsis>{file.description}</Text>}
+                            </div>
+                          </div>
+                        ))}
+                      </>
+                    )}
+
+                    {/* Scroll hint */}
+                    {filtered.length > 8 && (
+                      <div style={{
+                        textAlign: "center",
+                        padding: "6px 0 2px",
+                        background: "linear-gradient(to top, var(--spade-surface), transparent)",
+                        position: "sticky",
+                        bottom: 0,
+                        pointerEvents: "none",
+                      }}>
+                        <Text type="secondary" style={{ fontSize: 11 }}>
+                          Scroll for more · {filtered.length} files total
+                        </Text>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            );
+          })()
         )}
       </Modal>
     </div>

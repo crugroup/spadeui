@@ -6,7 +6,7 @@
 $primary: "#30A4FD";
 
 :root {
-  --spade-bg: radial-gradient(circle at 12% -5%, #dff0ff 0%, #f6f9fc 42%, #f4f6fa 100%);
+  --spade-bg: #f4f6fa;
   --spade-surface: #ffffff;
   --spade-surface-soft: #f7f9fc;
   --spade-text: #18253d;
@@ -577,6 +577,24 @@ body {
   letter-spacing: 0.03em;
   color: var(--spade-muted);
   border: 0;
+}
+
+.quick-upload-modal .ant-modal-content {
+  border-radius: 12px;
+  background: var(--spade-surface);
+}
+
+.quick-upload-modal .ant-modal .ant-modal-header {
+  background: transparent;
+  border-bottom: none;
+  padding-bottom: 8px;
+  margin-bottom: 0;
+}
+
+.quick-upload-modal .ant-modal .ant-modal-title,
+.quick-upload-modal .ant-modal .ant-modal-body,
+.quick-upload-modal .ant-modal .ant-modal-close {
+  background: transparent;
 }
 
 .rjsf-form .react-json-view,
