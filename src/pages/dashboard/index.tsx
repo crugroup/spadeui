@@ -102,9 +102,7 @@ export const Dashboard = () => {
 
   const { data: favRunsRaw, isLoading: favRunsLoading, isError: favRunsError } = useQuery({
     queryKey: ["dashboard", "latest_runs", "favorites", processFavoriteIds.join(",")],
-    queryFn: () => axiosHelper.axiosInstance
-      .get(`${API_URL}/processes/latest_runs`, { params: { ids: processFavoriteIds.join(",") } })
-      .then(r => r.data),
+.get(`${API_URL}/processes/latest_runs`, { params: { ids: processFavoriteIds.join(",") }, timeout: 8000 })
     enabled: processFavoriteIds.length > 0,
     staleTime: 30_000,
     retry: 0,
