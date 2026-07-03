@@ -63,7 +63,18 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
           rowKey="id"
           rowClassName={() => "entity-table-row"}
           onRow={(record) => ({
-            onClick: () => navigate(`/files/show/${record.id}`),
+            onClick: (event) => {
+              const target = event.target as HTMLElement;
+              if (
+                target.closest(".entity-table-actions") ||
+                target.closest(".entity-tag") ||
+                target.closest("a") ||
+                target.closest("button")
+              ) {
+                return;
+              }
+              navigate(`/files/show/${record.id}`);
+            },
             style: { cursor: "pointer" },
           })}
         >
