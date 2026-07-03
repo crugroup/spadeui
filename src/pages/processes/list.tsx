@@ -187,10 +187,20 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
           render={(_, record: any) => (
             <Tooltip title={isFavorite("processes", record.id) ? "Remove from favorites" : "Add to favorites"}>
               <span
+                role="button"
+                tabIndex={0}
+                aria-label={isFavorite("processes", record.id) ? "Remove from favorites" : "Add to favorites"}
                 style={{ cursor: "pointer", fontSize: 16 }}
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleFavorite("processes", record.id, record.code);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleFavorite("processes", record.id, record.code);
+                  }
                 }}
               >
                 {isFavorite("processes", record.id) ? (
