@@ -1,8 +1,11 @@
 import { DeleteButton, EditButton, FilterDropdown, List, ShowButton, useTable } from "@refinedev/antd";
 import { BaseRecord, IResourceComponentsProps } from "@refinedev/core";
 import { Input, Select, Space, Table, Tag, Tooltip } from "antd";
+import { StarFilled, StarOutlined } from "@ant-design/icons";
 import React from "react";
+import { useNavigate } from "react-router";
 import { ProcessRunButton } from "../../components/process-run-button";
+import { useFavorites } from "../../hooks/useFavorites";
 import { API_URL } from "../../config/constants";
 import { STATIC_QUERY_OPTIONS } from "../../config/query-cache";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
@@ -25,6 +28,8 @@ const getRunState = (latestRun?: { status?: string; result?: string }) => {
 };
 
 export const ProcessList: React.FC<IResourceComponentsProps> = () => {
+  const navigate = useNavigate();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const { filters, setFilters, tableQuery, tableProps } = useTable({
     syncWithLocation: true,
     queryOptions: STATIC_QUERY_OPTIONS,
@@ -170,7 +175,53 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
 
             return "entity-table-row";
           }}
+          onRow={(record) => ({
+            onClick: (event) => {
+              const target = event.target as HTMLElement;
+              if (
+                target.closest(".entity-table-actions") ||
+                target.closest(".entity-tag") ||
+                target.closest("a") ||
+                target.closest("button")
+              ) {
+                return;
+              }
+              navigate(`/processes/show/${(record as BaseRecord).id}`);
+            },
+            style: { cursor: "pointer" },
+          })}
         >
+        <Table.Column
+          title=""
+          width={40}
+          render={(_, record: any) => (
+            <Tooltip title={isFavorite("processes", record.id) ? "Remove from favorites" : "Add to favorites"}>
+              <span
+                role="button"
+                tabIndex={0}
+                aria-label={isFavorite("processes", record.id) ? "Remove from favorites" : "Add to favorites"}
+                style={{ cursor: "pointer", fontSize: 16 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavorite("processes", record.id, record.code);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleFavorite("processes", record.id, record.code);
+                  }
+                }}
+              >
+                {isFavorite("processes", record.id) ? (
+                  <StarFilled style={{ color: "#cc8b1f" }} />
+                ) : (
+                  <StarOutlined style={{ color: "var(--spade-muted)" }} />
+                )}
+              </span>
+            </Tooltip>
+          )}
+        />
         <Table.Column
           dataIndex="code"
           title="Name"
