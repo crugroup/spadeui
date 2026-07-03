@@ -1,11 +1,13 @@
 import { PlayCircleOutlined } from "@ant-design/icons";
 import { BaseKey, useCan, useCustomMutation, useInvalidate, useOne, useParsed } from "@refinedev/core";
 import validator from "@rjsf/validator-ajv8";
-import { Button, Modal, Space, App } from "antd";
+import { Button, Modal, Space, App, Typography } from "antd";
 import { ButtonProps } from "antd/lib";
 import { FC, useState } from "react";
 import { RjsfForm } from "../rjsf-form/rjsf-form";
 import { API_URL } from "../../config/constants";
+
+const { Text } = Typography;
 
 type ProcessRunButtonProps = {
   buttonProps: ButtonProps;
@@ -86,21 +88,44 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         {!hideText && "Run process"}
       </Button>
       <Modal
-        title="Process run form"
+        title={
+          <Space>
+            <PlayCircleOutlined style={{ color: "var(--spade-muted)" }} />
+            <span>Run {processData?.code ? <Text code>{processData.code}</Text> : "process"}</span>
+          </Space>
+        }
         open={isModalOpen}
-        onOk={() => setIsModalOpen(false)}
-        onCancel={() => {
-          setIsModalOpen(false);
-        }}
-        footer={<></>}
+        onCancel={() => setIsModalOpen(false)}
+        footer={
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
+            <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
+            <Button
+              type="primary"
+              icon={<PlayCircleOutlined />}
+              loading={isLoading}
+              htmlType="submit"
+              form="process-run-form"
+            >
+              Run process
+            </Button>
+          </div>
+        }
+        width={560}
         className="workflow-modal"
       >
-        <RjsfForm schema={processData?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
-          <Space align="start" className="workflow-modal__actions">
-            <Button disabled={isLoading} htmlType="submit" type="primary">
-              Submit
-            </Button>
-          </Space>
+        {processData?.description && (
+          <Text type="secondary" style={{ display: "block", marginBottom: 16 }}>{processData.description}</Text>
+        )}
+        <RjsfForm
+          id="process-run-form"
+          schema={processData?.user_params ?? {}}
+          validator={validator}
+          onSubmit={onSubmit}
+          noHtml5Validate
+        >
+          <div style={{ display: "none" }}>
+            <button type="submit" />
+          </div>
         </RjsfForm>
       </Modal>
     </>
