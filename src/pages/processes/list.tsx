@@ -5,7 +5,6 @@ import { StarFilled, StarOutlined } from "@ant-design/icons";
 import React from "react";
 import { useNavigate } from "react-router";
 import { ProcessRunButton } from "../../components/process-run-button";
-import { SkeletonList } from "../../components";
 import { useFavorites } from "../../hooks/useFavorites";
 import { API_URL } from "../../config/constants";
 import { STATIC_QUERY_OPTIONS } from "../../config/query-cache";
