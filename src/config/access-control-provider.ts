@@ -26,7 +26,7 @@ export default {
       return { can: true };
     }
 
-    if (resource === MENU_USER_TAB) {
+    if (resource === MENU_USER_TAB || resource === "dashboard") {
       const canAccessFiles = permissions.some(
         (p) => p.codename === `${ACTIONS_MAPPING[action as keyof typeof ACTIONS_MAPPING]}_${singular("files")}`
       );
