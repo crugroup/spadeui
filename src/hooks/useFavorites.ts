@@ -53,7 +53,12 @@ export function useFavorites() {
   );
 
   const getAllFavorites = useCallback(() => {
-    const labels = JSON.parse(localStorage.getItem("spade_favorite_labels") || "{}");
+    let labels: Record<string, string> = {};
+    try {
+      labels = JSON.parse(localStorage.getItem("spade_favorite_labels") || "{}");
+    } catch {
+      labels = {};
+    }
     return Object.entries(favorites).flatMap(([resource, ids]) =>
       ids.map((id) => ({
         resource,
