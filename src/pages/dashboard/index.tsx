@@ -106,7 +106,8 @@ export const Dashboard = () => {
       .get(`${API_URL}/processes/latest_runs`, { params: { ids: processFavoriteIds.join(",") }, timeout: 8000 })
       .then(r => r.data),
     enabled: processFavoriteIds.length > 0,
-    staleTime: 30_000,
+    staleTime: 10_000,
+    refetchOnMount: true,
     retry: 0,
   });
 
@@ -129,7 +130,8 @@ export const Dashboard = () => {
       .get(`${API_URL}/processes/latest_runs`, { params: { ids: allProcessIdsKey } })
       .then(r => r.data),
     enabled: !!allProcessIdsKey,
-    staleTime: 30_000,
+    staleTime: 10_000,
+    refetchOnMount: true,
   });
 
   const recentRunsLoading = processesLoading || recentRunsQueryLoading;
