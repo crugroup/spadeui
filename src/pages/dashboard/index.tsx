@@ -12,7 +12,8 @@ import {
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router";
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import axiosHelper from "../../helpers/axios-token-interceptor";
 import { API_URL } from "../../config/constants";
 import { useFavorites } from "../../hooks/useFavorites";
@@ -57,29 +58,29 @@ export const Dashboard = () => {
   const [quickUploadSearch, setQuickUploadSearch] = useState("");
   const [showAllFavorites, setShowAllFavorites] = useState(false);
 
-  // --- fetch files & processes stats via axios (bypasses Refine caching issues) ---
-  const [fileList, setFileList] = useState<any[] | null>(null);
-  const [processList, setProcessList] = useState<any[]>([]);
-  const [isStatsLoading, setIsStatsLoading] = useState(true);
+  // --- fetch files & processes via React Query ---
+  const { data: filesRaw, isLoading: filesLoading } = useQuery({
+    queryKey: ["dashboard", "files"],
+    queryFn: () => axiosHelper.axiosInstance.get(`${API_URL}/files`).then(r => r.data),
+    staleTime: 10 * 60_000,
+    gcTime: 30 * 60_000,
+  });
+  const { data: processesRaw, isLoading: processesLoading } = useQuery({
+    queryKey: ["dashboard", "processes"],
+    queryFn: () => axiosHelper.axiosInstance.get(`${API_URL}/processes`).then(r => r.data),
+    staleTime: 10 * 60_000,
+    gcTime: 30 * 60_000,
+  });
 
-  useEffect(() => {
-    let cancelled = false;
-    setIsStatsLoading(true);
-    Promise.all([
-      axiosHelper.axiosInstance.get(`${API_URL}/files`),
-      axiosHelper.axiosInstance.get(`${API_URL}/processes`),
-    ])
-      .then(([fRes, pRes]) => {
-        if (cancelled) return;
-        setFileList(Array.isArray(fRes.data) ? fRes.data : fRes.data?.results ?? []);
-        const procs = Array.isArray(pRes.data) ? pRes.data : pRes.data?.results ?? [];
-        setProcessList(procs);
-        setIsStatsLoading(false);
-      })
-      .catch(() => { if (!cancelled) setIsStatsLoading(false); });
-    return () => { cancelled = true; };
-  }, []);
-  const latestRunsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fileList = useMemo(() => {
+    const data = filesRaw;
+    return Array.isArray(data) ? data : data?.results ?? null;
+  }, [filesRaw]);
+  const processList = useMemo(() => {
+    const data = processesRaw;
+    return Array.isArray(data) ? data : data?.results ?? [];
+  }, [processesRaw]);
+  const isStatsLoading = filesLoading || processesLoading;
 
   const allFavorites = useMemo(() => getAllFavorites(), [getAllFavorites]);
   const favoriteFileIds = useMemo(
@@ -95,77 +96,56 @@ export const Dashboard = () => {
   }, [fileList, favoriteFileIds]);
 
   // --- latest runs for favorited processes ---
-  const [latestRunsByProcessId, setLatestRunsByProcessId] = useState<Record<number, any>>({});
-  const [latestRunsLoaded, setLatestRunsLoaded] = useState(false);
-  const [latestRunsTimedOut, setLatestRunsTimedOut] = useState(false);
   const processFavoriteIds = allFavorites
     .filter((f) => f.resource === "processes")
     .map((f) => f.id);
 
-  useEffect(() => {
-    if (latestRunsTimer.current) clearTimeout(latestRunsTimer.current);
-    if (processFavoriteIds.length === 0) {
-      setLatestRunsLoaded(true);
-      setLatestRunsTimedOut(false);
-      return;
-    }
-    const ids = processFavoriteIds.join(",");
-    let cancelled = false;
-    setLatestRunsTimedOut(false);
-    latestRunsTimer.current = setTimeout(() => {
-      if (!cancelled) { setLatestRunsTimedOut(true); setLatestRunsLoaded(true); }
-    }, 8000);
-    axiosHelper.axiosInstance
-      .get(`${API_URL}/processes/latest_runs`, { params: { ids } })
-      .then(({ data }) => {
-        if (cancelled) return;
-        if (latestRunsTimer.current) clearTimeout(latestRunsTimer.current);
-        const map: Record<number, any> = {};
-        (data ?? []).forEach((item: any) => {
-          if (item.latest_run) map[item.process_id] = item.latest_run;
-        });
-        setLatestRunsByProcessId(map);
-        setLatestRunsLoaded(true);
-      })
-      .catch(() => {
-        if (!cancelled) {
-          if (latestRunsTimer.current) clearTimeout(latestRunsTimer.current);
-          setLatestRunsTimedOut(true); setLatestRunsLoaded(true);
-        }
-      });
-    return () => { cancelled = true; if (latestRunsTimer.current) clearTimeout(latestRunsTimer.current); };
-  }, [processFavoriteIds.join(",")]);
+  const { data: favRunsRaw, isLoading: favRunsLoading, isError: favRunsError } = useQuery({
+    queryKey: ["dashboard", "latest_runs", "favorites", processFavoriteIds.join(",")],
+.get(`${API_URL}/processes/latest_runs`, { params: { ids: processFavoriteIds.join(",") }, timeout: 8000 })
+    enabled: processFavoriteIds.length > 0,
+    staleTime: 30_000,
+    retry: 0,
+  });
+
+  const latestRunsByProcessId = useMemo(() => {
+    const map: Record<number, any> = {};
+    (favRunsRaw ?? []).forEach((item: any) => {
+      if (item.latest_run) map[item.process_id] = item.latest_run;
+    });
+    return map;
+  }, [favRunsRaw]);
+  const latestRunsLoaded = processFavoriteIds.length === 0 || !favRunsLoading;
+  const latestRunsTimedOut = favRunsError;
 
   // --- recent activity: latest runs across ALL processes ---
-  const [recentRuns, setRecentRuns] = useState<any[]>([]);
-  const [recentRunsLoading, setRecentRunsLoading] = useState(true);
   const allProcessIdsKey = processList.map((p: any) => p.id).filter(Boolean).join(",");
 
-  useEffect(() => {
-    if (!allProcessIdsKey) { setRecentRunsLoading(false); return; }
-    let cancelled = false;
-    setRecentRunsLoading(true);
-    axiosHelper.axiosInstance
+  const { data: recentRunsRaw, isLoading: recentRunsQueryLoading } = useQuery({
+    queryKey: ["dashboard", "latest_runs", "all", allProcessIdsKey],
+    queryFn: () => axiosHelper.axiosInstance
       .get(`${API_URL}/processes/latest_runs`, { params: { ids: allProcessIdsKey } })
-      .then(({ data }) => {
-        if (cancelled) return;
-        const runs: any[] = [];
-        (data ?? []).forEach((item: any) => {
-          if (item.latest_run && item.latest_run.created_at) {
-            runs.push({
-              process_id: item.process_id,
-              process_code: processList.find((p: any) => p.id === item.process_id)?.code || `#${item.process_id}`,
-              ...item.latest_run,
-            });
-          }
+      .then(r => r.data),
+    enabled: !!allProcessIdsKey,
+    staleTime: 30_000,
+  });
+
+  const recentRunsLoading = processesLoading || recentRunsQueryLoading;
+
+  const recentRuns = useMemo(() => {
+    const runs: any[] = [];
+    (recentRunsRaw ?? []).forEach((item: any) => {
+      if (item.latest_run && item.latest_run.created_at) {
+        runs.push({
+          process_id: item.process_id,
+          process_code: processList.find((p: any) => p.id === item.process_id)?.code || `#${item.process_id}`,
+          ...item.latest_run,
         });
-        runs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-        setRecentRuns(runs.slice(0, 5));
-        setRecentRunsLoading(false);
-      })
-      .catch(() => { if (!cancelled) setRecentRunsLoading(false); });
-    return () => { cancelled = true; };
-  }, [allProcessIdsKey]);
+      }
+    });
+    runs.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    return runs.slice(0, 5);
+  }, [recentRunsRaw, processList]);
 
   // --- stats ---
   const runningCount = processList.filter((p: any) => {
