@@ -176,7 +176,18 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
             return "entity-table-row";
           }}
           onRow={(record) => ({
-            onClick: () => navigate(`/processes/show/${(record as BaseRecord).id}`),
+            onClick: (event) => {
+              const target = event.target as HTMLElement;
+              if (
+                target.closest(".entity-table-actions") ||
+                target.closest(".entity-tag") ||
+                target.closest("a") ||
+                target.closest("button")
+              ) {
+                return;
+              }
+              navigate(`/processes/show/${(record as BaseRecord).id}`);
+            },
             style: { cursor: "pointer" },
           })}
         >
