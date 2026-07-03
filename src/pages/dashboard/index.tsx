@@ -106,7 +106,15 @@ export const Dashboard = () => {
       .get(`${API_URL}/processes/latest_runs`, { params: { ids: processFavoriteIds.join(",") }, timeout: 8000 })
       .then(r => r.data),
     enabled: processFavoriteIds.length > 0,
-    staleTime: 30_000,
+    staleTime: 10_000,
+    refetchOnMount: true,
+    refetchInterval: (query) => {
+      if (!query.state.data) return false;
+      const hasRunning = (query.state.data as any[]).some((item: any) =>
+        item.latest_run?.status === "running" || item.latest_run?.status === "new"
+      );
+      return hasRunning ? 30_000 : false;
+    },
     retry: 0,
   });
 
@@ -129,7 +137,15 @@ export const Dashboard = () => {
       .get(`${API_URL}/processes/latest_runs`, { params: { ids: allProcessIdsKey } })
       .then(r => r.data),
     enabled: !!allProcessIdsKey,
-    staleTime: 30_000,
+    staleTime: 10_000,
+    refetchOnMount: true,
+    refetchInterval: (query) => {
+      if (!query.state.data) return false;
+      const hasRunning = (query.state.data as any[]).some((item: any) =>
+        item.latest_run?.status === "running" || item.latest_run?.status === "new"
+      );
+      return hasRunning ? 30_000 : false;
+    },
   });
 
   const recentRunsLoading = processesLoading || recentRunsQueryLoading;
