@@ -1,5 +1,6 @@
 import { PlayCircleOutlined } from "@ant-design/icons";
 import { BaseKey, useCan, useCustomMutation, useInvalidate, useOne, useParsed } from "@refinedev/core";
+import { useQueryClient } from "@tanstack/react-query";
 import validator from "@rjsf/validator-ajv8";
 import { Button, Modal, Space, App, Typography } from "antd";
 import { ButtonProps } from "antd/lib";
@@ -20,6 +21,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
   const { id } = useParsed();
   const { isLoading, mutate } = useCustomMutation();
   const invalidate = useInvalidate();
+  const queryClient = useQueryClient();
   const targetId = recordItemId ?? id;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -74,6 +76,8 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
       resource: "processes",
       invalidates: ["list", "detail"],
     });
+    // Invalidate dashboard React Query cache so it picks up new run status
+    queryClient.invalidateQueries({ queryKey: ["dashboard", "latest_runs"] });
   };
 
   return (
