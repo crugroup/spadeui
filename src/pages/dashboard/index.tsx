@@ -79,9 +79,11 @@ export const Dashboard = () => {
   }, []);
   const latestRunsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const allFavorites = getAllFavorites();
-  const fileFavorites = allFavorites.filter((f) => f.resource === "files");
-  const favoriteFileIds = new Set(fileFavorites.map((f) => f.id));
+  const allFavorites = useMemo(() => getAllFavorites(), [getAllFavorites]);
+  const favoriteFileIds = useMemo(
+    () => new Set(allFavorites.filter((f) => f.resource === "files").map((f) => f.id)),
+    [allFavorites]
+  );
 
   const quickUploadFiles = useMemo(() => {
     if (!fileList) return [];
