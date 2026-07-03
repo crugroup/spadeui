@@ -100,13 +100,14 @@ export const Dashboard = () => {
     .filter((f) => f.resource === "processes")
     .map((f) => f.id);
 
-  const { data: favRunsRaw } = useQuery({
+  const { data: favRunsRaw, isLoading: favRunsLoading, isError: favRunsError } = useQuery({
     queryKey: ["dashboard", "latest_runs", "favorites", processFavoriteIds.join(",")],
     queryFn: () => axiosHelper.axiosInstance
       .get(`${API_URL}/processes/latest_runs`, { params: { ids: processFavoriteIds.join(",") } })
       .then(r => r.data),
     enabled: processFavoriteIds.length > 0,
     staleTime: 30_000,
+    retry: 0,
   });
 
   const latestRunsByProcessId = useMemo(() => {
@@ -116,13 +117,13 @@ export const Dashboard = () => {
     });
     return map;
   }, [favRunsRaw]);
-  const latestRunsLoaded = processFavoriteIds.length === 0 || !!favRunsRaw;
-  const latestRunsTimedOut = false; // React Query handles timeouts internally
+  const latestRunsLoaded = processFavoriteIds.length === 0 || !favRunsLoading;
+  const latestRunsTimedOut = favRunsError;
 
   // --- recent activity: latest runs across ALL processes ---
   const allProcessIdsKey = processList.map((p: any) => p.id).filter(Boolean).join(",");
 
-  const { data: recentRunsRaw, isLoading: recentRunsLoading } = useQuery({
+  const { data: recentRunsRaw, isLoading: recentRunsQueryLoading } = useQuery({
     queryKey: ["dashboard", "latest_runs", "all", allProcessIdsKey],
     queryFn: () => axiosHelper.axiosInstance
       .get(`${API_URL}/processes/latest_runs`, { params: { ids: allProcessIdsKey } })
@@ -130,6 +131,8 @@ export const Dashboard = () => {
     enabled: !!allProcessIdsKey,
     staleTime: 30_000,
   });
+
+  const recentRunsLoading = processesLoading || recentRunsQueryLoading;
 
   const recentRuns = useMemo(() => {
     const runs: any[] = [];
