@@ -584,17 +584,17 @@ body {
   background: var(--spade-surface);
 }
 
-.quick-upload-modal .ant-modal .ant-modal-header {
-  background: transparent;
+.quick-upload-modal .ant-modal-header {
+  background: transparent !important;
   border-bottom: none;
   padding-bottom: 8px;
   margin-bottom: 0;
 }
 
-.quick-upload-modal .ant-modal .ant-modal-title,
-.quick-upload-modal .ant-modal .ant-modal-body,
-.quick-upload-modal .ant-modal .ant-modal-close {
-  background: transparent;
+.quick-upload-modal .ant-modal-title,
+.quick-upload-modal .ant-modal-body,
+.quick-upload-modal .ant-modal-close {
+  background: transparent !important;
 }
 
 .rjsf-form .react-json-view,

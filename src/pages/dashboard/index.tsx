@@ -443,6 +443,9 @@ export const Dashboard = () => {
                         {favFiles.map((file: any) => (
                           <div
                             key={`fav-${file.id}`}
+                            role="button"
+                            tabIndex={0}
+                            aria-label={`Upload to ${file.code}`}
                             style={{
                               cursor: "pointer",
                               padding: "8px 12px",
@@ -455,6 +458,13 @@ export const Dashboard = () => {
                             onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(48,164,253,0.06)")}
                             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                             onClick={() => { setSelectedFileId(file.id); setQuickUploadSearch(""); }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                setSelectedFileId(file.id);
+                                setQuickUploadSearch("");
+                              }
+                            }}
                           >
                             <StarFilled style={{ color: "#cc8b1f", fontSize: 14 }} />
                             <div style={{ flex: 1, minWidth: 0 }}>
@@ -488,6 +498,9 @@ export const Dashboard = () => {
                         {otherFiles.map((file: any) => (
                           <div
                             key={`file-${file.id}`}
+                            role="button"
+                            tabIndex={0}
+                            aria-label={`Upload to ${file.code}`}
                             style={{
                               cursor: "pointer",
                               padding: "8px 12px",
@@ -500,6 +513,13 @@ export const Dashboard = () => {
                             onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(48,164,253,0.06)")}
                             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                             onClick={() => { setSelectedFileId(file.id); setQuickUploadSearch(""); }}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                setSelectedFileId(file.id);
+                                setQuickUploadSearch("");
+                              }
+                            }}
                           >
                             <FileOutlined style={{ color: "var(--spade-muted)", fontSize: 14 }} />
                             <div style={{ flex: 1, minWidth: 0 }}>

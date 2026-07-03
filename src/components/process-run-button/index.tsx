@@ -103,10 +103,8 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
               type="primary"
               icon={<PlayCircleOutlined />}
               loading={isLoading}
-              onClick={() => {
-                const form = document.querySelector<HTMLFormElement>(".rjsf-form form");
-                form?.requestSubmit();
-              }}
+              htmlType="submit"
+              form="process-run-form"
             >
               Run process
             </Button>
@@ -119,6 +117,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
           <Text type="secondary" style={{ display: "block", marginBottom: 16 }}>{processData.description}</Text>
         )}
         <RjsfForm
+          id="process-run-form"
           schema={processData?.user_params ?? {}}
           validator={validator}
           onSubmit={onSubmit}
