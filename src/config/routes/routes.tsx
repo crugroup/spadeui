@@ -1,7 +1,7 @@
 import { ErrorComponent, ThemedLayout, ThemedSider } from "@refinedev/antd";
 import { Authenticated, CanAccess } from "@refinedev/core";
 import { NavigateToResource } from "@refinedev/react-router";
-import { Image, Space } from "antd";
+import { Image, Result, Space } from "antd";
 import { Link, Outlet, Route, Routes, useNavigate } from "react-router";
 import { useContext } from "react";
 import { ExecutorCreate, ExecutorEdit, ExecutorList, ExecutorShow } from "../../pages/executors";
@@ -13,6 +13,7 @@ import {
   FileProcessorShow,
 } from "../../pages/fileprocessors";
 import { FileCreate, FileEdit, FileList, FileShow } from "../../pages/files";
+import { Dashboard } from "../../pages/dashboard";
 import { GroupCreate, GroupEdit, GroupList, GroupShow } from "../../pages/groups";
 import { UserCreate, UserEdit, UserList, UserShow } from "../../pages/users";
 import { ForgotPassword } from "../../pages/auth/forgotPassword";
@@ -94,13 +95,11 @@ const CustomRoutes = () => {
           index
           element={
             <CanAccess
-              resource="files"
+              resource="dashboard"
               action="list"
-              onUnauthorized={() => {
-                navigate("/");
-              }}
+              fallback={<Result status="403" title="403" subTitle="Sorry, you are not authorized to access this page." />}
             >
-              <NavigateToResource resource="files" />
+              <Dashboard />
             </CanAccess>
           }
         />
