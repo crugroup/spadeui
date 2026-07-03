@@ -107,6 +107,7 @@ export const Dashboard = () => {
       .then(r => r.data),
     enabled: processFavoriteIds.length > 0,
     staleTime: 10_000,
+    placeholderData: (prev: any) => prev,
     refetchOnMount: true,
     refetchInterval: (query) => {
       if (!query.state.data) return false;
@@ -138,6 +139,7 @@ export const Dashboard = () => {
       .then(r => r.data),
     enabled: !!allProcessIdsKey,
     staleTime: 10_000,
+    placeholderData: (prev: any) => prev,
     refetchOnMount: true,
     refetchInterval: (query) => {
       if (!query.state.data) return false;

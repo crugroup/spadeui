@@ -61,6 +61,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
       .then(r => r.data),
     enabled: !!processIdsKey,
     staleTime: 10_000,
+    placeholderData: (prev: any) => prev,
     refetchOnMount: true,
     refetchInterval: (query) => {
       if (!query.state.data) return false;
