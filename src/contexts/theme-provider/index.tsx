@@ -37,11 +37,11 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
       }
     };
 
-    setOrRemove("--spade-surface", "#11223f");
+    setOrRemove("--spade-surface", colors.colorBgContainer);
     setOrRemove("--spade-surface-soft", "#0f1d35");
-    setOrRemove("--spade-text", "#f2f6ff");
+    setOrRemove("--spade-text", colors.colorTextBase);
     setOrRemove("--spade-muted", "#7a8ba3");
-    setOrRemove("--spade-border", "#233f65");
+    setOrRemove("--spade-border", colors.colorBorder);
     setOrRemove("--spade-shadow", "0 6px 18px rgba(0, 0, 0, 0.25)");
   }, [mode]);
 
