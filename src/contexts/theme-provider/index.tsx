@@ -24,15 +24,25 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
     document.body.style.backgroundColor = colors.colorBgLayout;
     document.body.style.color = colors.colorTextBase;
 
-    // Update --spade-* CSS custom properties for dark/light mode
+    // Only set --spade-* inline overrides for dark mode;
+    // in light mode remove them so stylesheet :root defaults remain the source of truth.
     const root = document.documentElement;
     const isDark = mode === "dark";
-    root.style.setProperty("--spade-surface", isDark ? "#11223f" : "#ffffff");
-    root.style.setProperty("--spade-surface-soft", isDark ? "#0f1d35" : "#f7f9fc");
-    root.style.setProperty("--spade-text", isDark ? "#f2f6ff" : "#18253d");
-    root.style.setProperty("--spade-muted", isDark ? "#7a8ba3" : "#5c6b83");
-    root.style.setProperty("--spade-border", isDark ? "#233f65" : "#d7deea");
-    root.style.setProperty("--spade-shadow", isDark ? "0 6px 18px rgba(0, 0, 0, 0.25)" : "0 6px 18px rgba(19, 37, 70, 0.05)");
+
+    const setOrRemove = (prop: string, value: string) => {
+      if (isDark) {
+        root.style.setProperty(prop, value);
+      } else {
+        root.style.removeProperty(prop);
+      }
+    };
+
+    setOrRemove("--spade-surface", "#11223f");
+    setOrRemove("--spade-surface-soft", "#0f1d35");
+    setOrRemove("--spade-text", "#f2f6ff");
+    setOrRemove("--spade-muted", "#7a8ba3");
+    setOrRemove("--spade-border", "#233f65");
+    setOrRemove("--spade-shadow", "0 6px 18px rgba(0, 0, 0, 0.25)");
   }, [mode]);
 
   const setColorMode = () => {
