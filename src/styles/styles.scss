@@ -29,6 +29,8 @@ body,
 body {
   margin: 0;
   font-family: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
+  color: var(--spade-text);
+  background: var(--spade-bg);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }

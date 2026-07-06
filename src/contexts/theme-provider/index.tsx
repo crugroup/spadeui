@@ -21,28 +21,23 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   useLayoutEffect(() => {
     const colors = mode === "light" ? lightColors : darkColors;
-    document.body.style.backgroundColor = colors.colorBgLayout;
-    document.body.style.color = colors.colorTextBase;
-
-    // Only set --spade-* inline overrides for dark mode;
-    // in light mode remove them so stylesheet :root defaults remain the source of truth.
     const root = document.documentElement;
     const isDark = mode === "dark";
 
-    const setOrRemove = (prop: string, value: string) => {
-      if (isDark) {
-        root.style.setProperty(prop, value);
-      } else {
-        root.style.removeProperty(prop);
-      }
-    };
+    // Always set --spade-* from the current theme tokens so both
+    // light and dark stay in sync. SCSS :root defaults serve only as
+    // a no-JS / initial-load fallback.
+    root.style.setProperty("--spade-bg", colors.colorBgLayout);
+    root.style.setProperty("--spade-surface", colors.colorBgContainer);
+    root.style.setProperty("--spade-text", colors.colorTextBase);
+    root.style.setProperty("--spade-border", colors.colorBorder);
 
-    setOrRemove("--spade-surface", colors.colorBgContainer);
-    setOrRemove("--spade-surface-soft", "#0f1d35");
-    setOrRemove("--spade-text", colors.colorTextBase);
-    setOrRemove("--spade-muted", "#7a8ba3");
-    setOrRemove("--spade-border", colors.colorBorder);
-    setOrRemove("--spade-shadow", "0 6px 18px rgba(0, 0, 0, 0.25)");
+    // No direct antd token equivalents — use hardcoded dark/light pairs
+    root.style.setProperty("--spade-surface-soft", isDark ? "#0f1d35" : "#f7f9fc");
+    root.style.setProperty("--spade-muted", isDark ? "#7a8ba3" : "#5c6b83");
+    root.style.setProperty("--spade-shadow", isDark
+      ? "0 6px 18px rgba(0, 0, 0, 0.25)"
+      : "0 6px 18px rgba(19, 37, 70, 0.05)");
   }, [mode]);
 
   const setColorMode = () => {
