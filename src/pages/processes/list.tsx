@@ -12,7 +12,7 @@ import { STATIC_QUERY_OPTIONS } from "../../config/query-cache";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
 import axiosHelper from "../../helpers/axios-token-interceptor";
 
-const ACTIVE_RUN_POLL_INTERVAL = 30_000;
+const ACTIVE_RUN_POLL_INTERVAL = 10_000;
 
 type LatestRun = { status?: string; result?: string; created_at?: string };
 
@@ -60,7 +60,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
       .get(`${API_URL}/processes/latest_runs`, { params: { ids: processIdsKey } })
       .then(r => r.data),
     enabled: !!processIdsKey,
-    staleTime: 10_000,
+    staleTime: 3_000,
     placeholderData: (prev: any) => prev,
     refetchOnMount: true,
     refetchInterval: (query) => {
