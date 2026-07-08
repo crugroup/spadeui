@@ -108,7 +108,7 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
   return (
     <List>
       <div className="processes-live-hint-wrap">
-        <div className="processes-live-hint">Live updates every 30 seconds while runs are active</div>
+        <div className="processes-live-hint">Live updates every 10 seconds while runs are active</div>
         {runningCount > 0 && (
           <Tag className="processes-live-counter">
             <span className="processes-live-counter__pulse" />

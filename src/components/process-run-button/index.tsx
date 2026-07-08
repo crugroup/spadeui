@@ -72,7 +72,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
             (old: any) => {
               if (!Array.isArray(old)) return old;
               return old.map((item: any) =>
-                item.process_id === targetId
+                String(item.process_id) === String(targetId)
                   ? { ...item, latest_run: { ...item.latest_run, status: "running" } }
                   : item
               );
