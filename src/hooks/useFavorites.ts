@@ -3,6 +3,17 @@ import axiosHelper from "../helpers/axios-token-interceptor";
 import { API_URL } from "../config/constants";
 
 const STORAGE_KEY = "spade_favorites";
+const LABELS_KEY = "spade_favorite_labels";
+
+function loadLabels(): Record<string, string> {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(LABELS_KEY) || "{}");
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      return parsed as Record<string, string>;
+    }
+  } catch { /* ignore */ }
+  return {};
+}
 
 type Favorites = Record<string, number[]>;
 
@@ -28,11 +39,16 @@ async function syncFromAPI() {
     // overwriting the user's newer local state.
     if (localStorage.getItem(STORAGE_KEY) !== localBefore) return null;
     const favs: Favorites = {};
+    const labels: Record<string, string> = {};
     (data ?? []).forEach((f: any) => {
       if (!favs[f.resource]) favs[f.resource] = [];
       favs[f.resource].push(f.resource_id);
+      labels[`${f.resource}:${f.resource_id}`] = f.label || "";
     });
     saveFavorites(favs);
+    try {
+      localStorage.setItem(LABELS_KEY, JSON.stringify(labels));
+    } catch { /* ignore label cache failures */ }
     return favs;
   } catch {
     return null;
@@ -89,6 +105,19 @@ export function useFavorites() {
         addToAPI(resource, id);
       }
 
+      // Update label cache immediately so the dashboard shows the real
+      // name without waiting for the next syncFromAPI.
+      const labelKey = `${resource}:${id}`;
+      const labels = loadLabels();
+      if (wasFavorite) {
+        delete labels[labelKey];
+      } else if (_label) {
+        labels[labelKey] = _label;
+      }
+      try {
+        localStorage.setItem(LABELS_KEY, JSON.stringify(labels));
+      } catch { /* ignore */ }
+
       saveFavorites(current);
       setFavorites({ ...current });
       window.dispatchEvent(new Event("spade-favorites-changed"));
@@ -102,11 +131,12 @@ export function useFavorites() {
   );
 
   const getAllFavorites = useCallback(() => {
+    const labels = loadLabels();
     return Object.entries(favorites).flatMap(([resource, ids]) =>
       ids.map((id) => ({
         resource,
         id,
-        label: `${resource}/${id}`,
+        label: labels[`${resource}:${id}`] || `${resource}/${id}`,
       }))
     );
   }, [favorites]);
