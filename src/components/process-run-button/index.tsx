@@ -64,6 +64,28 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
             description: "Running",
           });
           setIsModalOpen(false);
+
+          // Optimistic update: immediately show "running" status in the
+          // dashboard / processes list before the API confirms it.
+          queryClient.setQueriesData(
+            { queryKey: ["dashboard", "latest_runs"], exact: false },
+            (old: any) => {
+              if (!Array.isArray(old)) return old;
+              return old.map((item: any) =>
+                String(item.process_id) === String(targetId)
+                  ? { ...item, latest_run: { ...item.latest_run, status: "running" } }
+                  : item
+              );
+            }
+          );
+
+          // Invalidate dashboard React Query cache after a short delay so
+          // the backend has time to start the process before we refetch.
+          const refetchLatestRuns = () => {
+            queryClient.invalidateQueries({ queryKey: ["dashboard", "latest_runs"] });
+          };
+          setTimeout(refetchLatestRuns, 1000);
+          setTimeout(refetchLatestRuns, 4000);
         },
       }
     );
@@ -76,8 +98,6 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
       resource: "processes",
       invalidates: ["list", "detail"],
     });
-    // Invalidate dashboard React Query cache so it picks up new run status
-    queryClient.invalidateQueries({ queryKey: ["dashboard", "latest_runs"] });
   };
 
   return (
