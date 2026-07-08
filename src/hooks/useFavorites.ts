@@ -36,7 +36,9 @@ async function syncFromAPI() {
       labels[`${f.resource}:${f.resource_id}`] = f.label || "";
     });
     saveFavorites(favs);
-    localStorage.setItem(LABELS_KEY, JSON.stringify(labels));
+    try {
+      localStorage.setItem(LABELS_KEY, JSON.stringify(labels));
+    } catch { /* ignore label cache failures */ }
     return favs;
   } catch {
     return null;
@@ -92,6 +94,24 @@ export function useFavorites() {
         current[resource] = [...ids, id];
         addToAPI(resource, id);
       }
+
+      // Update label cache immediately so the dashboard shows the real
+      // name without waiting for the next syncFromAPI.
+      const labelKey = `${resource}:${id}`;
+      let labels: Record<string, string> = {};
+      try {
+        labels = JSON.parse(localStorage.getItem(LABELS_KEY) || "{}");
+      } catch {
+        labels = {};
+      }
+      if (wasFavorite) {
+        delete labels[labelKey];
+      } else if (_label) {
+        labels[labelKey] = _label;
+      }
+      try {
+        localStorage.setItem(LABELS_KEY, JSON.stringify(labels));
+      } catch { /* ignore */ }
 
       saveFavorites(current);
       setFavorites({ ...current });
