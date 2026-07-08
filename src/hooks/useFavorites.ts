@@ -5,6 +5,16 @@ import { API_URL } from "../config/constants";
 const STORAGE_KEY = "spade_favorites";
 const LABELS_KEY = "spade_favorite_labels";
 
+function loadLabels(): Record<string, string> {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(LABELS_KEY) || "{}");
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      return parsed as Record<string, string>;
+    }
+  } catch { /* ignore */ }
+  return {};
+}
+
 type Favorites = Record<string, number[]>;
 
 function loadFavorites(): Favorites {
@@ -98,12 +108,7 @@ export function useFavorites() {
       // Update label cache immediately so the dashboard shows the real
       // name without waiting for the next syncFromAPI.
       const labelKey = `${resource}:${id}`;
-      let labels: Record<string, string> = {};
-      try {
-        labels = JSON.parse(localStorage.getItem(LABELS_KEY) || "{}");
-      } catch {
-        labels = {};
-      }
+      const labels = loadLabels();
       if (wasFavorite) {
         delete labels[labelKey];
       } else if (_label) {
@@ -126,12 +131,7 @@ export function useFavorites() {
   );
 
   const getAllFavorites = useCallback(() => {
-    let labels: Record<string, string> = {};
-    try {
-      labels = JSON.parse(localStorage.getItem(LABELS_KEY) || "{}");
-    } catch {
-      labels = {};
-    }
+    const labels = loadLabels();
     return Object.entries(favorites).flatMap(([resource, ids]) =>
       ids.map((id) => ({
         resource,
