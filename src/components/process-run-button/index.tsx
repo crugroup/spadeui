@@ -64,6 +64,20 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
             description: "Running",
           });
           setIsModalOpen(false);
+
+          // Optimistic update: immediately show "running" status in the
+          // dashboard / processes list before the API confirms it.
+          queryClient.setQueriesData(
+            { queryKey: ["dashboard", "latest_runs"], exact: false },
+            (old: any) => {
+              if (!Array.isArray(old)) return old;
+              return old.map((item: any) =>
+                item.process_id === targetId
+                  ? { ...item, latest_run: { ...item.latest_run, status: "running" } }
+                  : item
+              );
+            }
+          );
         },
       }
     );
