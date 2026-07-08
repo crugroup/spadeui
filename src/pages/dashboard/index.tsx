@@ -107,7 +107,7 @@ export const Dashboard = () => {
       .get(`${API_URL}/processes/latest_runs`, { params: { ids: allProcessIdsKey } })
       .then(r => r.data),
     enabled: !!allProcessIdsKey,
-    staleTime: 10_000,
+    staleTime: 3_000,
     placeholderData: (prev: any) => prev,
     refetchOnMount: true,
     refetchInterval: (query) => {
@@ -115,7 +115,7 @@ export const Dashboard = () => {
       const hasRunning = (query.state.data as any[]).some((item: any) =>
         item.latest_run?.status === "running" || item.latest_run?.status === "new"
       );
-      return hasRunning ? 30_000 : false;
+      return hasRunning ? 10_000 : false;
     },
     retry: 0,
   });
