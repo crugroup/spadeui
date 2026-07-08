@@ -3,6 +3,7 @@ import axiosHelper from "../helpers/axios-token-interceptor";
 import { API_URL } from "../config/constants";
 
 const STORAGE_KEY = "spade_favorites";
+const LABELS_KEY = "spade_favorite_labels";
 
 type Favorites = Record<string, number[]>;
 
@@ -28,11 +29,14 @@ async function syncFromAPI() {
     // overwriting the user's newer local state.
     if (localStorage.getItem(STORAGE_KEY) !== localBefore) return null;
     const favs: Favorites = {};
+    const labels: Record<string, string> = {};
     (data ?? []).forEach((f: any) => {
       if (!favs[f.resource]) favs[f.resource] = [];
       favs[f.resource].push(f.resource_id);
+      labels[`${f.resource}:${f.resource_id}`] = f.label || "";
     });
     saveFavorites(favs);
+    localStorage.setItem(LABELS_KEY, JSON.stringify(labels));
     return favs;
   } catch {
     return null;
@@ -102,11 +106,17 @@ export function useFavorites() {
   );
 
   const getAllFavorites = useCallback(() => {
+    let labels: Record<string, string> = {};
+    try {
+      labels = JSON.parse(localStorage.getItem(LABELS_KEY) || "{}");
+    } catch {
+      labels = {};
+    }
     return Object.entries(favorites).flatMap(([resource, ids]) =>
       ids.map((id) => ({
         resource,
         id,
-        label: `${resource}/${id}`,
+        label: labels[`${resource}:${id}`] || `${resource}/${id}`,
       }))
     );
   }, [favorites]);
