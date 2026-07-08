@@ -21,7 +21,13 @@ function saveFavorites(favs: Favorites) {
 
 async function syncFromAPI() {
   try {
+    // Snapshot localStorage before the request so we can detect concurrent
+    // local changes (e.g. user toggled a favorite while sync was in-flight).
+    const localBefore = localStorage.getItem(STORAGE_KEY);
     const { data } = await axiosHelper.axiosInstance.get(`${API_URL}/favorites`);
+    // If localStorage changed since we started, skip hydration to avoid
+    // overwriting the user's newer local state.
+    if (localStorage.getItem(STORAGE_KEY) !== localBefore) return null;
     const favs: Favorites = {};
     const labels: Record<string, string> = {};
     (data ?? []).forEach((f: any) => {
@@ -45,7 +51,9 @@ async function addToAPI(resource: string, id: number, label: string) {
 
 async function removeFromAPI(resource: string, id: number) {
   try {
-    await axiosHelper.axiosInstance.delete(`${API_URL}/favorites`, { data: { resource, resource_id: id } });
+    await axiosHelper.axiosInstance.delete(`${API_URL}/favorites`, {
+      params: { resource, resource_id: id },
+    });
   } catch { /* silent */ }
 }
 
