@@ -63,10 +63,13 @@ export function useFavorites() {
 
   // Hydrate from API on mount
   useEffect(() => {
+    let cancelled = false;
     syncFromAPI().then((apiFavs) => {
+      if (cancelled) return;
       if (apiFavs) setFavorites(apiFavs);
       setSynced(true);
     });
+    return () => { cancelled = true; };
   }, []);
 
   const isFavorite = useCallback(

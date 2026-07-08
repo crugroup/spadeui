@@ -78,6 +78,14 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
               );
             }
           );
+
+          // Invalidate dashboard React Query cache after a short delay so
+          // the backend has time to start the process before we refetch.
+          const refetchLatestRuns = () => {
+            queryClient.invalidateQueries({ queryKey: ["dashboard", "latest_runs"] });
+          };
+          setTimeout(refetchLatestRuns, 1000);
+          setTimeout(refetchLatestRuns, 4000);
         },
       }
     );
@@ -90,14 +98,6 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
       resource: "processes",
       invalidates: ["list", "detail"],
     });
-    // Invalidate dashboard React Query cache after a short delay so the
-    // backend has time to actually start the process before we refetch.
-    const refetchLatestRuns = () => {
-      queryClient.invalidateQueries({ queryKey: ["dashboard", "latest_runs"] });
-    };
-    // First refetch after 1s (process started), then again after 4s
-    setTimeout(refetchLatestRuns, 1000);
-    setTimeout(refetchLatestRuns, 4000);
   };
 
   return (
