@@ -19,7 +19,8 @@ type ProcessRunButtonProps = {
 const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId, hideText }) => {
   const { notification } = App.useApp();
   const { id } = useParsed();
-  const { isLoading, mutate } = useCustomMutation();
+  const { mutate, mutation } = useCustomMutation();
+  const isRunning = mutation.isPending;
   const invalidate = useInvalidate();
   const queryClient = useQueryClient();
   const targetId = recordItemId ?? id;
@@ -52,7 +53,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         if (!Array.isArray(old)) return old;
         return old.map((item: any) =>
           String(item.process_id) === String(targetId)
-            ? { ...item, latest_run: { ...item.latest_run, status: "running" } }
+            ? { ...item, latest_run: { ...item.latest_run, status: "running", created_at: new Date().toISOString() } }
             : item
         );
       }
@@ -144,7 +145,8 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
       <Button
         {...buttonProps}
         onClick={() => setIsModalOpen(true)}
-        disabled={!permissionData?.can}
+        disabled={!permissionData?.can || isRunning}
+        loading={isRunning}
         title={permissionData?.can ? undefined : "You don't have permissions to access"}
         icon={<PlayCircleOutlined />}
       >
@@ -165,7 +167,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
             <Button
               type="primary"
               icon={<PlayCircleOutlined />}
-              loading={isLoading}
+              loading={isRunning}
               htmlType="submit"
               form="process-run-form"
             >
