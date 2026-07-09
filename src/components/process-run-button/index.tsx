@@ -62,7 +62,8 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
           setIsModalOpen(false);
 
           const run = data?.data;
-          const isStillRunning = run?.status === "running" || run?.status === "new";
+          const normalizedStatus = run?.status?.toLowerCase();
+          const isStillRunning = normalizedStatus === "running" || normalizedStatus === "new";
 
           if (isStillRunning) {
             // Async execution path: process kicked off but not yet complete.
@@ -89,7 +90,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
             const result = run?.result?.toLowerCase();
             if (result === "success") {
               notification.success({ message: "Process completed", description: "Success" });
-            } else if (result === "failed" || run?.status === "error") {
+            } else if (result === "failed" || normalizedStatus === "failed" || normalizedStatus === "error") {
               notification.error({
                 message: "Process failed",
                 description: run?.error_message || "An error occurred",

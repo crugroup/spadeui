@@ -112,9 +112,10 @@ export const Dashboard = () => {
     refetchOnMount: true,
     refetchInterval: (query) => {
       if (!query.state.data) return false;
-      const hasRunning = (query.state.data as any[]).some((item: any) =>
-        item.latest_run?.status === "running" || item.latest_run?.status === "new"
-      );
+      const hasRunning = (query.state.data as any[]).some((item: any) => {
+        const s = item.latest_run?.status?.toLowerCase();
+        return s === "running" || s === "new";
+      });
       return hasRunning ? 10_000 : false;
     },
     retry: 0,
@@ -149,11 +150,14 @@ export const Dashboard = () => {
   // --- stats ---
   const runningCount = processList.filter((p: any) => {
     const lr = latestRunsByProcessId[p.id] || p.latest_run;
-    return lr?.status === "running" || lr?.status === "new";
+    const s = lr?.status?.toLowerCase();
+    return s === "running" || s === "new";
   }).length;
   const failedCount = processList.filter((p: any) => {
     const lr = latestRunsByProcessId[p.id] || p.latest_run;
-    return lr?.result === "failed" || lr?.status === "error";
+    const s = lr?.status?.toLowerCase();
+    const r = lr?.result?.toLowerCase();
+    return s === "failed" || s === "error" || r === "failed" || r === "error";
   }).length;
 
   /* ---------- render ---------- */

@@ -258,6 +258,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                 <Select allowClear className="filter-dropdown__select">
                   <Select.Option value="success">Success</Select.Option>
                   <Select.Option value="warning">Warning</Select.Option>
+                  <Select.Option value="failed">Failed</Select.Option>
                   <Select.Option value="error">Error</Select.Option>
                 </Select>
               </FilterDropdown>

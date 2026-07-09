@@ -66,9 +66,10 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
     refetchInterval: (query) => {
       if (!query.state.data) return false;
       const data = query.state.data as any[];
-      const hasRunning = data.some((item: any) =>
-        item.latest_run?.status === "running" || item.latest_run?.status === "new"
-      );
+      const hasRunning = data.some((item: any) => {
+        const s = item.latest_run?.status?.toLowerCase();
+        return s === "running" || s === "new";
+      });
       return hasRunning ? ACTIVE_RUN_POLL_INTERVAL : false;
     },
   });
