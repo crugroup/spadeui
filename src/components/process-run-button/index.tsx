@@ -19,7 +19,8 @@ type ProcessRunButtonProps = {
 const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId, hideText }) => {
   const { notification } = App.useApp();
   const { id } = useParsed();
-  const { isLoading, mutate } = useCustomMutation();
+  const { mutate, mutation } = useCustomMutation();
+  const isRunning = mutation.isPending;
   const invalidate = useInvalidate();
   const queryClient = useQueryClient();
   const targetId = recordItemId ?? id;
@@ -41,6 +42,23 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
   const onSubmit = async ({ formData }: { formData?: FormData }) => {
     const serializedParams = JSON.stringify(formData ?? {});
 
+    // Close modal and flip chip to "running" immediately so the user has visual
+    // feedback while the HTTP request is in-flight (important for slow deployments).
+    setIsModalOpen(false);
+    await queryClient.cancelQueries({ queryKey: ["dashboard", "latest_runs"], exact: false });
+    const snapshot = queryClient.getQueriesData({ queryKey: ["dashboard", "latest_runs"], exact: false });
+    queryClient.setQueriesData(
+      { queryKey: ["dashboard", "latest_runs"], exact: false },
+      (old: any) => {
+        if (!Array.isArray(old)) return old;
+        return old.map((item: any) =>
+          String(item.process_id) === String(targetId)
+            ? { ...item, latest_run: { ...item.latest_run, status: "running", created_at: new Date().toISOString() } }
+            : item
+        );
+      }
+    );
+
     mutate(
       {
         url: `${API_URL}/processes/${targetId}/run`,
@@ -58,34 +76,58 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         },
       },
       {
-        onSuccess: () => {
-          notification.warning({
-            message: "Process started",
-            description: "Running",
-          });
-          setIsModalOpen(false);
+        onSuccess: (data: any) => {
+          const run = data?.data;
+          const normalizedStatus = run?.status?.toLowerCase();
+          const isStillRunning = normalizedStatus === "running" || normalizedStatus === "new";
 
-          // Optimistic update: immediately show "running" status in the
-          // dashboard / processes list before the API confirms it.
-          queryClient.setQueriesData(
-            { queryKey: ["dashboard", "latest_runs"], exact: false },
-            (old: any) => {
-              if (!Array.isArray(old)) return old;
-              return old.map((item: any) =>
-                String(item.process_id) === String(targetId)
-                  ? { ...item, latest_run: { ...item.latest_run, status: "running" } }
-                  : item
-              );
+          if (isStillRunning) {
+            // Async execution path: still running — chip already shows "running"
+            // from the optimistic update; polling takes over from here.
+            // Do NOT invalidate now — the backend hasn't bumped the cache version
+            // yet, so a refetch would return the old state and kill polling.
+            notification.info({
+              message: "Process started",
+              description: "Running…",
+            });
+          } else {
+            // Sync execution path: response already contains the final state.
+            // Update cache immediately so the chip reflects the real outcome.
+            const result = run?.result?.toLowerCase();
+            if (result === "success") {
+              notification.success({ message: "Process completed", description: "Success" });
+            } else if (result === "failed" || normalizedStatus === "failed" || normalizedStatus === "error") {
+              notification.error({
+                message: "Process failed",
+                description: run?.error_message || "An error occurred",
+              });
+            } else if (result === "warning") {
+              notification.warning({ message: "Process completed with warnings" });
+            } else {
+              notification.info({ message: "Process completed" });
             }
-          );
 
-          // Invalidate dashboard React Query cache after a short delay so
-          // the backend has time to start the process before we refetch.
-          const refetchLatestRuns = () => {
+            queryClient.setQueriesData(
+              { queryKey: ["dashboard", "latest_runs"], exact: false },
+              (old: any) => {
+                if (!Array.isArray(old)) return old;
+                return old.map((item: any) =>
+                  String(item.process_id) === String(targetId)
+                    ? { ...item, latest_run: run }
+                    : item
+                );
+              }
+            );
+
+            // Backend cache version was bumped; refetch gets fresh DB data.
             queryClient.invalidateQueries({ queryKey: ["dashboard", "latest_runs"] });
-          };
-          setTimeout(refetchLatestRuns, 1000);
-          setTimeout(refetchLatestRuns, 4000);
+          }
+        },
+        onError: () => {
+          // Roll back the optimistic "running" state if the request fails.
+          snapshot.forEach(([queryKey, data]: [any, any]) => {
+            queryClient.setQueryData(queryKey, data);
+          });
         },
       }
     );
@@ -105,7 +147,8 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
       <Button
         {...buttonProps}
         onClick={() => setIsModalOpen(true)}
-        disabled={!permissionData?.can}
+        disabled={!permissionData?.can || isRunning}
+        loading={isRunning}
         title={permissionData?.can ? undefined : "You don't have permissions to access"}
         icon={<PlayCircleOutlined />}
       >
@@ -126,7 +169,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
             <Button
               type="primary"
               icon={<PlayCircleOutlined />}
-              loading={isLoading}
+              loading={isRunning}
               htmlType="submit"
               form="process-run-form"
             >
