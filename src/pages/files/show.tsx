@@ -98,6 +98,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
 
     if (normalizedStatus === "running" || normalizedStatus === "new") return "running";
     if (
+      normalizedStatus === "failed" ||
       normalizedStatus === "error" ||
       normalizedResult === "failed" ||
       normalizedResult === "error" ||

@@ -28,7 +28,7 @@ const getRunState = (lr?: { status?: string; result?: string }) => {
   const r = lr?.result?.toLowerCase();
   if (!s && !r) return "idle";
   if (s === "running" || s === "new") return "running";
-  if (s === "error" || r === "failed" || r === "error" || r === "warning") return "failed";
+  if (s === "failed" || s === "error" || r === "failed" || r === "error" || r === "warning") return "failed";
   if (r === "success" || s === "finished") return "success";
   return "idle";
 };

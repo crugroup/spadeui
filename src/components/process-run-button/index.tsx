@@ -58,34 +58,63 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         },
       },
       {
-        onSuccess: () => {
-          notification.warning({
-            message: "Process started",
-            description: "Running",
-          });
+        onSuccess: (data: any) => {
           setIsModalOpen(false);
 
-          // Optimistic update: immediately show "running" status in the
-          // dashboard / processes list before the API confirms it.
-          queryClient.setQueriesData(
-            { queryKey: ["dashboard", "latest_runs"], exact: false },
-            (old: any) => {
-              if (!Array.isArray(old)) return old;
-              return old.map((item: any) =>
-                String(item.process_id) === String(targetId)
-                  ? { ...item, latest_run: { ...item.latest_run, status: "running" } }
-                  : item
-              );
-            }
-          );
+          const run = data?.data;
+          const isStillRunning = run?.status === "running" || run?.status === "new";
 
-          // Invalidate dashboard React Query cache after a short delay so
-          // the backend has time to start the process before we refetch.
-          const refetchLatestRuns = () => {
-            queryClient.invalidateQueries({ queryKey: ["dashboard", "latest_runs"] });
-          };
-          setTimeout(refetchLatestRuns, 1000);
-          setTimeout(refetchLatestRuns, 4000);
+          if (isStillRunning) {
+            // Async execution path: process kicked off but not yet complete.
+            // Set optimistic "running" and let the poll interval take over.
+            notification.info({
+              message: "Process started",
+              description: "Running…",
+            });
+            queryClient.setQueriesData(
+              { queryKey: ["dashboard", "latest_runs"], exact: false },
+              (old: any) => {
+                if (!Array.isArray(old)) return old;
+                return old.map((item: any) =>
+                  String(item.process_id) === String(targetId)
+                    ? { ...item, latest_run: { ...item.latest_run, status: "running" } }
+                    : item
+                );
+              }
+            );
+          } else {
+            // Sync execution path: response already contains the final state.
+            // Update the cache immediately so the status chip reflects the real
+            // outcome without any "running" flash or poll delay.
+            const result = run?.result?.toLowerCase();
+            if (result === "success") {
+              notification.success({ message: "Process completed", description: "Success" });
+            } else if (result === "failed" || run?.status === "error") {
+              notification.error({
+                message: "Process failed",
+                description: run?.error_message || "An error occurred",
+              });
+            } else if (result === "warning") {
+              notification.warning({ message: "Process completed with warnings" });
+            } else {
+              notification.info({ message: "Process completed" });
+            }
+
+            queryClient.setQueriesData(
+              { queryKey: ["dashboard", "latest_runs"], exact: false },
+              (old: any) => {
+                if (!Array.isArray(old)) return old;
+                return old.map((item: any) =>
+                  String(item.process_id) === String(targetId)
+                    ? { ...item, latest_run: run }
+                    : item
+                );
+              }
+            );
+          }
+
+          // Background invalidation to keep cache fresh regardless of path.
+          queryClient.invalidateQueries({ queryKey: ["dashboard", "latest_runs"] });
         },
       }
     );

@@ -23,7 +23,7 @@ const getRunState = (latestRun?: { status?: string; result?: string }) => {
   if (!status && !result) return "idle";
 
   if (status === "running" || status === "new") return "running";
-  if (status === "error" || result === "failed" || result === "error" || result === "warning") return "failed";
+  if (status === "failed" || status === "error" || result === "failed" || result === "error" || result === "warning") return "failed";
   if (result === "success" || status === "finished") return "success";
   return "idle";
 };
