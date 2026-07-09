@@ -41,6 +41,23 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
   const onSubmit = async ({ formData }: { formData?: FormData }) => {
     const serializedParams = JSON.stringify(formData ?? {});
 
+    // Close modal and flip chip to "running" immediately so the user has visual
+    // feedback while the HTTP request is in-flight (important for slow deployments).
+    setIsModalOpen(false);
+    await queryClient.cancelQueries({ queryKey: ["dashboard", "latest_runs"], exact: false });
+    const snapshot = queryClient.getQueriesData({ queryKey: ["dashboard", "latest_runs"], exact: false });
+    queryClient.setQueriesData(
+      { queryKey: ["dashboard", "latest_runs"], exact: false },
+      (old: any) => {
+        if (!Array.isArray(old)) return old;
+        return old.map((item: any) =>
+          String(item.process_id) === String(targetId)
+            ? { ...item, latest_run: { ...item.latest_run, status: "running" } }
+            : item
+        );
+      }
+    );
+
     mutate(
       {
         url: `${API_URL}/processes/${targetId}/run`,
@@ -59,34 +76,20 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
       },
       {
         onSuccess: (data: any) => {
-          setIsModalOpen(false);
-
           const run = data?.data;
           const normalizedStatus = run?.status?.toLowerCase();
           const isStillRunning = normalizedStatus === "running" || normalizedStatus === "new";
 
           if (isStillRunning) {
-            // Async execution path: process kicked off but not yet complete.
-            // Set optimistic "running" and let the poll interval take over.
+            // Async execution path: still running — chip already shows "running"
+            // from the optimistic update; polling takes over from here.
             notification.info({
               message: "Process started",
               description: "Running…",
             });
-            queryClient.setQueriesData(
-              { queryKey: ["dashboard", "latest_runs"], exact: false },
-              (old: any) => {
-                if (!Array.isArray(old)) return old;
-                return old.map((item: any) =>
-                  String(item.process_id) === String(targetId)
-                    ? { ...item, latest_run: { ...item.latest_run, status: "running" } }
-                    : item
-                );
-              }
-            );
           } else {
             // Sync execution path: response already contains the final state.
-            // Update the cache immediately so the status chip reflects the real
-            // outcome without any "running" flash or poll delay.
+            // Update cache immediately so the chip reflects the real outcome.
             const result = run?.result?.toLowerCase();
             if (result === "success") {
               notification.success({ message: "Process completed", description: "Success" });
@@ -116,6 +119,12 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
 
           // Background invalidation to keep cache fresh regardless of path.
           queryClient.invalidateQueries({ queryKey: ["dashboard", "latest_runs"] });
+        },
+        onError: () => {
+          // Roll back the optimistic "running" state if the request fails.
+          snapshot.forEach(([queryKey, data]: [any, any]) => {
+            queryClient.setQueriesData(queryKey, data);
+          });
         },
       }
     );
