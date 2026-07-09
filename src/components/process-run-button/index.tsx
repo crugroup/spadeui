@@ -84,6 +84,8 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
           if (isStillRunning) {
             // Async execution path: still running — chip already shows "running"
             // from the optimistic update; polling takes over from here.
+            // Do NOT invalidate now — the backend hasn't bumped the cache version
+            // yet, so a refetch would return the old state and kill polling.
             notification.info({
               message: "Process started",
               description: "Running…",
@@ -116,15 +118,15 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
                 );
               }
             );
-          }
 
-          // Background invalidation to keep cache fresh regardless of path.
-          queryClient.invalidateQueries({ queryKey: ["dashboard", "latest_runs"] });
+            // Backend cache version was bumped; refetch gets fresh DB data.
+            queryClient.invalidateQueries({ queryKey: ["dashboard", "latest_runs"] });
+          }
         },
         onError: () => {
           // Roll back the optimistic "running" state if the request fails.
           snapshot.forEach(([queryKey, data]: [any, any]) => {
-            queryClient.setQueriesData(queryKey, data);
+            queryClient.setQueryData(queryKey, data);
           });
         },
       }
