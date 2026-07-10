@@ -37,10 +37,10 @@ export const FileCreate: React.FC<IResourceComponentsProps> = () => {
 
   return (
     <Create saveButtonProps={saveButtonProps}>
-      <Form {...formProps} layout="vertical">
+      <Form {...formProps} layout="vertical" className="entity-form">
         <ErrorNotifications formProps={formProps} />
         <Form.Item
-          label="Code"
+          label="Name"
           name={["code"]}
           rules={[
             {

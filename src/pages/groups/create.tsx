@@ -10,9 +10,10 @@ export const GroupCreate: React.FC<IResourceComponentsProps> = () => {
   const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
 
   // Fetch permissions using useList hook
-  const { data: permissionsData, isLoading: permissionsLoading } = useList({
+  const { result: permissionsResult, isLoading: permissionsLoading } = useList({
     resource: "permissions",
   });
+  const permissionsData = permissionsResult?.data;
 
   const permissions = permissionsData?.data || [];
 

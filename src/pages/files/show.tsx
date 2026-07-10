@@ -1,34 +1,40 @@
-import { DateField, FilterDropdown, List, Show, TextField, useTable } from "@refinedev/antd";
+import { DateField, FilterDropdown, Show, TextField, useTable } from "@refinedev/antd";
 import {
   CanAccess,
   IResourceComponentsProps,
   useGetToPath,
   useMany,
   useOne,
-  useResource,
   useShow,
 } from "@refinedev/core";
-import { Select, Table, Tabs, Tag, Typography } from "antd";
+import { Select, Space, Table, Tabs, Tag, Typography } from "antd";
 import prettyBytes from "pretty-bytes";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { FileUploadButton } from "../../components";
 import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
 import { JsonField } from "../../components/json-field/json-field";
+import { HISTORY_QUERY_OPTIONS, STATIC_QUERY_OPTIONS } from "../../config/query-cache";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
-import IconStatusMapper from "../../components/icon-status-mapper/icon-status-mapper";
 import React from "react";
 
 const { Title } = Typography;
 
 export const FileShow: React.FC<IResourceComponentsProps> = () => {
-  const { query } = useShow();
+  const { query } = useShow({
+    queryOptions: STATIC_QUERY_OPTIONS,
+  });
   const { data, isLoading } = query;
+  const [activeTabKey, setActiveTabKey] = React.useState("1");
 
   const record = data?.data;
 
   const { tableProps: uploadTableProps } = useTable({
     syncWithLocation: false,
     resource: "fileuploads",
+    queryOptions: {
+      ...HISTORY_QUERY_OPTIONS,
+      enabled: activeTabKey === "2" && !!record?.id,
+    },
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
     },
@@ -37,64 +43,87 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: formatData, isLoading: formatIsLoading } = useOne({
+  const { result: formatData, isLoading: formatIsLoading } = useOne({
     resource: "fileformats",
     id: record?.format ?? "",
     queryOptions: {
+      ...STATIC_QUERY_OPTIONS,
       enabled: !!record?.format,
     },
   });
 
-  const { data: processorData, isLoading: processorIsLoading } = useOne({
+  const { result: processorData, isLoading: processorIsLoading } = useOne({
     resource: "fileprocessors",
     id: record?.processor ?? "",
     queryOptions: {
+      ...STATIC_QUERY_OPTIONS,
       enabled: !!record?.processor,
     },
   });
 
-  const { data: processData, isLoading: processIsLoading } = useOne({
+  const { result: processData, isLoading: processIsLoading } = useOne({
     resource: "processes",
     id: record?.linked_process ?? "",
     queryOptions: {
+      ...STATIC_QUERY_OPTIONS,
       enabled: !!record?.linked_process,
     },
   });
 
-  const { data: variableSetsData, isLoading: variableSetsIsLoading } = useMany({
+  const { result: variableSetsResult, isLoading: variableSetsIsLoading } = useMany({
     resource: "variable-sets",
     ids: record?.variable_sets || [],
     queryOptions: {
+      ...STATIC_QUERY_OPTIONS,
       enabled: !!record?.variable_sets?.length,
     },
   });
+  const variableSetsData = variableSetsResult?.data;
 
-  const { data: userData, isLoading: userIsLoading } = useMany({
+  const { result: userResult, isLoading: userIsLoading } = useMany({
     resource: "users",
     ids: uploadTableProps?.dataSource?.map((item) => item?.user) ?? [],
     queryOptions: {
-      enabled: !!uploadTableProps?.dataSource,
+      ...HISTORY_QUERY_OPTIONS,
+      enabled: activeTabKey === "2" && !!uploadTableProps?.dataSource?.length,
     },
   });
+  const userData = userResult?.data;
 
   const getToPath = useGetToPath();
 
-  const fileFormatResource = useResource("fileformats").resource;
-  const processResource = useResource("processes").resource;
-  const fileProcessorResource = useResource("fileprocessors").resource;
-  const variableSetResource = useResource("variable-sets").resource;
+  const getRunState = (status?: string, result?: string) => {
+    const normalizedStatus = status?.toLowerCase();
+    const normalizedResult = result?.toLowerCase();
+
+    if (normalizedStatus === "running" || normalizedStatus === "new") return "running";
+    if (
+      normalizedStatus === "failed" ||
+      normalizedStatus === "error" ||
+      normalizedResult === "failed" ||
+      normalizedResult === "error" ||
+      normalizedResult === "warning"
+    )
+      return "failed";
+    if (normalizedResult === "success" || normalizedStatus === "finished") return "success";
+    return "failed";
+  };
 
   const definitionsTab = (
-    <>
-      <Title level={5}>Code</Title>
+    <div className="entity-show-shell">
+      <Title level={5}>Name</Title>
       <TextField value={record?.code ?? ""} />
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
       <Title level={5}>Tags</Title>
       <Typography.Paragraph>
-        {record?.tags?.map((tag: string) => (
-          <Tag key={tag}>{tag}</Tag>
-        ))}
+        <div className="file-tags-wrap">
+          {record?.tags?.map((tag: string) => (
+            <Tag className="entity-tag" key={tag}>
+              {tag}
+            </Tag>
+          ))}
+        </div>
       </Typography.Paragraph>
       <Title level={5}>Format</Title>
       <Typography.Paragraph>
@@ -105,7 +134,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             <Link
               to={
                 getToPath({
-                  resource: fileFormatResource,
+                  resource: "fileformats",
                   action: "show",
                   meta: { id: record?.format },
                 }) ?? "#"
@@ -124,7 +153,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             <Link
               to={
                 getToPath({
-                  resource: fileProcessorResource,
+                  resource: "fileprocessors",
                   action: "show",
                   meta: { id: record?.processor },
                 }) ?? "#"
@@ -143,7 +172,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             <Link
               to={
                 getToPath({
-                  resource: processResource,
+                  resource: "processes",
                   action: "show",
                   meta: { id: record?.linked_process },
                 }) ?? "#"
@@ -168,7 +197,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
                     <Link
                       to={
                         getToPath({
-                          resource: variableSetResource,
+                          resource: "variable-sets",
                           action: "show",
                           meta: { id: variableSet.id },
                         }) ?? "#"
@@ -196,12 +225,12 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       <Typography.Paragraph>
         {record?.system_params && <JsonField value={record?.system_params} />}
       </Typography.Paragraph>
-    </>
+    </div>
   );
 
   const historyTab = (
     <CanAccess resource="fileuploads" action="show">
-      <List title={<></>} breadcrumb={false} canCreate={false} resource="fileuploads">
+      <div className="entity-table-shell entity-table-shell--flat">
         <Table
           {...uploadTableProps}
           pagination={{
@@ -209,18 +238,27 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             showSizeChanger: false,
           }}
           rowKey="id"
+          rowClassName={() => "entity-table-row"}
         >
           <Table.Column dataIndex="name" title="Name" sorter />
           <Table.Column
             dataIndex="result"
             title="Result"
-            render={(value) => <IconStatusMapper status={value} />}
+            render={(value, record: { status?: string; result?: string }) => {
+              const state = getRunState(record?.status, record?.result || value);
+              return (
+                <Space size={8}>
+                  <Tag className={`run-status-chip run-status-chip--${state}`}>{state}</Tag>
+                </Space>
+              );
+            }}
             sorter
             filterDropdown={(props) => (
               <FilterDropdown {...props}>
                 <Select allowClear className="filter-dropdown__select">
                   <Select.Option value="success">Success</Select.Option>
                   <Select.Option value="warning">Warning</Select.Option>
+                  <Select.Option value="failed">Failed</Select.Option>
                   <Select.Option value="error">Error</Select.Option>
                 </Select>
               </FilterDropdown>
@@ -238,13 +276,13 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
             dataIndex={["user"]}
             title="User"
             render={(value) =>
-              userIsLoading ? <>Loading...</> : userData?.data?.find((item) => item.id === value)?.email
+              userIsLoading ? <>Loading...</> : userData?.find((item) => item.id === value)?.email
             }
             sorter
           />
           <Table.Column dataIndex="error_message" title="Message" sorter />
         </Table>
-      </List>
+      </div>
     </CanAccess>
   );
 
@@ -259,7 +297,10 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
       )}
     >
       <Tabs
+        className="entity-tabs"
         defaultActiveKey="1"
+        activeKey={activeTabKey}
+        onChange={setActiveTabKey}
         items={[
           {
             key: "1",

@@ -84,10 +84,15 @@ export const dataProvider = (
       if (isAxiosError(err) && err.response) {
         return Promise.reject({
           errors: err.response.data,
-          statusCode: err.code,
+          statusCode: err.response.status,
+          message: err.message,
         });
       } else {
-        return Promise.reject(err);
+        return Promise.reject({
+          errors: { detail: isAxiosError(err) ? err.message : "Network request failed" },
+          statusCode: 0,
+          message: isAxiosError(err) ? err.message : "Network request failed",
+        });
       }
     }
   },
@@ -110,10 +115,15 @@ export const dataProvider = (
       if (isAxiosError(err) && err.response) {
         return Promise.reject({
           errors: err.response.data,
-          statusCode: err.code,
+          statusCode: err.response.status,
+          message: err.message,
         });
       } else {
-        return Promise.reject(err);
+        return Promise.reject({
+          errors: { detail: isAxiosError(err) ? err.message : "Network request failed" },
+          statusCode: 0,
+          message: isAxiosError(err) ? err.message : "Network request failed",
+        });
       }
     }
   },

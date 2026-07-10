@@ -8,12 +8,12 @@ export const VariableSetEdit: React.FC<IResourceComponentsProps> = () => {
   const [selectedVariables, setSelectedVariables] = useState<React.Key[]>([]);
 
   // Fetch variables using useList hook
-  const { data: variablesData, isLoading: variablesLoading } = useList({
+  const { result: variablesResult, isLoading: variablesLoading } = useList({
     resource: "variables",
     pagination: { mode: "off" },
   });
 
-  const variables = variablesData?.data || [];
+  const variables = variablesResult?.data || [];
   const variableSetData = queryResult?.data?.data;
 
   // Initialize selected variables when data is loaded

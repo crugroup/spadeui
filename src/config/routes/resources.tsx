@@ -1,3 +1,4 @@
+import { HomeOutlined } from "@ant-design/icons";
 import FilesIcon from "../../../public/icons/files-icon";
 import FileIcon from "../../../public/icons/file-icon";
 import FileProcessorsIcon from "../../../public/icons/file-processors-icon";
@@ -28,37 +29,46 @@ export default [
     },
   },
   {
+    name: "dashboard",
+    list: "/",
+    meta: {
+      parent: "work",
+      label: "Dashboard",
+      icon: <HomeOutlined />,
+    },
+  },
+  {
     name: "files",
-    parentName: "work",
     list: "/files",
     create: "/files/create",
     edit: "/files/edit/:id",
     show: "/files/show/:id",
     meta: {
+      parent: "work",
       canDelete: true,
       icon: <FilesIcon />,
     },
   },
   {
     name: "processes",
-    parentName: "work",
     list: "/processes",
     create: "/processes/create",
     edit: "/processes/edit/:id",
     show: "/processes/show/:id",
     meta: {
+      parent: "work",
       canDelete: true,
       icon: <ProcessesIcon />,
     },
   },
   {
     name: "fileformats",
-    parentName: "admin",
     list: "/fileformats",
     create: "/fileformats/create",
     edit: "/fileformats/edit/:id",
     show: "/fileformats/show/:id",
     meta: {
+      parent: "admin",
       canDelete: true,
       label: "File formats",
       icon: <FileIcon />,
@@ -66,12 +76,12 @@ export default [
   },
   {
     name: "fileprocessors",
-    parentName: "admin",
     list: "/fileprocessors",
     create: "/fileprocessors/create",
     edit: "/fileprocessors/edit/:id",
     show: "/fileprocessors/show/:id",
     meta: {
+      parent: "admin",
       canDelete: true,
       label: "File processors",
       icon: <FileProcessorsIcon />,
@@ -79,60 +89,60 @@ export default [
   },
   {
     name: "executors",
-    parentName: "admin",
     list: "/executors",
     create: "/executors/create",
     edit: "/executors/edit/:id",
     show: "/executors/show/:id",
     meta: {
+      parent: "admin",
       canDelete: true,
       icon: <ExecutorsIcon />,
     },
   },
   {
     name: "users",
-    parentName: "admin",
     list: "/users",
     create: "/users/create",
     edit: "/users/edit/:id",
     show: "/users/show/:id",
     meta: {
+      parent: "admin",
       canDelete: true,
       icon: <UserIcon />,
     },
   },
   {
     name: "groups",
-    parentName: "admin",
     list: "/groups",
     create: "/groups/create",
     edit: "/groups/edit/:id",
     show: "/groups/show/:id",
     meta: {
+      parent: "admin",
       canDelete: true,
       icon: <GroupIcon />,
     },
   },
   {
     name: "variables",
-    parentName: "admin",
     list: "/variables",
     create: "/variables/create",
     edit: "/variables/edit/:id",
     show: "/variables/show/:id",
     meta: {
+      parent: "admin",
       canDelete: true,
       icon: <VariablesIcon />,
     },
   },
   {
     name: "variable-sets",
-    parentName: "admin",
     list: "/variable-sets",
     create: "/variable-sets/create",
     edit: "/variable-sets/edit/:id",
     show: "/variable-sets/show/:id",
     meta: {
+      parent: "admin",
       canDelete: true,
       label: "Variable Sets",
       icon: <VariableSetsIcon />,

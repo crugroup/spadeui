@@ -37,10 +37,10 @@ export const FileEdit: React.FC<IResourceComponentsProps> = () => {
 
   return (
     <Edit saveButtonProps={saveButtonProps}>
-      <Form {...formProps} layout="vertical">
+      <Form {...formProps} layout="vertical" className="entity-form">
         <ErrorNotifications formProps={formProps} />
         <Form.Item
-          label="Code"
+          label="Name"
           name={["code"]}
           rules={[
             {
