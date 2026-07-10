@@ -246,7 +246,7 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
             dataIndex={["user"]}
             title="User"
             render={(value) =>
-              userIsLoading ? <>Loading...</> : userData?.data?.find((item) => item.id === value)?.email
+              userIsLoading ? <>Loading...</> : userData?.find((item) => item.id === value)?.email
             }
             sorter
           />
