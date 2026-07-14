@@ -106,7 +106,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
     )
       return "failed";
     if (normalizedResult === "success" || normalizedStatus === "finished") return "success";
-    return "failed";
+    return "idle";
   };
 
   const definitionsTab = (
