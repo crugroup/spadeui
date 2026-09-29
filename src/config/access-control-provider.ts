@@ -53,9 +53,11 @@ export default {
 
     // Action names used by Refine are different from the ones used by Django
     const actionMapped = ACTIONS_MAPPING[action as keyof typeof ACTIONS_MAPPING];
+    // Django codenames use the model name, which has no hyphens ("variable-sets" -> "variableset")
+    const modelName = singular(resource).replace(/-/g, "");
 
     return {
-      can: permissions.some((p) => p.codename === `${actionMapped}_${singular(resource)}`),
+      can: permissions.some((p) => p.codename === `${actionMapped}_${modelName}`),
     };
   },
 };
