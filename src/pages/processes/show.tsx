@@ -15,6 +15,7 @@ import JsonField from "../../components/json-field/json-field";
 import { ProcessRunButton } from "../../components/process-run-button";
 import { HISTORY_QUERY_OPTIONS, STATIC_QUERY_OPTIONS } from "../../config/query-cache";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
+import { useCanViewVariableSets } from "../../hooks/useCanViewVariableSets";
 
 const { Title } = Typography;
 
@@ -36,12 +37,13 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
+  const canViewVariableSets = useCanViewVariableSets();
   const { result: variableSetsResult, isLoading: variableSetsIsLoading } = useMany({
     resource: "variable-sets",
     ids: record?.variable_sets || [],
     queryOptions: {
       ...STATIC_QUERY_OPTIONS,
-      enabled: !!record?.variable_sets?.length,
+      enabled: canViewVariableSets && !!record?.variable_sets?.length,
     },
   });
   const variableSetsData = variableSetsResult?.data;
@@ -132,7 +134,9 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       <Title level={5}>Variable Sets</Title>
       <Typography.Paragraph>
         {record?.variable_sets?.length ? (
-          variableSetsIsLoading || variableSetsData?.data == null ? (
+          !canViewVariableSets ? (
+            <>{record.variable_sets.map((variableSetId: number) => `#${variableSetId}`).join(", ")}</>
+          ) : variableSetsIsLoading || variableSetsData?.data == null ? (
             <>Loading...</>
           ) : (
             <div>
