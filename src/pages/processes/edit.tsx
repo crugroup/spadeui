@@ -5,6 +5,7 @@ import React from "react";
 import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
 import { ErrorNotifications } from "../../components/error-notifications";
 import JsonField from "../../components/json-field/json-field";
+import { useCanViewVariableSets } from "../../hooks/useCanViewVariableSets";
 
 export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
   const { formProps, form, saveButtonProps, queryResult } = useForm();
@@ -23,18 +24,21 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
     optionValue: "name",
   });
 
+  const canViewVariableSets = useCanViewVariableSets();
   const { selectProps: variableSetSelectProps } = useSelect({
     resource: "variable-sets",
     defaultValue: processesData?.variable_sets,
     optionLabel: "name",
+    queryOptions: { enabled: canViewVariableSets },
+    defaultValueQueryOptions: { enabled: canViewVariableSets },
   });
 
   return (
     <Edit saveButtonProps={saveButtonProps}>
-      <Form {...formProps} layout="vertical">
+      <Form {...formProps} layout="vertical" className="entity-form">
         <ErrorNotifications formProps={formProps} />
         <Form.Item
-          label="Code"
+          label="Name"
           name={["code"]}
           rules={[
             {
@@ -81,6 +85,7 @@ export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
         >
           <Select
             {...variableSetSelectProps}
+            disabled={!canViewVariableSets}
             mode="multiple"
             placeholder="Select variable sets (optional)"
             allowClear

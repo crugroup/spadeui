@@ -1,11 +1,14 @@
 import { PlayCircleOutlined } from "@ant-design/icons";
-import { BaseKey, useCan, useCustomMutation, useInvalidate, useOne, useResource } from "@refinedev/core";
+import { BaseKey, useCan, useCustomMutation, useInvalidate, useOne, useParsed } from "@refinedev/core";
+import { useQueryClient } from "@tanstack/react-query";
 import validator from "@rjsf/validator-ajv8";
-import { Button, Modal, Space } from "antd";
+import { Button, Modal, Space, App, Typography } from "antd";
 import { ButtonProps } from "antd/lib";
 import { FC, useState } from "react";
 import { RjsfForm } from "../rjsf-form/rjsf-form";
 import { API_URL } from "../../config/constants";
+
+const { Text } = Typography;
 
 type ProcessRunButtonProps = {
   buttonProps: ButtonProps;
@@ -14,13 +17,21 @@ type ProcessRunButtonProps = {
 };
 
 const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId, hideText }) => {
-  const { id } = useResource();
-  const { isLoading, mutate } = useCustomMutation();
+  const { notification } = App.useApp();
+  const { id } = useParsed();
+  const { mutate, mutation } = useCustomMutation();
+  const isRunning = mutation.isPending;
   const invalidate = useInvalidate();
+  const queryClient = useQueryClient();
+  const targetId = recordItemId ?? id;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: processData } = useOne({
+  const { result: processData } = useOne({
     resource: "processes",
-    id: recordItemId ?? id,
+    id: targetId,
+    queryOptions: {
+      enabled: isModalOpen && !!targetId,
+    },
   });
 
   const { data: permissionData } = useCan({
@@ -28,32 +39,95 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
     resource: "processruns",
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const onSubmit = async ({ formData }: { formData?: FormData }) => {
+    const serializedParams = JSON.stringify(formData ?? {});
+
+    // Close modal and flip chip to "running" immediately so the user has visual
+    // feedback while the HTTP request is in-flight (important for slow deployments).
+    setIsModalOpen(false);
+    await queryClient.cancelQueries({ queryKey: ["dashboard", "latest_runs"], exact: false });
+    const snapshot = queryClient.getQueriesData({ queryKey: ["dashboard", "latest_runs"], exact: false });
+    queryClient.setQueriesData(
+      { queryKey: ["dashboard", "latest_runs"], exact: false },
+      (old: any) => {
+        if (!Array.isArray(old)) return old;
+        return old.map((item: any) =>
+          String(item.process_id) === String(targetId)
+            ? { ...item, latest_run: { ...item.latest_run, status: "running", created_at: new Date().toISOString() } }
+            : item
+        );
+      }
+    );
+
     mutate(
       {
-        url: `${API_URL}/processes/${recordItemId ?? id}/run`,
+        url: `${API_URL}/processes/${targetId}/run`,
         method: "post",
         values: {
-          params: JSON.stringify(formData) ?? {},
+          params: serializedParams,
         },
-        successNotification: () => ({
-          message: "The process was launched successfuly",
-          type: "success",
-          description: "Success",
-        }),
+        successNotification: false,
         errorNotification: (err) => {
           return {
-            message: err?.response.data.error_message || err?.message || "Something went wrong",
+            message: err?.response?.data?.error_message || err?.message || "Something went wrong",
             type: "error",
             description: "Error",
           };
         },
       },
       {
-        onSuccess: () => {
-          setIsModalOpen(false);
+        onSuccess: (data: any) => {
+          const run = data?.data;
+          const normalizedStatus = run?.status?.toLowerCase();
+          const isStillRunning = normalizedStatus === "running" || normalizedStatus === "new";
+
+          if (isStillRunning) {
+            // Async execution path: still running — chip already shows "running"
+            // from the optimistic update; polling takes over from here.
+            // Do NOT invalidate now — the backend hasn't bumped the cache version
+            // yet, so a refetch would return the old state and kill polling.
+            notification.info({
+              message: "Process started",
+              description: "Running…",
+            });
+          } else {
+            // Sync execution path: response already contains the final state.
+            // Update cache immediately so the chip reflects the real outcome.
+            const result = run?.result?.toLowerCase();
+            if (result === "success") {
+              notification.success({ message: "Process completed", description: "Success" });
+            } else if (result === "failed" || normalizedStatus === "failed" || normalizedStatus === "error") {
+              notification.error({
+                message: "Process failed",
+                description: run?.error_message || "An error occurred",
+              });
+            } else if (result === "warning") {
+              notification.warning({ message: "Process completed with warnings" });
+            } else {
+              notification.info({ message: "Process completed" });
+            }
+
+            queryClient.setQueriesData(
+              { queryKey: ["dashboard", "latest_runs"], exact: false },
+              (old: any) => {
+                if (!Array.isArray(old)) return old;
+                return old.map((item: any) =>
+                  String(item.process_id) === String(targetId)
+                    ? { ...item, latest_run: run }
+                    : item
+                );
+              }
+            );
+
+            // Backend cache version was bumped; refetch gets fresh DB data.
+            queryClient.invalidateQueries({ queryKey: ["dashboard", "latest_runs"] });
+          }
+        },
+        onError: () => {
+          // Roll back the optimistic "running" state if the request fails.
+          snapshot.forEach(([queryKey, data]: [any, any]) => {
+            queryClient.setQueryData(queryKey, data);
+          });
         },
       }
     );
@@ -62,6 +136,10 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
       resource: "processruns",
       invalidates: ["list"],
     });
+    invalidate({
+      resource: "processes",
+      invalidates: ["list", "detail"],
+    });
   };
 
   return (
@@ -69,27 +147,52 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
       <Button
         {...buttonProps}
         onClick={() => setIsModalOpen(true)}
-        disabled={!permissionData?.can}
+        disabled={!permissionData?.can || isRunning}
+        loading={isRunning}
         title={permissionData?.can ? undefined : "You don't have permissions to access"}
         icon={<PlayCircleOutlined />}
       >
         {!hideText && "Run process"}
       </Button>
       <Modal
-        title="Process run form"
-        open={isModalOpen}
-        onOk={() => setIsModalOpen(false)}
-        onCancel={() => {
-          setIsModalOpen(false);
-        }}
-        footer={<></>}
-      >
-        <RjsfForm schema={processData?.data?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
-          <Space align="start">
-            <Button disabled={isLoading} htmlType="submit" type="primary">
-              Submit
-            </Button>
+        title={
+          <Space>
+            <PlayCircleOutlined style={{ color: "var(--spade-muted)" }} />
+            <span>Run {processData?.code ? <Text code>{processData.code}</Text> : "process"}</span>
           </Space>
+        }
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        footer={
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
+            <Button onClick={() => setIsModalOpen(false)}>Cancel</Button>
+            <Button
+              type="primary"
+              icon={<PlayCircleOutlined />}
+              loading={isRunning}
+              htmlType="submit"
+              form="process-run-form"
+            >
+              Run process
+            </Button>
+          </div>
+        }
+        width={560}
+        className="workflow-modal"
+      >
+        {processData?.description && (
+          <Text type="secondary" style={{ display: "block", marginBottom: 16 }}>{processData.description}</Text>
+        )}
+        <RjsfForm
+          id="process-run-form"
+          schema={processData?.user_params ?? {}}
+          validator={validator}
+          onSubmit={onSubmit}
+          noHtml5Validate
+        >
+          <div style={{ display: "none" }}>
+            <button type="submit" />
+          </div>
         </RjsfForm>
       </Modal>
     </>

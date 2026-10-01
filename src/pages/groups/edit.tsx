@@ -12,11 +12,10 @@ export const GroupEdit: React.FC<IResourceComponentsProps> = () => {
   const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
 
   // Fetch permissions using useList hook
-  const { data: permissionsData, isLoading: permissionsLoading } = useList({
+  const { result: permissionsResult, isLoading: permissionsLoading } = useList({
     resource: "permissions",
   });
-
-  const permissions = permissionsData?.data || [];
+  const permissions = permissionsResult?.data || [];
 
   // Set initial selected permissions from record
   useEffect(() => {

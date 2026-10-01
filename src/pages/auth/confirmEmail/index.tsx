@@ -2,7 +2,7 @@ import { Card, Col, Row, Typography } from "antd";
 import { useCustomMutation } from "@refinedev/core";
 import formatAxiosErrors from "../../../helpers/format-axios-errors";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import { LoadingOutlined } from "@ant-design/icons";
 import WarningIcon from "../../../../public/icons/warning-icon";
 import { API_URL } from "../../../config/constants";
@@ -66,7 +66,9 @@ export const ConfirmEmail = () => {
   return (
     <Row justify="center" align="middle" style={{ minHeight: "80vh" }}>
       <Col span={12}>
-        <Card className="text-center">{isError ? errorContent : loadingContent}</Card>
+        <Card className="text-center" variant="outlined">
+          {isError ? errorContent : loadingContent}
+        </Card>
       </Col>
     </Row>
   );

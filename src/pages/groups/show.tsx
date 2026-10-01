@@ -12,9 +12,10 @@ export const GroupShow: React.FC<IResourceComponentsProps> = () => {
   const record = data?.data;
 
   // Fetch permissions
-  const { data: permissionsData } = useList({
+  const { result: permissionsResult } = useList({
     resource: "permissions",
   });
+  const permissionsData = permissionsResult?.data;
 
   // Map permission IDs to names
   const permissionNames = record?.permissions?.map((permissionId: string) => {

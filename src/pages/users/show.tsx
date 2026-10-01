@@ -12,26 +12,28 @@ export const UserShow: React.FC<IResourceComponentsProps> = () => {
   const record = data?.data;
 
   // Fetch groups
-  const { data: groupsData } = useList({
+  const { result: groupsResult } = useList({
     resource: "groups",
   });
+  const groupsData = groupsResult?.data;
 
   // Fetch permissions
-  const { data: permissionsData } = useList({
+  const { result: permissionsResult } = useList({
     resource: "permissions",
   });
+  const permissionsData = permissionsResult?.data;
 
   // Map group IDs to names
-  const groupNames = record?.groups?.map((groupId: number) => {
-    const group = groupsData?.data.find((g: any) => g.id === groupId);
-    return group ? group.name : groupId;
-  });
+  const groupNames = (record?.groups?.map((groupId: number) => {
+    const group = groupsData?.data?.find((g: any) => g.id === groupId);
+    return group ? group.name : groupId.toString();
+  }) ?? []).sort((a: string, b: string) => a.localeCompare(b));
 
   // Map permission IDs to names
-  const permissionNames = record?.user_permissions?.map((permissionId: number) => {
-    const permission = permissionsData?.data.find((p: any) => p.id === permissionId);
-    return permission ? permission.name : permissionId;
-  });
+  const permissionNames = (record?.user_permissions?.map((permissionId: number) => {
+    const permission = permissionsData?.data?.find((p: any) => p.id === permissionId);
+    return permission ? permission.name : permissionId.toString();
+  }) ?? []).sort((a: string, b: string) => a.localeCompare(b));
 
   return (
     <Show isLoading={isLoading}>
