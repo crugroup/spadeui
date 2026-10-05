@@ -37,7 +37,6 @@ function App() {
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
-                  useNewQueryKeys: true,
                 }}
               >
                 <CustomRoutes />

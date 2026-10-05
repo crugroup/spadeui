@@ -7,15 +7,16 @@ export const GroupCreate: React.FC<IResourceComponentsProps> = () => {
   const { formProps, saveButtonProps } = useForm();
 
   // State to manage selected permissions
-  const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
+  const [selectedPermissions, setSelectedPermissions] = useState<React.Key[]>([]);
 
   // Fetch permissions using useList hook
-  const { result: permissionsResult, isLoading: permissionsLoading } = useList({
+  const {
+    result: permissionsResult,
+    query: { isLoading: permissionsLoading },
+  } = useList({
     resource: "permissions",
   });
-  const permissionsData = permissionsResult?.data;
-
-  const permissions = permissionsData?.data || [];
+  const permissions = permissionsResult?.data || [];
 
   return (
     <Create saveButtonProps={saveButtonProps} isLoading={permissionsLoading}>
@@ -32,7 +33,7 @@ export const GroupCreate: React.FC<IResourceComponentsProps> = () => {
             targetKeys={selectedPermissions}
             onChange={setSelectedPermissions}
             render={(item) => item.name}
-            rowKey={(item) => item.id}
+            rowKey={(item) => item.id as React.Key}
             style={{ width: "100%" }}
             listStyle={{
               width: "100%",

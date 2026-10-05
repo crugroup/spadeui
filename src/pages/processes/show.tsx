@@ -21,7 +21,10 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
 
   const record = data?.data;
 
-  const { result: executorData, isLoading: executorIsLoading } = useOne({
+  const {
+    result: executorData,
+    query: { isLoading: executorIsLoading },
+  } = useOne({
     resource: "executors",
     id: record?.executor || "",
     queryOptions: {
@@ -31,7 +34,10 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
   });
 
   const canViewVariableSets = useCanViewVariableSets();
-  const { result: variableSetsResult, isLoading: variableSetsIsLoading } = useMany({
+  const {
+    result: variableSetsResult,
+    query: { isLoading: variableSetsIsLoading },
+  } = useMany({
     resource: "variable-sets",
     ids: record?.variable_sets || [],
     queryOptions: {
@@ -62,7 +68,10 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { result: userResult, isLoading: userIsLoading } = useMany({
+  const {
+    result: userResult,
+    query: { isLoading: userIsLoading },
+  } = useMany({
     resource: "users",
     ids: processRunsTableProps?.dataSource?.map((item) => item?.user) ?? [],
     queryOptions: {
@@ -114,13 +123,13 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
             <Link
               to={
                 getToPath({
-                  resource: "executors",
+                  resource: { name: "executors" },
                   action: "show",
                   meta: { id: record?.executor },
                 }) ?? "#"
               }
             >
-              {executorData?.data?.name}
+              {executorData?.name}
             </Link>
           ))}
       </Typography.Paragraph>
@@ -129,19 +138,19 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
         {record?.variable_sets?.length ? (
           !canViewVariableSets ? (
             <>{record.variable_sets.map((variableSetId: number) => `#${variableSetId}`).join(", ")}</>
-          ) : variableSetsIsLoading || variableSetsData?.data == null ? (
+          ) : variableSetsIsLoading || variableSetsData == null ? (
             <>Loading...</>
           ) : (
             <div>
               {record?.variable_sets?.map((variableSetId: number, index: number) => {
-                const variableSet = variableSetsData.data.find((item) => item.id === variableSetId);
+                const variableSet = variableSetsData.find((item) => item.id === variableSetId);
                 if (!variableSet) return <>undefined</>;
                 return (
                   <span key={variableSet.id}>
                     <Link
                       to={
                         getToPath({
-                          resource: "variable-sets",
+                          resource: { name: "variable-sets" },
                           action: "show",
                           meta: { id: variableSet.id },
                         }) ?? "#"

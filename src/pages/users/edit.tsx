@@ -5,22 +5,28 @@ import React, { useState, useEffect } from "react";
 
 export const UserEdit: React.FC<IResourceComponentsProps> = () => {
   const { formProps, saveButtonProps, query } = useForm();
-  const { data, isLoading } = query;
-  const record = data?.data;
+  const record = query?.data?.data;
+  const isLoading = query?.isLoading;
 
   // State to manage selected permissions
-  const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
+  const [selectedPermissions, setSelectedPermissions] = useState<React.Key[]>([]);
 
   // State to manage selected groups
-  const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
+  const [selectedGroups, setSelectedGroups] = useState<React.Key[]>([]);
 
   // Fetch permissions using useList hook
-  const { result: permissionsResult, isLoading: permissionsLoading } = useList({
+  const {
+    result: permissionsResult,
+    query: { isLoading: permissionsLoading },
+  } = useList({
     resource: "permissions",
   });
 
   // Fetch groups using useList hook
-  const { result: groupsResult, isLoading: groupsLoading } = useList({
+  const {
+    result: groupsResult,
+    query: { isLoading: groupsLoading },
+  } = useList({
     resource: "groups",
   });
 
@@ -77,7 +83,7 @@ export const UserEdit: React.FC<IResourceComponentsProps> = () => {
             targetKeys={selectedGroups}
             onChange={setSelectedGroups}
             render={(item) => item.name}
-            rowKey={(item) => item.id}
+            rowKey={(item) => item.id as React.Key}
             style={{ width: "100%" }}
             listStyle={{
               width: "100%",
@@ -93,7 +99,7 @@ export const UserEdit: React.FC<IResourceComponentsProps> = () => {
             targetKeys={selectedPermissions}
             onChange={setSelectedPermissions}
             render={(item) => item.name}
-            rowKey={(item) => item.id}
+            rowKey={(item) => item.id as React.Key}
             style={{ width: "100%" }}
             listStyle={{
               width: "100%",

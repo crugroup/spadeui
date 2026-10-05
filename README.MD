@@ -91,13 +91,13 @@ Runs the [Vitest](https://vitest.dev/) suite in a jsdom environment. The backend
 - To test code that calls the API, pass a fake HTTP client instead of the real axios instance (see `src/config/rest-data-provider/index.test.ts`). To test permission logic, seed `localStorage` with fake permissions (see `src/config/access-control-provider.test.ts`).
 - Render components with `@testing-library/react`.
 
-The `test` job in `.github/workflows/docker-image.yml` runs `yarn test` on every push and pull request. The Docker image is only built when the tests pass.
+The `test` job in `.github/workflows/docker-image.yml` runs `yarn typecheck` and `yarn test` on every push and pull request. The Docker image is only built when the tests pass.
 
 #### Type checking
 ```bash
-npx tsc --noEmit
+yarn typecheck
 ```
-Validates TypeScript types without building.
+Validates TypeScript types without building: `src/` (`tsconfig.app.json`) and `vite.config.ts` (`tsconfig.node.json`). `yarn build` runs it first.
 
 #### Build for production
 ```bash
@@ -155,7 +155,7 @@ yarn up vite@^6.4
 3. Run security audit: `yarn npm audit --all`
 4. Test with `yarn build`
 5. Test with `yarn dev`
-6. Run `npx tsc --noEmit` for type checking
+6. Run `yarn typecheck` for type checking
 
 ### Testing Checklist
 - [ ] `yarn install` completes without errors
@@ -164,7 +164,7 @@ yarn up vite@^6.4
 - [ ] `yarn npm audit --all` returns "No audit suggestions"
 - [ ] `yarn build` succeeds (target: < 5s build time)
 - [ ] `yarn dev` starts on port 5173
-- [ ] `npx tsc --noEmit` shows no type errors
+- [ ] `yarn typecheck` shows no type errors
 - [ ] Frontend connects to backend API successfully
 
 ### Tech Stack & Compatibility Notes

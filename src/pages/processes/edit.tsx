@@ -8,9 +8,9 @@ import JsonField from "../../components/json-field/json-field";
 import { useCanViewVariableSets } from "../../hooks/useCanViewVariableSets";
 
 export const ProcessEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, form, saveButtonProps, queryResult } = useForm();
+  const { formProps, form, saveButtonProps, query } = useForm();
 
-  const processesData = queryResult?.data?.data;
+  const processesData = query?.data?.data;
 
   const { selectProps: executorSelectProps } = useSelect({
     resource: "executors",

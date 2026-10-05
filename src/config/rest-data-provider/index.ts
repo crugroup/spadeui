@@ -16,7 +16,7 @@ export const dataProvider = (
   getList: async ({ resource, pagination, filters, sorters, meta }) => {
     const url = `${apiUrl}/${resource}`;
 
-    const { current = 1, mode = "server" } = pagination ?? {};
+    const { currentPage = 1, mode = "server" } = pagination ?? {};
 
     const { headers: headersFromMeta, method } = meta ?? {};
     const requestMethod = (method as MethodTypes) ?? "get";
@@ -29,7 +29,7 @@ export const dataProvider = (
     } = {};
 
     if (mode === "server") {
-      query.page = current;
+      query.page = currentPage;
     }
 
     const generatedSort = generateSort(sorters);
@@ -44,7 +44,7 @@ export const dataProvider = (
       }
     );
 
-    const total = data.count ?? +headers["x-total-count"] ?? data.length;
+    const total = data.count ?? Number(headers["x-total-count"]);
 
     return {
       data: Array.isArray(data) ? data : data.results,

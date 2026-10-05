@@ -29,13 +29,14 @@ describe("dataProvider", () => {
 
     const result = await provider(client).getList({
       resource: "files",
+      pagination: { currentPage: 2 },
       sorters: [{ field: "name", order: "desc" }],
       filters: [{ field: "status", operator: "eq", value: "new" }],
     });
 
     const url: string = client.get.mock.calls[0][0];
     expect(url.startsWith(`${API}/files?`)).toBe(true);
-    expect(url).toContain("page=1");
+    expect(url).toContain("page=2");
     expect(url).toContain("ordering=-name");
     expect(url).toContain("status=new");
     expect(result).toEqual({ data: [{ id: 1, name: "a" }], total: 42 });
@@ -48,6 +49,24 @@ describe("dataProvider", () => {
     const result = await provider(client).getList({ resource: "groups" });
 
     expect(result).toEqual({ data: [{ id: 1 }, { id: 2 }], total: 2 });
+  });
+
+  it("getList skips the page param when pagination is off", async () => {
+    const client = fakeClient();
+    client.get.mockResolvedValue({ data: [], headers: {} });
+
+    await provider(client).getList({ resource: "files", pagination: { currentPage: 3, mode: "off" } });
+
+    expect(client.get.mock.calls[0][0]).not.toContain("page=");
+  });
+
+  it("getList falls back to the x-total-count header", async () => {
+    const client = fakeClient();
+    client.get.mockResolvedValue({ data: [{ id: 1 }], headers: { "x-total-count": "9" } });
+
+    const result = await provider(client).getList({ resource: "files" });
+
+    expect(result.total).toBe(9);
   });
 
   it("getMany requests each id only once", async () => {

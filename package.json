@@ -57,14 +57,15 @@
   },
   "scripts": {
     "dev": "refine dev",
-    "build": "tsc && refine build",
+    "build": "yarn typecheck && refine build",
     "start": "refine start",
     "refine": "refine",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
     "test": "vitest run",
     "test:watch": "vitest",
-    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
+    "typecheck": "tsc -p tsconfig.app.json && tsc -p tsconfig.node.json --noEmit"
   },
   "browserslist": {
     "production": [
@@ -78,5 +79,8 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "yarn@4.6.0"
+  "packageManager": "yarn@4.6.0",
+  "resolutions": {
+    "vite": "^6.4.3"
+  }
 }

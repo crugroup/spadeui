@@ -83,8 +83,8 @@ export const Register = () => {
 
         // I'm replacing the default form with the new one leaving everything else
         // so we don't have to create the whole page from scratch
-        if (isValidElement(content)) {
-          const newChildren = Children.map(content?.props.children, (child) => {
+        if (isValidElement<{ children?: ReactNode }>(content)) {
+          const newChildren = Children.map(content.props.children, (child) => {
             if (isValidElement(child) && (child as ReactElement).type === Form) {
               return newForm;
             }
@@ -97,7 +97,7 @@ export const Register = () => {
               <div className="register-logo-holder">
                 <Logo />
               </div>
-              {cloneElement(content, (content as ReactElement).props, newChildren)}
+              {cloneElement(content, undefined, newChildren)}
             </div>
           );
         }
