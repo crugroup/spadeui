@@ -5,18 +5,20 @@ import React, { useState, useEffect } from "react";
 
 export const GroupEdit: React.FC<IResourceComponentsProps> = () => {
   const { formProps, saveButtonProps, query } = useForm();
-  const { data, isLoading } = query;
-  const record = data?.data;
+  const record = query?.data?.data;
+  const isLoading = query?.isLoading;
 
   // State to manage selected permissions
-  const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
+  const [selectedPermissions, setSelectedPermissions] = useState<React.Key[]>([]);
 
   // Fetch permissions using useList hook
-  const { data: permissionsData, isLoading: permissionsLoading } = useList({
+  const {
+    result: permissionsResult,
+    query: { isLoading: permissionsLoading },
+  } = useList({
     resource: "permissions",
   });
-
-  const permissions = permissionsData?.data || [];
+  const permissions = permissionsResult?.data || [];
 
   // Set initial selected permissions from record
   useEffect(() => {
@@ -41,7 +43,7 @@ export const GroupEdit: React.FC<IResourceComponentsProps> = () => {
             targetKeys={selectedPermissions}
             onChange={setSelectedPermissions}
             render={(item) => item.name}
-            rowKey={(item) => item.id}
+            rowKey={(item) => item.id as React.Key}
             style={{ width: "100%" }}
             listStyle={{
               width: "100%",

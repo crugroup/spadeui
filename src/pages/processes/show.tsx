@@ -1,49 +1,59 @@
-import { DateField, FilterDropdown, List, Show, TextField, useTable } from "@refinedev/antd";
-import {
-  CanAccess,
-  IResourceComponentsProps,
-  useGetToPath,
-  useMany,
-  useOne,
-  useResource,
-  useShow,
-} from "@refinedev/core";
-import { Select, Table, Tabs, Tag, Typography } from "antd";
+import { DateField, FilterDropdown, Show, TextField, useTable } from "@refinedev/antd";
+import { CanAccess, IResourceComponentsProps, useGetToPath, useMany, useOne, useShow } from "@refinedev/core";
+import { Select, Space, Table, Tabs, Tag, Typography } from "antd";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { SystemParamsTooltip, UserParamsTooltip } from "../../components/common-tooltips";
-import IconStatusMapper from "../../components/icon-status-mapper/icon-status-mapper";
 import JsonField from "../../components/json-field/json-field";
 import { ProcessRunButton } from "../../components/process-run-button";
+import { HISTORY_QUERY_OPTIONS, STATIC_QUERY_OPTIONS } from "../../config/query-cache";
 import { DEFAULT_PAGE_SIZE } from "../../config/rest-data-provider";
+import { useCanViewVariableSets } from "../../hooks/useCanViewVariableSets";
 
 const { Title } = Typography;
 
 export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
-  const { queryResult } = useShow();
-  const { data, isLoading } = queryResult;
+  const { query } = useShow({
+    queryOptions: STATIC_QUERY_OPTIONS,
+  });
+  const { data, isLoading } = query ?? {};
+  const [activeTabKey, setActiveTabKey] = React.useState("1");
 
   const record = data?.data;
 
-  const { data: executorData, isLoading: executorIsLoading } = useOne({
+  const {
+    result: executorData,
+    query: { isLoading: executorIsLoading },
+  } = useOne({
     resource: "executors",
     id: record?.executor || "",
     queryOptions: {
+      ...STATIC_QUERY_OPTIONS,
       enabled: !!record?.executor,
     },
   });
 
-  const { data: variableSetsData, isLoading: variableSetsIsLoading } = useMany({
+  const canViewVariableSets = useCanViewVariableSets();
+  const {
+    result: variableSetsResult,
+    query: { isLoading: variableSetsIsLoading },
+  } = useMany({
     resource: "variable-sets",
     ids: record?.variable_sets || [],
     queryOptions: {
-      enabled: !!record?.variable_sets?.length,
+      ...STATIC_QUERY_OPTIONS,
+      enabled: canViewVariableSets && !!record?.variable_sets?.length,
     },
   });
+  const variableSetsData = variableSetsResult?.data;
 
   const { tableProps: processRunsTableProps } = useTable({
     syncWithLocation: false,
     resource: "processruns",
+    queryOptions: {
+      ...HISTORY_QUERY_OPTIONS,
+      enabled: activeTabKey === "2" && !!record?.id,
+    },
     pagination: {
       pageSize: DEFAULT_PAGE_SIZE,
     },
@@ -58,28 +68,50 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const { data: userData, isLoading: userIsLoading } = useMany({
+  const {
+    result: userResult,
+    query: { isLoading: userIsLoading },
+  } = useMany({
     resource: "users",
     ids: processRunsTableProps?.dataSource?.map((item) => item?.user) ?? [],
     queryOptions: {
-      enabled: !!processRunsTableProps?.dataSource,
+      ...HISTORY_QUERY_OPTIONS,
+      enabled: activeTabKey === "2" && !!processRunsTableProps?.dataSource?.length,
     },
   });
+  const userData = userResult?.data;
 
   const getToPath = useGetToPath();
-  const executorResource = useResource("executors").resource;
-  const variableSetResource = useResource("variable-sets").resource;
+
+  const getRunState = (status?: string, result?: string) => {
+    const normalizedStatus = status?.toLowerCase();
+    const normalizedResult = result?.toLowerCase();
+
+    if (normalizedStatus === "running" || normalizedStatus === "new") return "running";
+    if (
+      normalizedStatus === "failed" ||
+      normalizedStatus === "error" ||
+      normalizedResult === "failed" ||
+      normalizedResult === "error" ||
+      normalizedResult === "warning"
+    )
+      return "failed";
+    if (normalizedResult === "success" || normalizedStatus === "finished") return "success";
+    return "failed";
+  };
 
   const definitionsTab = (
-    <>
-      <Title level={5}>Code</Title>
+    <div className="entity-show-shell">
+      <Title level={5}>Name</Title>
       <TextField value={record?.code} />
       <Title level={5}>Description</Title>
       <TextField value={record?.description} />
       <Title level={5}>Tags</Title>
       <Typography.Paragraph>
         {record?.tags?.map((tag: string) => (
-          <Tag key={tag}>{tag}</Tag>
+          <Tag className="entity-tag" key={tag}>
+            {tag}
+          </Tag>
         ))}
       </Typography.Paragraph>
       <Title level={5}>Executor</Title>
@@ -91,32 +123,34 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
             <Link
               to={
                 getToPath({
-                  resource: executorResource,
+                  resource: { name: "executors" },
                   action: "show",
                   meta: { id: record?.executor },
                 }) ?? "#"
               }
             >
-              {executorData?.data?.name}
+              {executorData?.name}
             </Link>
           ))}
       </Typography.Paragraph>
       <Title level={5}>Variable Sets</Title>
       <Typography.Paragraph>
         {record?.variable_sets?.length ? (
-          variableSetsIsLoading || variableSetsData?.data == null ? (
+          !canViewVariableSets ? (
+            <>{record.variable_sets.map((variableSetId: number) => `#${variableSetId}`).join(", ")}</>
+          ) : variableSetsIsLoading || variableSetsData == null ? (
             <>Loading...</>
           ) : (
             <div>
               {record?.variable_sets?.map((variableSetId: number, index: number) => {
-                const variableSet = variableSetsData.data.find((item) => item.id === variableSetId);
+                const variableSet = variableSetsData.find((item) => item.id === variableSetId);
                 if (!variableSet) return <>undefined</>;
                 return (
                   <span key={variableSet.id}>
                     <Link
                       to={
                         getToPath({
-                          resource: variableSetResource,
+                          resource: { name: "variable-sets" },
                           action: "show",
                           meta: { id: variableSet.id },
                         }) ?? "#"
@@ -144,17 +178,29 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
         <UserParamsTooltip />
       </Title>
       <Typography.Paragraph>{record?.user_params && <JsonField value={record?.user_params} />}</Typography.Paragraph>
-    </>
+    </div>
   );
 
   const historyTab = (
     <CanAccess resource="processruns" action="show">
-      <List title={<></>} breadcrumb={false} canCreate={false} resource="processruns">
-        <Table {...processRunsTableProps} pagination={false} rowKey="id">
+      <div className="entity-table-shell entity-table-shell--flat">
+        <Table
+          {...processRunsTableProps}
+          pagination={{ ...processRunsTableProps.pagination, showSizeChanger: false }}
+          rowKey="id"
+          rowClassName={() => "entity-table-row"}
+        >
           <Table.Column
             dataIndex="status"
             title="Status"
-            render={(value) => <IconStatusMapper status={value} />}
+            render={(value, record: { status?: string; result?: string }) => {
+              const state = getRunState(record?.status || value, record?.result);
+              return (
+                <Space size={8}>
+                  <Tag className={`run-status-chip run-status-chip--${state}`}>{state}</Tag>
+                </Space>
+              );
+            }}
             sorter
             filterDropdown={(props) => (
               <FilterDropdown {...props}>
@@ -170,13 +216,21 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
           <Table.Column
             dataIndex="result"
             title="Result"
-            render={(value) => <IconStatusMapper status={value} />}
+            render={(value, record: { status?: string; result?: string }) => {
+              const state = getRunState(record?.status, record?.result || value);
+              return (
+                <Space size={8}>
+                  <Tag className={`run-status-chip run-status-chip--${state}`}>{state}</Tag>
+                </Space>
+              );
+            }}
             sorter
             filterDropdown={(props) => (
               <FilterDropdown {...props}>
                 <Select allowClear className="filter-dropdown__select">
                   <Select.Option value="success">Success</Select.Option>
                   <Select.Option value="warning">Warning</Select.Option>
+                  <Select.Option value="failed">Failed</Select.Option>
                   <Select.Option value="error">Error</Select.Option>
                 </Select>
               </FilterDropdown>
@@ -197,14 +251,12 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
           <Table.Column
             dataIndex={["user"]}
             title="User"
-            render={(value) =>
-              userIsLoading ? <>Loading...</> : userData?.data?.find((item) => item.id === value)?.email
-            }
+            render={(value) => (userIsLoading ? <>Loading...</> : userData?.find((item) => item.id === value)?.email)}
             sorter
           />
           <Table.Column dataIndex="error_message" title="Message" sorter />
         </Table>
-      </List>
+      </div>
     </CanAccess>
   );
 
@@ -219,7 +271,10 @@ export const ProcessShow: React.FC<IResourceComponentsProps> = () => {
       )}
     >
       <Tabs
+        className="entity-tabs"
         defaultActiveKey="1"
+        activeKey={activeTabKey}
+        onChange={setActiveTabKey}
         items={[
           {
             key: "1",

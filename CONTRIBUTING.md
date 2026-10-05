@@ -48,6 +48,7 @@ A good bug report shouldn't leave others needing to chase you up for more inform
 
 - Make sure that you are using the latest version.
 - Determine if your bug is really a bug and not an error on your side e.g. using incompatible environment components/versions. If you are looking for support, you might want to check [this section](#i-have-a-question).
+
 <!-- (Make sure that you have read the [documentation]().  -->
 
 - To see if other users have experienced (and potentially already solved) the same issue you are having, check if there is not already a bug report existing for your bug or error in the [bug tracker](https://github.com/crugroup/spadeui/issues?q=label%3Abug).
@@ -82,7 +83,9 @@ This section guides you through submitting an enhancement suggestion for Spade, 
 #### Before Submitting an Enhancement
 
 - Make sure that you are using the latest version.
+
 <!-- - Read the [documentation]() carefully and find out if the functionality is already covered, maybe by an individual configuration. -->
+
 - Perform a [search](https://github.com/crugroup/spadeui/issues) to see if the enhancement has already been suggested. If it has, add a comment to the existing issue instead of opening a new one.
 - Find out whether your idea fits with the scope and aims of the project.
 

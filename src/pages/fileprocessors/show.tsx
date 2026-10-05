@@ -6,8 +6,8 @@ import React from "react";
 const { Title } = Typography;
 
 export const FileProcessorShow: React.FC<IResourceComponentsProps> = () => {
-  const { queryResult } = useShow();
-  const { data, isLoading } = queryResult;
+  const { query } = useShow();
+  const { data, isLoading } = query ?? {};
 
   const record = data?.data;
 

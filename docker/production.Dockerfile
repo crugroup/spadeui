@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM node:current-alpine AS build
+FROM --platform=$BUILDPLATFORM node:24-alpine AS build
 COPY . /app
 WORKDIR /app
 RUN corepack enable && yarn install && yarn run build

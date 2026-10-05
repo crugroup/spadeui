@@ -16,7 +16,7 @@ export const dataProvider = (
   getList: async ({ resource, pagination, filters, sorters, meta }) => {
     const url = `${apiUrl}/${resource}`;
 
-    const { current = 1, mode = "server" } = pagination ?? {};
+    const { currentPage = 1, mode = "server" } = pagination ?? {};
 
     const { headers: headersFromMeta, method } = meta ?? {};
     const requestMethod = (method as MethodTypes) ?? "get";
@@ -29,7 +29,7 @@ export const dataProvider = (
     } = {};
 
     if (mode === "server") {
-      query.page = current;
+      query.page = currentPage;
     }
 
     const generatedSort = generateSort(sorters);
@@ -44,7 +44,7 @@ export const dataProvider = (
       }
     );
 
-    const total = data.count ?? +headers["x-total-count"] ?? data.length;
+    const total = data.count ?? Number(headers["x-total-count"]);
 
     return {
       data: Array.isArray(data) ? data : data.results,
@@ -84,10 +84,15 @@ export const dataProvider = (
       if (isAxiosError(err) && err.response) {
         return Promise.reject({
           errors: err.response.data,
-          statusCode: err.code,
+          statusCode: err.response.status,
+          message: err.message,
         });
       } else {
-        return Promise.reject(err);
+        return Promise.reject({
+          errors: { detail: isAxiosError(err) ? err.message : "Network request failed" },
+          statusCode: 0,
+          message: isAxiosError(err) ? err.message : "Network request failed",
+        });
       }
     }
   },
@@ -110,10 +115,15 @@ export const dataProvider = (
       if (isAxiosError(err) && err.response) {
         return Promise.reject({
           errors: err.response.data,
-          statusCode: err.code,
+          statusCode: err.response.status,
+          message: err.message,
         });
       } else {
-        return Promise.reject(err);
+        return Promise.reject({
+          errors: { detail: isAxiosError(err) ? err.message : "Network request failed" },
+          statusCode: 0,
+          message: isAxiosError(err) ? err.message : "Network request failed",
+        });
       }
     }
   },

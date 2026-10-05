@@ -2,7 +2,7 @@ import { AuthPage, useForm } from "@refinedev/antd";
 import { useRegister } from "@refinedev/core";
 import { Button, Form, Input } from "antd";
 import { Children, ReactElement, ReactNode, cloneElement, isValidElement } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Logo } from "../../../components/logo";
 
 export const Register = () => {
@@ -83,8 +83,8 @@ export const Register = () => {
 
         // I'm replacing the default form with the new one leaving everything else
         // so we don't have to create the whole page from scratch
-        if (isValidElement(content)) {
-          const newChildren = Children.map(content?.props.children, (child) => {
+        if (isValidElement<{ children?: ReactNode }>(content)) {
+          const newChildren = Children.map(content.props.children, (child) => {
             if (isValidElement(child) && (child as ReactElement).type === Form) {
               return newForm;
             }
@@ -93,12 +93,12 @@ export const Register = () => {
           });
 
           return (
-            <>
+            <div className="auth-surface auth-surface--register">
               <div className="register-logo-holder">
                 <Logo />
               </div>
-              {cloneElement(content, (content as ReactElement).props, newChildren)}
-            </>
+              {cloneElement(content, undefined, newChildren)}
+            </div>
           );
         }
 
