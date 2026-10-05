@@ -32,7 +32,7 @@
     "sass": "^1.105.1"
   },
   "devDependencies": {
-    "@eslint/js": "^10",
+    "@eslint/js": "^10.0.1",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
@@ -53,8 +53,8 @@
     "jsdom": "^30.1.2",
     "prettier": "^3.9.9",
     "typescript": "^5.9.3",
-    "vite": "^6.4.3",
-    "vitest": "^3.2.7"
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
   },
   "scripts": {
     "dev": "refine dev",
