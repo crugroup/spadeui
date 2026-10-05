@@ -11,7 +11,9 @@ function loadLabels(): Record<string, string> {
     if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
       return parsed as Record<string, string>;
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return {};
 }
 
@@ -48,7 +50,9 @@ async function syncFromAPI() {
     saveFavorites(favs);
     try {
       localStorage.setItem(LABELS_KEY, JSON.stringify(labels));
-    } catch { /* ignore label cache failures */ }
+    } catch {
+      /* ignore label cache failures */
+    }
     return favs;
   } catch {
     return null;
@@ -58,7 +62,9 @@ async function syncFromAPI() {
 async function addToAPI(resource: string, id: number) {
   try {
     await axiosHelper.axiosInstance.post(`${API_URL}/favorites`, { resource, resource_id: id });
-  } catch { /* silent */ }
+  } catch {
+    /* silent */
+  }
 }
 
 async function removeFromAPI(resource: string, id: number) {
@@ -66,7 +72,9 @@ async function removeFromAPI(resource: string, id: number) {
     await axiosHelper.axiosInstance.delete(`${API_URL}/favorites`, {
       params: { resource, resource_id: id },
     });
-  } catch { /* silent */ }
+  } catch {
+    /* silent */
+  }
 }
 
 export function useFavorites() {
@@ -81,7 +89,9 @@ export function useFavorites() {
       if (apiFavs) setFavorites(apiFavs);
       setSynced(true);
     });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const isFavorite = useCallback(
@@ -91,44 +101,40 @@ export function useFavorites() {
     [favorites]
   );
 
-  const toggleFavorite = useCallback(
-    (resource: string, id: number, _label?: string) => {
-      const current = loadFavorites();
-      const ids = current[resource] || [];
-      const wasFavorite = ids.includes(id);
+  const toggleFavorite = useCallback((resource: string, id: number, _label?: string) => {
+    const current = loadFavorites();
+    const ids = current[resource] || [];
+    const wasFavorite = ids.includes(id);
 
-      if (wasFavorite) {
-        current[resource] = ids.filter((i) => i !== id);
-        removeFromAPI(resource, id);
-      } else {
-        current[resource] = [...ids, id];
-        addToAPI(resource, id);
-      }
+    if (wasFavorite) {
+      current[resource] = ids.filter((i) => i !== id);
+      removeFromAPI(resource, id);
+    } else {
+      current[resource] = [...ids, id];
+      addToAPI(resource, id);
+    }
 
-      // Update label cache immediately so the dashboard shows the real
-      // name without waiting for the next syncFromAPI.
-      const labelKey = `${resource}:${id}`;
-      const labels = loadLabels();
-      if (wasFavorite) {
-        delete labels[labelKey];
-      } else if (_label) {
-        labels[labelKey] = _label;
-      }
-      try {
-        localStorage.setItem(LABELS_KEY, JSON.stringify(labels));
-      } catch { /* ignore */ }
+    // Update label cache immediately so the dashboard shows the real
+    // name without waiting for the next syncFromAPI.
+    const labelKey = `${resource}:${id}`;
+    const labels = loadLabels();
+    if (wasFavorite) {
+      delete labels[labelKey];
+    } else if (_label) {
+      labels[labelKey] = _label;
+    }
+    try {
+      localStorage.setItem(LABELS_KEY, JSON.stringify(labels));
+    } catch {
+      /* ignore */
+    }
 
-      saveFavorites(current);
-      setFavorites({ ...current });
-      window.dispatchEvent(new Event("spade-favorites-changed"));
-    },
-    []
-  );
+    saveFavorites(current);
+    setFavorites({ ...current });
+    window.dispatchEvent(new Event("spade-favorites-changed"));
+  }, []);
 
-  const getFavoriteIds = useCallback(
-    (resource: string) => favorites[resource] || [],
-    [favorites]
-  );
+  const getFavoriteIds = useCallback((resource: string) => favorites[resource] || [], [favorites]);
 
   const getAllFavorites = useCallback(() => {
     const labels = loadLabels();

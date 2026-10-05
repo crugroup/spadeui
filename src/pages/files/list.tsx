@@ -56,112 +56,116 @@ export const FileList: React.FC<IResourceComponentsProps> = () => {
     <List canCreate={true}>
       <div className="entity-table-shell entity-table-shell--flat">
         <SkeletonList loading={tableQuery.isLoading}>
-        <Table
-          className="files-table"
-          {...tableProps}
-          pagination={{ ...tableProps.pagination, showSizeChanger: false }}
-          rowKey="id"
-          rowClassName={() => "entity-table-row"}
-          onRow={(record) => ({
-            onClick: (event) => {
-              const target = event.target as HTMLElement;
-              if (
-                target.closest(".entity-table-actions") ||
-                target.closest(".entity-tag") ||
-                target.closest("a") ||
-                target.closest("button")
-              ) {
-                return;
-              }
-              navigate(`/files/show/${record.id}`);
-            },
-            style: { cursor: "pointer" },
-          })}
-        >
-        <Table.Column
-          title=""
-          width={40}
-          render={(_, record: any) => (
-            <Tooltip title={isFavorite("files", record.id) ? "Remove from favorites" : "Add to favorites"}>
-              <span
-                role="button"
-                tabIndex={0}
-                aria-label={isFavorite("files", record.id) ? "Remove from favorites" : "Add to favorites"}
-                style={{ cursor: "pointer", fontSize: 16 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleFavorite("files", record.id, record.code);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    toggleFavorite("files", record.id, record.code);
-                  }
-                }}
-              >
-                {isFavorite("files", record.id) ? (
-                  <StarFilled style={{ color: "#cc8b1f" }} />
-                ) : (
-                  <StarOutlined style={{ color: "var(--spade-muted)" }} />
-                )}
-              </span>
-            </Tooltip>
-          )}
-        />
-        <Table.Column
-          dataIndex="code"
-          title="Name"
-          sorter
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input placeholder="Search by name" />
-            </FilterDropdown>
-          )}
-        />
-        <Table.Column dataIndex="description" title="Description" sorter />{" "}
-        <Table.Column
-          dataIndex="tags"
-          title="Tags"
-          render={(tags: string[]) => (
-            <div className="file-tags-wrap">
-              {tags.map((tag) => (
-                <Tag
-                  className={`entity-tag entity-tag--interactive ${activeTagFilter?.value === tag ? "entity-tag--active" : ""}`}
-                  key={tag}
-                  onClick={() => applyTagFilter(tag)}
-                >
-                  {tag}
-                </Tag>
-              ))}
-            </div>
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Select
-                allowClear
-                showSearch
-                optionFilterProp="label"
-                placeholder="Search tags"
-                options={tagSet.map((name) => ({ label: name, value: name }))}
-                className="filter-dropdown__select"
-              />
-            </FilterDropdown>
-          )}
-        />
-        <Table.Column
-          title="Actions"
-          dataIndex="actions"
-          render={(_, record: BaseRecord) => (
-            <Space className="entity-table-actions">
-              <EditButton hideText size="small" recordItemId={record.id} />
-              <ShowButton hideText size="small" recordItemId={record.id} />
-              <DeleteButton hideText size="small" recordItemId={record.id} />
-              <FileUploadButton hideText buttonProps={{ size: "small", type: "primary" }} recordItemId={record.id} />
-            </Space>
-          )}
-        />
-        </Table>
+          <Table
+            className="files-table"
+            {...tableProps}
+            pagination={{ ...tableProps.pagination, showSizeChanger: false }}
+            rowKey="id"
+            rowClassName={() => "entity-table-row"}
+            onRow={(record) => ({
+              onClick: (event) => {
+                const target = event.target as HTMLElement;
+                if (
+                  target.closest(".entity-table-actions") ||
+                  target.closest(".entity-tag") ||
+                  target.closest("a") ||
+                  target.closest("button")
+                ) {
+                  return;
+                }
+                navigate(`/files/show/${record.id}`);
+              },
+              style: { cursor: "pointer" },
+            })}
+          >
+            <Table.Column
+              title=""
+              width={40}
+              render={(_, record: any) => (
+                <Tooltip title={isFavorite("files", record.id) ? "Remove from favorites" : "Add to favorites"}>
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    aria-label={isFavorite("files", record.id) ? "Remove from favorites" : "Add to favorites"}
+                    style={{ cursor: "pointer", fontSize: 16 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite("files", record.id, record.code);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleFavorite("files", record.id, record.code);
+                      }
+                    }}
+                  >
+                    {isFavorite("files", record.id) ? (
+                      <StarFilled style={{ color: "#cc8b1f" }} />
+                    ) : (
+                      <StarOutlined style={{ color: "var(--spade-muted)" }} />
+                    )}
+                  </span>
+                </Tooltip>
+              )}
+            />
+            <Table.Column
+              dataIndex="code"
+              title="Name"
+              sorter
+              filterDropdown={(props) => (
+                <FilterDropdown {...props}>
+                  <Input placeholder="Search by name" />
+                </FilterDropdown>
+              )}
+            />
+            <Table.Column dataIndex="description" title="Description" sorter />{" "}
+            <Table.Column
+              dataIndex="tags"
+              title="Tags"
+              render={(tags: string[]) => (
+                <div className="file-tags-wrap">
+                  {tags.map((tag) => (
+                    <Tag
+                      className={`entity-tag entity-tag--interactive ${activeTagFilter?.value === tag ? "entity-tag--active" : ""}`}
+                      key={tag}
+                      onClick={() => applyTagFilter(tag)}
+                    >
+                      {tag}
+                    </Tag>
+                  ))}
+                </div>
+              )}
+              filterDropdown={(props) => (
+                <FilterDropdown {...props}>
+                  <Select
+                    allowClear
+                    showSearch
+                    optionFilterProp="label"
+                    placeholder="Search tags"
+                    options={tagSet.map((name) => ({ label: name, value: name }))}
+                    className="filter-dropdown__select"
+                  />
+                </FilterDropdown>
+              )}
+            />
+            <Table.Column
+              title="Actions"
+              dataIndex="actions"
+              render={(_, record: BaseRecord) => (
+                <Space className="entity-table-actions">
+                  <EditButton hideText size="small" recordItemId={record.id} />
+                  <ShowButton hideText size="small" recordItemId={record.id} />
+                  <DeleteButton hideText size="small" recordItemId={record.id} />
+                  <FileUploadButton
+                    hideText
+                    buttonProps={{ size: "small", type: "primary" }}
+                    recordItemId={record.id}
+                  />
+                </Space>
+              )}
+            />
+          </Table>
         </SkeletonList>
       </div>
     </List>

@@ -32,6 +32,10 @@
     "sass": "^1.105.1"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/jsdom": "^30",
     "@types/node": "^26.6.3",
     "@types/pluralize": "^0.0.33",
     "@types/react": "^19.3.0",
@@ -45,9 +49,11 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.4.26",
+    "jsdom": "^30.1.2",
     "prettier": "^3.9.9",
     "typescript": "^5.9.3",
-    "vite": "^6.4.3"
+    "vite": "^6.4.3",
+    "vitest": "^3.2.4"
   },
   "scripts": {
     "dev": "refine dev",
@@ -56,6 +62,8 @@
     "refine": "refine",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "browserslist": {

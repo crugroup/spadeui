@@ -38,6 +38,13 @@ yarn dev
 yarn build
 ```
 
+#### Running unit tests
+
+```bash
+yarn test        # single run, as in CI
+yarn test:watch  # re-run on file changes
+```
+
 ## Maintenance
 
 ### Prerequisites
@@ -72,6 +79,19 @@ VITE_BACKEND_BASE_URL=http://localhost:8081/api/v1
 yarn lint
 ```
 Checks for ESLint and TypeScript errors.
+
+#### Run unit tests
+```bash
+yarn test
+```
+Runs the [Vitest](https://vitest.dev/) suite in a jsdom environment. The backend does not need to be running: tests use fake data only.
+
+- Test files sit next to the code they cover and are named `*.test.ts` / `*.test.tsx`.
+- `src/test/setup.ts` runs before every test file. It stubs `window.env` and `matchMedia`, adds the `@testing-library/jest-dom` matchers, and clears `localStorage` after each test.
+- To test code that calls the API, pass a fake HTTP client instead of the real axios instance (see `src/config/rest-data-provider/index.test.ts`). To test permission logic, seed `localStorage` with fake permissions (see `src/config/access-control-provider.test.ts`).
+- Render components with `@testing-library/react`.
+
+The `test` job in `.github/workflows/docker-image.yml` runs `yarn test` on every push and pull request. The Docker image is only built when the tests pass.
 
 #### Type checking
 ```bash
@@ -139,6 +159,7 @@ yarn up vite@^6.4
 
 ### Testing Checklist
 - [ ] `yarn install` completes without errors
+- [ ] `yarn test` passes
 - [ ] `yarn explain peer-requirements` shows no critical (✘) issues
 - [ ] `yarn npm audit --all` returns "No audit suggestions"
 - [ ] `yarn build` succeeds (target: < 5s build time)

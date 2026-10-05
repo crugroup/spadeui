@@ -35,9 +35,10 @@ export const ThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
     // No direct antd token equivalents — use hardcoded dark/light pairs
     root.style.setProperty("--spade-surface-soft", isDark ? "#0f1d35" : "#f7f9fc");
     root.style.setProperty("--spade-muted", isDark ? "#7a8ba3" : "#5c6b83");
-    root.style.setProperty("--spade-shadow", isDark
-      ? "0 6px 18px rgba(0, 0, 0, 0.25)"
-      : "0 6px 18px rgba(19, 37, 70, 0.05)");
+    root.style.setProperty(
+      "--spade-shadow",
+      isDark ? "0 6px 18px rgba(0, 0, 0, 0.25)" : "0 6px 18px rgba(19, 37, 70, 0.05)"
+    );
   }, [mode]);
 
   const setColorMode = () => {

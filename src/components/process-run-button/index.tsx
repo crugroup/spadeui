@@ -47,17 +47,14 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
     setIsModalOpen(false);
     await queryClient.cancelQueries({ queryKey: ["dashboard", "latest_runs"], exact: false });
     const snapshot = queryClient.getQueriesData({ queryKey: ["dashboard", "latest_runs"], exact: false });
-    queryClient.setQueriesData(
-      { queryKey: ["dashboard", "latest_runs"], exact: false },
-      (old: any) => {
-        if (!Array.isArray(old)) return old;
-        return old.map((item: any) =>
-          String(item.process_id) === String(targetId)
-            ? { ...item, latest_run: { ...item.latest_run, status: "running", created_at: new Date().toISOString() } }
-            : item
-        );
-      }
-    );
+    queryClient.setQueriesData({ queryKey: ["dashboard", "latest_runs"], exact: false }, (old: any) => {
+      if (!Array.isArray(old)) return old;
+      return old.map((item: any) =>
+        String(item.process_id) === String(targetId)
+          ? { ...item, latest_run: { ...item.latest_run, status: "running", created_at: new Date().toISOString() } }
+          : item
+      );
+    });
 
     mutate(
       {
@@ -107,17 +104,12 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
               notification.info({ message: "Process completed" });
             }
 
-            queryClient.setQueriesData(
-              { queryKey: ["dashboard", "latest_runs"], exact: false },
-              (old: any) => {
-                if (!Array.isArray(old)) return old;
-                return old.map((item: any) =>
-                  String(item.process_id) === String(targetId)
-                    ? { ...item, latest_run: run }
-                    : item
-                );
-              }
-            );
+            queryClient.setQueriesData({ queryKey: ["dashboard", "latest_runs"], exact: false }, (old: any) => {
+              if (!Array.isArray(old)) return old;
+              return old.map((item: any) =>
+                String(item.process_id) === String(targetId) ? { ...item, latest_run: run } : item
+              );
+            });
 
             // Backend cache version was bumped; refetch gets fresh DB data.
             queryClient.invalidateQueries({ queryKey: ["dashboard", "latest_runs"] });
@@ -181,7 +173,9 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
         className="workflow-modal"
       >
         {processData?.description && (
-          <Text type="secondary" style={{ display: "block", marginBottom: 16 }}>{processData.description}</Text>
+          <Text type="secondary" style={{ display: "block", marginBottom: 16 }}>
+            {processData.description}
+          </Text>
         )}
         <RjsfForm
           id="process-run-form"

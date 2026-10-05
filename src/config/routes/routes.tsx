@@ -8,50 +8,76 @@ import { Header } from "../../components/header";
 import { ThemeProviderContext } from "../../contexts/theme-provider";
 import { ACCOUNT_CONFIRMATION_REQUIRED } from "../constants";
 
-const Dashboard = lazy(() => import("../../pages/dashboard").then(m => ({ default: m.Dashboard })));
-const FileList = lazy(() => import("../../pages/files/list").then(m => ({ default: m.FileList })));
-const FileCreate = lazy(() => import("../../pages/files/create").then(m => ({ default: m.FileCreate })));
-const FileEdit = lazy(() => import("../../pages/files/edit").then(m => ({ default: m.FileEdit })));
-const FileShow = lazy(() => import("../../pages/files/show").then(m => ({ default: m.FileShow })));
-const FileFormatList = lazy(() => import("../../pages/fileformats/list").then(m => ({ default: m.FileFormatList })));
-const FileFormatCreate = lazy(() => import("../../pages/fileformats/create").then(m => ({ default: m.FileFormatCreate })));
-const FileFormatEdit = lazy(() => import("../../pages/fileformats/edit").then(m => ({ default: m.FileFormatEdit })));
-const FileFormatShow = lazy(() => import("../../pages/fileformats/show").then(m => ({ default: m.FileFormatShow })));
-const FileProcessorList = lazy(() => import("../../pages/fileprocessors/list").then(m => ({ default: m.FileProcessorList })));
-const FileProcessorCreate = lazy(() => import("../../pages/fileprocessors/create").then(m => ({ default: m.FileProcessorCreate })));
-const FileProcessorEdit = lazy(() => import("../../pages/fileprocessors/edit").then(m => ({ default: m.FileProcessorEdit })));
-const FileProcessorShow = lazy(() => import("../../pages/fileprocessors/show").then(m => ({ default: m.FileProcessorShow })));
-const ExecutorList = lazy(() => import("../../pages/executors/list").then(m => ({ default: m.ExecutorList })));
-const ExecutorCreate = lazy(() => import("../../pages/executors/create").then(m => ({ default: m.ExecutorCreate })));
-const ExecutorEdit = lazy(() => import("../../pages/executors/edit").then(m => ({ default: m.ExecutorEdit })));
-const ExecutorShow = lazy(() => import("../../pages/executors/show").then(m => ({ default: m.ExecutorShow })));
-const ProcessList = lazy(() => import("../../pages/processes/list").then(m => ({ default: m.ProcessList })));
-const ProcessCreate = lazy(() => import("../../pages/processes/create").then(m => ({ default: m.ProcessCreate })));
-const ProcessEdit = lazy(() => import("../../pages/processes/edit").then(m => ({ default: m.ProcessEdit })));
-const ProcessShow = lazy(() => import("../../pages/processes/show").then(m => ({ default: m.ProcessShow })));
-const GroupList = lazy(() => import("../../pages/groups/list").then(m => ({ default: m.GroupList })));
-const GroupCreate = lazy(() => import("../../pages/groups/create").then(m => ({ default: m.GroupCreate })));
-const GroupEdit = lazy(() => import("../../pages/groups/edit").then(m => ({ default: m.GroupEdit })));
-const GroupShow = lazy(() => import("../../pages/groups/show").then(m => ({ default: m.GroupShow })));
-const UserList = lazy(() => import("../../pages/users/list").then(m => ({ default: m.UserList })));
-const UserCreate = lazy(() => import("../../pages/users/create").then(m => ({ default: m.UserCreate })));
-const UserEdit = lazy(() => import("../../pages/users/edit").then(m => ({ default: m.UserEdit })));
-const UserShow = lazy(() => import("../../pages/users/show").then(m => ({ default: m.UserShow })));
-const VariableList = lazy(() => import("../../pages/variables/list").then(m => ({ default: m.VariableList })));
-const VariableCreate = lazy(() => import("../../pages/variables/create").then(m => ({ default: m.VariableCreate })));
-const VariableEdit = lazy(() => import("../../pages/variables/edit").then(m => ({ default: m.VariableEdit })));
-const VariableShow = lazy(() => import("../../pages/variables/show").then(m => ({ default: m.VariableShow })));
-const VariableSetList = lazy(() => import("../../pages/variablesets/list").then(m => ({ default: m.VariableSetList })));
-const VariableSetCreate = lazy(() => import("../../pages/variablesets/create").then(m => ({ default: m.VariableSetCreate })));
-const VariableSetEdit = lazy(() => import("../../pages/variablesets/edit").then(m => ({ default: m.VariableSetEdit })));
-const VariableSetShow = lazy(() => import("../../pages/variablesets/show").then(m => ({ default: m.VariableSetShow })));
-const UpdatePasswordLoggedIn = lazy(() => import("../../pages/updatePasswordLoggedIn").then(m => ({ default: m.UpdatePasswordLoggedIn })));
-const Login = lazy(() => import("../../pages/auth/login").then(m => ({ default: m.Login })));
-const ForgotPassword = lazy(() => import("../../pages/auth/forgotPassword").then(m => ({ default: m.ForgotPassword })));
-const UpdatePassword = lazy(() => import("../../pages/auth/updatePassword").then(m => ({ default: m.UpdatePassword })));
-const Register = lazy(() => import("../../pages/auth/register").then(m => ({ default: m.Register })));
-const AccountCreated = lazy(() => import("../../pages/auth/accountCreated").then(m => ({ default: m.AccountCreated })));
-const ConfirmEmail = lazy(() => import("../../pages/auth/confirmEmail").then(m => ({ default: m.ConfirmEmail })));
+const Dashboard = lazy(() => import("../../pages/dashboard").then((m) => ({ default: m.Dashboard })));
+const FileList = lazy(() => import("../../pages/files/list").then((m) => ({ default: m.FileList })));
+const FileCreate = lazy(() => import("../../pages/files/create").then((m) => ({ default: m.FileCreate })));
+const FileEdit = lazy(() => import("../../pages/files/edit").then((m) => ({ default: m.FileEdit })));
+const FileShow = lazy(() => import("../../pages/files/show").then((m) => ({ default: m.FileShow })));
+const FileFormatList = lazy(() => import("../../pages/fileformats/list").then((m) => ({ default: m.FileFormatList })));
+const FileFormatCreate = lazy(() =>
+  import("../../pages/fileformats/create").then((m) => ({ default: m.FileFormatCreate }))
+);
+const FileFormatEdit = lazy(() => import("../../pages/fileformats/edit").then((m) => ({ default: m.FileFormatEdit })));
+const FileFormatShow = lazy(() => import("../../pages/fileformats/show").then((m) => ({ default: m.FileFormatShow })));
+const FileProcessorList = lazy(() =>
+  import("../../pages/fileprocessors/list").then((m) => ({ default: m.FileProcessorList }))
+);
+const FileProcessorCreate = lazy(() =>
+  import("../../pages/fileprocessors/create").then((m) => ({ default: m.FileProcessorCreate }))
+);
+const FileProcessorEdit = lazy(() =>
+  import("../../pages/fileprocessors/edit").then((m) => ({ default: m.FileProcessorEdit }))
+);
+const FileProcessorShow = lazy(() =>
+  import("../../pages/fileprocessors/show").then((m) => ({ default: m.FileProcessorShow }))
+);
+const ExecutorList = lazy(() => import("../../pages/executors/list").then((m) => ({ default: m.ExecutorList })));
+const ExecutorCreate = lazy(() => import("../../pages/executors/create").then((m) => ({ default: m.ExecutorCreate })));
+const ExecutorEdit = lazy(() => import("../../pages/executors/edit").then((m) => ({ default: m.ExecutorEdit })));
+const ExecutorShow = lazy(() => import("../../pages/executors/show").then((m) => ({ default: m.ExecutorShow })));
+const ProcessList = lazy(() => import("../../pages/processes/list").then((m) => ({ default: m.ProcessList })));
+const ProcessCreate = lazy(() => import("../../pages/processes/create").then((m) => ({ default: m.ProcessCreate })));
+const ProcessEdit = lazy(() => import("../../pages/processes/edit").then((m) => ({ default: m.ProcessEdit })));
+const ProcessShow = lazy(() => import("../../pages/processes/show").then((m) => ({ default: m.ProcessShow })));
+const GroupList = lazy(() => import("../../pages/groups/list").then((m) => ({ default: m.GroupList })));
+const GroupCreate = lazy(() => import("../../pages/groups/create").then((m) => ({ default: m.GroupCreate })));
+const GroupEdit = lazy(() => import("../../pages/groups/edit").then((m) => ({ default: m.GroupEdit })));
+const GroupShow = lazy(() => import("../../pages/groups/show").then((m) => ({ default: m.GroupShow })));
+const UserList = lazy(() => import("../../pages/users/list").then((m) => ({ default: m.UserList })));
+const UserCreate = lazy(() => import("../../pages/users/create").then((m) => ({ default: m.UserCreate })));
+const UserEdit = lazy(() => import("../../pages/users/edit").then((m) => ({ default: m.UserEdit })));
+const UserShow = lazy(() => import("../../pages/users/show").then((m) => ({ default: m.UserShow })));
+const VariableList = lazy(() => import("../../pages/variables/list").then((m) => ({ default: m.VariableList })));
+const VariableCreate = lazy(() => import("../../pages/variables/create").then((m) => ({ default: m.VariableCreate })));
+const VariableEdit = lazy(() => import("../../pages/variables/edit").then((m) => ({ default: m.VariableEdit })));
+const VariableShow = lazy(() => import("../../pages/variables/show").then((m) => ({ default: m.VariableShow })));
+const VariableSetList = lazy(() =>
+  import("../../pages/variablesets/list").then((m) => ({ default: m.VariableSetList }))
+);
+const VariableSetCreate = lazy(() =>
+  import("../../pages/variablesets/create").then((m) => ({ default: m.VariableSetCreate }))
+);
+const VariableSetEdit = lazy(() =>
+  import("../../pages/variablesets/edit").then((m) => ({ default: m.VariableSetEdit }))
+);
+const VariableSetShow = lazy(() =>
+  import("../../pages/variablesets/show").then((m) => ({ default: m.VariableSetShow }))
+);
+const UpdatePasswordLoggedIn = lazy(() =>
+  import("../../pages/updatePasswordLoggedIn").then((m) => ({ default: m.UpdatePasswordLoggedIn }))
+);
+const Login = lazy(() => import("../../pages/auth/login").then((m) => ({ default: m.Login })));
+const ForgotPassword = lazy(() =>
+  import("../../pages/auth/forgotPassword").then((m) => ({ default: m.ForgotPassword }))
+);
+const UpdatePassword = lazy(() =>
+  import("../../pages/auth/updatePassword").then((m) => ({ default: m.UpdatePassword }))
+);
+const Register = lazy(() => import("../../pages/auth/register").then((m) => ({ default: m.Register })));
+const AccountCreated = lazy(() =>
+  import("../../pages/auth/accountCreated").then((m) => ({ default: m.AccountCreated }))
+);
+const ConfirmEmail = lazy(() => import("../../pages/auth/confirmEmail").then((m) => ({ default: m.ConfirmEmail })));
 
 const spadeLogos: { [key: string]: { single: string; full: string } } = {
   dark: {
@@ -120,9 +146,13 @@ const CustomRoutes = () => {
             <CanAccess
               resource="dashboard"
               action="list"
-              fallback={<Result status="403" title="403" subTitle="Sorry, you are not authorized to access this page." />}
+              fallback={
+                <Result status="403" title="403" subTitle="Sorry, you are not authorized to access this page." />
+              }
             >
-              <Suspense fallback={null}><Dashboard /></Suspense>
+              <Suspense fallback={null}>
+                <Dashboard />
+              </Suspense>
             </CanAccess>
           }
         />
@@ -131,7 +161,9 @@ const CustomRoutes = () => {
             index
             element={
               <CanAccess resource="files" action="list" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><FileList /></Suspense>
+                <Suspense fallback={null}>
+                  <FileList />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -139,7 +171,9 @@ const CustomRoutes = () => {
             path="create"
             element={
               <CanAccess resource="files" action="create" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><FileCreate /></Suspense>
+                <Suspense fallback={null}>
+                  <FileCreate />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -147,7 +181,9 @@ const CustomRoutes = () => {
             path="edit/:id"
             element={
               <CanAccess resource="files" action="edit" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><FileEdit /></Suspense>
+                <Suspense fallback={null}>
+                  <FileEdit />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -155,7 +191,9 @@ const CustomRoutes = () => {
             path="show/:id"
             element={
               <CanAccess resource="files" action="show" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><FileShow /></Suspense>
+                <Suspense fallback={null}>
+                  <FileShow />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -165,7 +203,9 @@ const CustomRoutes = () => {
             index
             element={
               <CanAccess resource="fileformats" action="list" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><FileFormatList /></Suspense>
+                <Suspense fallback={null}>
+                  <FileFormatList />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -173,7 +213,9 @@ const CustomRoutes = () => {
             path="create"
             element={
               <CanAccess resource="fileformats" action="create" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><FileFormatCreate /></Suspense>
+                <Suspense fallback={null}>
+                  <FileFormatCreate />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -181,7 +223,9 @@ const CustomRoutes = () => {
             path="edit/:id"
             element={
               <CanAccess resource="fileformats" action="edit" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><FileFormatEdit /></Suspense>
+                <Suspense fallback={null}>
+                  <FileFormatEdit />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -189,7 +233,9 @@ const CustomRoutes = () => {
             path="show/:id"
             element={
               <CanAccess resource="fileformats" action="show" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><FileFormatShow /></Suspense>
+                <Suspense fallback={null}>
+                  <FileFormatShow />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -199,7 +245,9 @@ const CustomRoutes = () => {
             index
             element={
               <CanAccess resource="fileprocessors" action="list" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><FileProcessorList /></Suspense>
+                <Suspense fallback={null}>
+                  <FileProcessorList />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -207,7 +255,9 @@ const CustomRoutes = () => {
             path="create"
             element={
               <CanAccess resource="fileprocessors" action="create" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><FileProcessorCreate /></Suspense>
+                <Suspense fallback={null}>
+                  <FileProcessorCreate />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -215,7 +265,9 @@ const CustomRoutes = () => {
             path="edit/:id"
             element={
               <CanAccess resource="fileprocessors" action="edit" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><FileProcessorEdit /></Suspense>
+                <Suspense fallback={null}>
+                  <FileProcessorEdit />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -223,7 +275,9 @@ const CustomRoutes = () => {
             path="show/:id"
             element={
               <CanAccess resource="fileprocessors" action="show" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><FileProcessorShow /></Suspense>
+                <Suspense fallback={null}>
+                  <FileProcessorShow />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -233,7 +287,9 @@ const CustomRoutes = () => {
             index
             element={
               <CanAccess resource="executors" action="list" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><ExecutorList /></Suspense>
+                <Suspense fallback={null}>
+                  <ExecutorList />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -241,7 +297,9 @@ const CustomRoutes = () => {
             path="create"
             element={
               <CanAccess resource="executors" action="create" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><ExecutorCreate /></Suspense>
+                <Suspense fallback={null}>
+                  <ExecutorCreate />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -249,7 +307,9 @@ const CustomRoutes = () => {
             path="edit/:id"
             element={
               <CanAccess resource="executors" action="edit" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><ExecutorEdit /></Suspense>
+                <Suspense fallback={null}>
+                  <ExecutorEdit />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -257,7 +317,9 @@ const CustomRoutes = () => {
             path="show/:id"
             element={
               <CanAccess resource="executors" action="show" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><ExecutorShow /></Suspense>
+                <Suspense fallback={null}>
+                  <ExecutorShow />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -267,7 +329,9 @@ const CustomRoutes = () => {
             index
             element={
               <CanAccess resource="processes" action="list" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><ProcessList /></Suspense>
+                <Suspense fallback={null}>
+                  <ProcessList />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -275,7 +339,9 @@ const CustomRoutes = () => {
             path="create"
             element={
               <CanAccess resource="processes" action="create" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><ProcessCreate /></Suspense>
+                <Suspense fallback={null}>
+                  <ProcessCreate />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -283,7 +349,9 @@ const CustomRoutes = () => {
             path="edit/:id"
             element={
               <CanAccess resource="processes" action="edit" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><ProcessEdit /></Suspense>
+                <Suspense fallback={null}>
+                  <ProcessEdit />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -291,7 +359,9 @@ const CustomRoutes = () => {
             path="show/:id"
             element={
               <CanAccess resource="processes" action="show" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><ProcessShow /></Suspense>
+                <Suspense fallback={null}>
+                  <ProcessShow />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -301,7 +371,9 @@ const CustomRoutes = () => {
             index
             element={
               <CanAccess resource="groups" action="list" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><GroupList /></Suspense>
+                <Suspense fallback={null}>
+                  <GroupList />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -309,7 +381,9 @@ const CustomRoutes = () => {
             path="create"
             element={
               <CanAccess resource="groups" action="create" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><GroupCreate /></Suspense>
+                <Suspense fallback={null}>
+                  <GroupCreate />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -317,7 +391,9 @@ const CustomRoutes = () => {
             path="edit/:id"
             element={
               <CanAccess resource="groups" action="edit" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><GroupEdit /></Suspense>
+                <Suspense fallback={null}>
+                  <GroupEdit />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -325,7 +401,9 @@ const CustomRoutes = () => {
             path="show/:id"
             element={
               <CanAccess resource="groups" action="show" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><GroupShow /></Suspense>
+                <Suspense fallback={null}>
+                  <GroupShow />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -335,7 +413,9 @@ const CustomRoutes = () => {
             index
             element={
               <CanAccess resource="users" action="list" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><UserList /></Suspense>
+                <Suspense fallback={null}>
+                  <UserList />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -343,7 +423,9 @@ const CustomRoutes = () => {
             path="create"
             element={
               <CanAccess resource="users" action="create" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><UserCreate /></Suspense>
+                <Suspense fallback={null}>
+                  <UserCreate />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -351,7 +433,9 @@ const CustomRoutes = () => {
             path="edit/:id"
             element={
               <CanAccess resource="users" action="edit" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><UserEdit /></Suspense>
+                <Suspense fallback={null}>
+                  <UserEdit />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -359,7 +443,9 @@ const CustomRoutes = () => {
             path="show/:id"
             element={
               <CanAccess resource="users" action="show" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><UserShow /></Suspense>
+                <Suspense fallback={null}>
+                  <UserShow />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -369,7 +455,9 @@ const CustomRoutes = () => {
             index
             element={
               <CanAccess resource="variables" action="list" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><VariableList /></Suspense>
+                <Suspense fallback={null}>
+                  <VariableList />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -377,7 +465,9 @@ const CustomRoutes = () => {
             path="create"
             element={
               <CanAccess resource="variables" action="create" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><VariableCreate /></Suspense>
+                <Suspense fallback={null}>
+                  <VariableCreate />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -385,7 +475,9 @@ const CustomRoutes = () => {
             path="edit/:id"
             element={
               <CanAccess resource="variables" action="edit" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><VariableEdit /></Suspense>
+                <Suspense fallback={null}>
+                  <VariableEdit />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -393,7 +485,9 @@ const CustomRoutes = () => {
             path="show/:id"
             element={
               <CanAccess resource="variables" action="show" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><VariableShow /></Suspense>
+                <Suspense fallback={null}>
+                  <VariableShow />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -403,7 +497,9 @@ const CustomRoutes = () => {
             index
             element={
               <CanAccess resource="variable-sets" action="list" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><VariableSetList /></Suspense>
+                <Suspense fallback={null}>
+                  <VariableSetList />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -411,7 +507,9 @@ const CustomRoutes = () => {
             path="create"
             element={
               <CanAccess resource="variable-sets" action="create" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><VariableSetCreate /></Suspense>
+                <Suspense fallback={null}>
+                  <VariableSetCreate />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -419,7 +517,9 @@ const CustomRoutes = () => {
             path="edit/:id"
             element={
               <CanAccess resource="variable-sets" action="edit" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><VariableSetEdit /></Suspense>
+                <Suspense fallback={null}>
+                  <VariableSetEdit />
+                </Suspense>
               </CanAccess>
             }
           />
@@ -427,12 +527,21 @@ const CustomRoutes = () => {
             path="show/:id"
             element={
               <CanAccess resource="variable-sets" action="show" onUnauthorized={() => navigate("/")}>
-                <Suspense fallback={null}><VariableSetShow /></Suspense>
+                <Suspense fallback={null}>
+                  <VariableSetShow />
+                </Suspense>
               </CanAccess>
             }
           />
         </Route>
-        <Route path="/update-password" element={<Suspense fallback={null}><UpdatePasswordLoggedIn /></Suspense>} />
+        <Route
+          path="/update-password"
+          element={
+            <Suspense fallback={null}>
+              <UpdatePasswordLoggedIn />
+            </Suspense>
+          }
+        />
         <Route path="*" element={<ErrorComponent />} />
       </Route>
       <Route
@@ -442,15 +551,31 @@ const CustomRoutes = () => {
           </Authenticated>
         }
       >
-        <Route path="/login" element={<Suspense fallback={null}><Login /></Suspense>} />
+        <Route
+          path="/login"
+          element={
+            <Suspense fallback={null}>
+              <Login />
+            </Suspense>
+          }
+        />
         {ACCOUNT_CONFIRMATION_REQUIRED && (
           <>
-            <Route path="/register" element={<Suspense fallback={null}><Register /></Suspense>} />
+            <Route
+              path="/register"
+              element={
+                <Suspense fallback={null}>
+                  <Register />
+                </Suspense>
+              }
+            />
             <Route
               path="/account-created"
               element={
                 <ThemedLayout Sider={() => null}>
-                  <Suspense fallback={null}><AccountCreated /></Suspense>
+                  <Suspense fallback={null}>
+                    <AccountCreated />
+                  </Suspense>
                 </ThemedLayout>
               }
             />
@@ -458,14 +583,30 @@ const CustomRoutes = () => {
               path="/confirm-email/:token"
               element={
                 <ThemedLayout Sider={() => null}>
-                  <Suspense fallback={null}><ConfirmEmail /></Suspense>
+                  <Suspense fallback={null}>
+                    <ConfirmEmail />
+                  </Suspense>
                 </ThemedLayout>
               }
             />
           </>
         )}
-        <Route path="/forgot-password" element={<Suspense fallback={null}><ForgotPassword /></Suspense>} />
-        <Route path="/update-password/:uid/:token" element={<Suspense fallback={null}><UpdatePassword /></Suspense>} />
+        <Route
+          path="/forgot-password"
+          element={
+            <Suspense fallback={null}>
+              <ForgotPassword />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/update-password/:uid/:token"
+          element={
+            <Suspense fallback={null}>
+              <UpdatePassword />
+            </Suspense>
+          }
+        />
       </Route>
     </Routes>
   );

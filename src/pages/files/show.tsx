@@ -1,12 +1,5 @@
 import { DateField, FilterDropdown, Show, TextField, useTable } from "@refinedev/antd";
-import {
-  CanAccess,
-  IResourceComponentsProps,
-  useGetToPath,
-  useMany,
-  useOne,
-  useShow,
-} from "@refinedev/core";
+import { CanAccess, IResourceComponentsProps, useGetToPath, useMany, useOne, useShow } from "@refinedev/core";
 import { Select, Space, Table, Tabs, Tag, Typography } from "antd";
 import prettyBytes from "pretty-bytes";
 import { Link } from "react-router";
@@ -279,9 +272,7 @@ export const FileShow: React.FC<IResourceComponentsProps> = () => {
           <Table.Column
             dataIndex={["user"]}
             title="User"
-            render={(value) =>
-              userIsLoading ? <>Loading...</> : userData?.find((item) => item.id === value)?.email
-            }
+            render={(value) => (userIsLoading ? <>Loading...</> : userData?.find((item) => item.id === value)?.email)}
             sorter
           />
           <Table.Column dataIndex="error_message" title="Message" sorter />

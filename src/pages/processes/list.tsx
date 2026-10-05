@@ -23,7 +23,8 @@ const getRunState = (latestRun?: { status?: string; result?: string }) => {
   if (!status && !result) return "idle";
 
   if (status === "running" || status === "new") return "running";
-  if (status === "failed" || status === "error" || result === "failed" || result === "error" || result === "warning") return "failed";
+  if (status === "failed" || status === "error" || result === "failed" || result === "error" || result === "warning")
+    return "failed";
   if (result === "success" || status === "finished") return "success";
   return "idle";
 };
@@ -56,9 +57,10 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
   // Shared cache key with dashboard — navigating between pages is instant
   const { data: latestRunsRaw, isLoading: latestRunsLoading } = useQuery({
     queryKey: ["dashboard", "latest_runs", "all", processIdsKey],
-    queryFn: () => axiosHelper.axiosInstance
-      .get(`${API_URL}/processes/latest_runs`, { params: { ids: processIdsKey } })
-      .then(r => r.data),
+    queryFn: () =>
+      axiosHelper.axiosInstance
+        .get(`${API_URL}/processes/latest_runs`, { params: { ids: processIdsKey } })
+        .then((r) => r.data),
     enabled: !!processIdsKey,
     staleTime: 3_000,
     placeholderData: (prev: any) => prev,
@@ -74,13 +76,14 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
     },
   });
 
-  const latestRunsByProcessId = useMemo(() =>
-    Object.fromEntries(
-      (latestRunsRaw ?? []).map((item: { process_id: number; latest_run?: LatestRun | null }) => [
-        item.process_id,
-        item.latest_run ?? undefined,
-      ])
-    ),
+  const latestRunsByProcessId = useMemo(
+    () =>
+      Object.fromEntries(
+        (latestRunsRaw ?? []).map((item: { process_id: number; latest_run?: LatestRun | null }) => [
+          item.process_id,
+          item.latest_run ?? undefined,
+        ])
+      ),
     [latestRunsRaw]
   );
   const latestRunsLoaded = processIdsKey.length === 0 || !latestRunsLoading;
@@ -153,135 +156,141 @@ export const ProcessList: React.FC<IResourceComponentsProps> = () => {
             style: { cursor: "pointer" },
           })}
         >
-        <Table.Column
-          title=""
-          width={40}
-          render={(_, record: any) => (
-            <Tooltip title={isFavorite("processes", record.id) ? "Remove from favorites" : "Add to favorites"}>
-              <span
-                role="button"
-                tabIndex={0}
-                aria-label={isFavorite("processes", record.id) ? "Remove from favorites" : "Add to favorites"}
-                style={{ cursor: "pointer", fontSize: 16 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleFavorite("processes", record.id, record.code);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
+          <Table.Column
+            title=""
+            width={40}
+            render={(_, record: any) => (
+              <Tooltip title={isFavorite("processes", record.id) ? "Remove from favorites" : "Add to favorites"}>
+                <span
+                  role="button"
+                  tabIndex={0}
+                  aria-label={isFavorite("processes", record.id) ? "Remove from favorites" : "Add to favorites"}
+                  style={{ cursor: "pointer", fontSize: 16 }}
+                  onClick={(e) => {
                     e.stopPropagation();
                     toggleFavorite("processes", record.id, record.code);
-                  }
-                }}
-              >
-                {isFavorite("processes", record.id) ? (
-                  <StarFilled style={{ color: "#cc8b1f" }} />
-                ) : (
-                  <StarOutlined style={{ color: "var(--spade-muted)" }} />
-                )}
-              </span>
-            </Tooltip>
-          )}
-        />
-        <Table.Column
-          dataIndex="code"
-          title="Name"
-          sorter
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input placeholder="Search by name" />
-            </FilterDropdown>
-          )}
-        />
-        <Table.Column
-          dataIndex="description"
-          title="Description"
-          sorter
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Input placeholder="Search by description" />
-            </FilterDropdown>
-          )}
-        />
-        <Table.Column
-          dataIndex="tags"
-          title="Tags"
-          render={(tags: string[]) => (
-            <div className="process-tags-wrap">
-              {tags.map((tag) => (
-                <Tag
-                  className={`entity-tag entity-tag--interactive ${activeTagFilter?.value === tag ? "entity-tag--active" : ""}`}
-                  key={tag}
-                  onClick={() => applyTagFilter(tag)}
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      toggleFavorite("processes", record.id, record.code);
+                    }
+                  }}
                 >
-                  {tag}
-                </Tag>
-              ))}
-            </div>
-          )}
-          filterDropdown={(props) => (
-            <FilterDropdown {...props}>
-              <Select
-                allowClear
-                showSearch
-                optionFilterProp="label"
-                placeholder="Search tags"
-                options={tagSet.map((name) => ({ label: name, value: name }))}
-                className="filter-dropdown__select"
-              />
-            </FilterDropdown>
-          )}
-        />
-        <Table.Column
-          dataIndex="latest_run"
-          title="Latest run"
-          render={(latestRun?: { status?: string; result?: string; created_at?: string }) => {
-            if (!latestRun) {
-              return <span className="run-status-meta">{latestRunsLoaded ? "Not run yet" : "Checking..."}</span>;
-            }
-
-            const state = getRunState(latestRun);
-            const subtitle = latestRun.created_at
-              ? `Updated ${new Date(latestRun.created_at).toLocaleString()}`
-              : `Status: ${state}`;
-            const startedAt = latestRun.created_at ? new Date(latestRun.created_at).getTime() : null;
-            const elapsedSeconds = startedAt ? Math.max(0, Math.floor((Date.now() - startedAt) / 1000)) : null;
-            const elapsedLabel =
-              elapsedSeconds == null
-                ? ""
-                : `${Math.floor(elapsedSeconds / 60)}m ${String(elapsedSeconds % 60).padStart(2, "0")}s`;
-            const isRunning = state === "running";
-
-            return (
-              <div className={`run-status-cell ${isRunning ? "run-status-cell--running" : ""} ${state === "failed" ? "run-status-cell--failed" : ""}`}>
-                <Tooltip title={subtitle}>
-                  <Tag className={`run-status-chip run-status-chip--${state} ${isRunning ? "run-status-chip--running-strong" : ""}`}>
-                    <span className="run-status-chip__content">
-                      {isRunning && <span className="run-status-chip__pulse" />}
-                      <span>{state}</span>
-                    </span>
+                  {isFavorite("processes", record.id) ? (
+                    <StarFilled style={{ color: "#cc8b1f" }} />
+                  ) : (
+                    <StarOutlined style={{ color: "var(--spade-muted)" }} />
+                  )}
+                </span>
+              </Tooltip>
+            )}
+          />
+          <Table.Column
+            dataIndex="code"
+            title="Name"
+            sorter
+            filterDropdown={(props) => (
+              <FilterDropdown {...props}>
+                <Input placeholder="Search by name" />
+              </FilterDropdown>
+            )}
+          />
+          <Table.Column
+            dataIndex="description"
+            title="Description"
+            sorter
+            filterDropdown={(props) => (
+              <FilterDropdown {...props}>
+                <Input placeholder="Search by description" />
+              </FilterDropdown>
+            )}
+          />
+          <Table.Column
+            dataIndex="tags"
+            title="Tags"
+            render={(tags: string[]) => (
+              <div className="process-tags-wrap">
+                {tags.map((tag) => (
+                  <Tag
+                    className={`entity-tag entity-tag--interactive ${activeTagFilter?.value === tag ? "entity-tag--active" : ""}`}
+                    key={tag}
+                    onClick={() => applyTagFilter(tag)}
+                  >
+                    {tag}
                   </Tag>
-                </Tooltip>
-                {isRunning && (
-                  <span className="run-status-meta run-status-meta--live">Live refresh{elapsedLabel ? ` for ${elapsedLabel}` : ""}</span>
-                )}
+                ))}
               </div>
-            );
-          }}
-        />
-        <Table.Column
-          title="Actions"
-          dataIndex="actions"
-          render={(_, record: BaseRecord) => (
-            <Space className="entity-table-actions">
-              <EditButton hideText size="small" recordItemId={record.id} />
-              <ShowButton hideText size="small" recordItemId={record.id} />
-              <DeleteButton hideText size="small" recordItemId={record.id} />
-              <ProcessRunButton hideText buttonProps={{ size: "small", type: "primary" }} recordItemId={record.id} />
-            </Space>
-          )}
-        />
+            )}
+            filterDropdown={(props) => (
+              <FilterDropdown {...props}>
+                <Select
+                  allowClear
+                  showSearch
+                  optionFilterProp="label"
+                  placeholder="Search tags"
+                  options={tagSet.map((name) => ({ label: name, value: name }))}
+                  className="filter-dropdown__select"
+                />
+              </FilterDropdown>
+            )}
+          />
+          <Table.Column
+            dataIndex="latest_run"
+            title="Latest run"
+            render={(latestRun?: { status?: string; result?: string; created_at?: string }) => {
+              if (!latestRun) {
+                return <span className="run-status-meta">{latestRunsLoaded ? "Not run yet" : "Checking..."}</span>;
+              }
+
+              const state = getRunState(latestRun);
+              const subtitle = latestRun.created_at
+                ? `Updated ${new Date(latestRun.created_at).toLocaleString()}`
+                : `Status: ${state}`;
+              const startedAt = latestRun.created_at ? new Date(latestRun.created_at).getTime() : null;
+              const elapsedSeconds = startedAt ? Math.max(0, Math.floor((Date.now() - startedAt) / 1000)) : null;
+              const elapsedLabel =
+                elapsedSeconds == null
+                  ? ""
+                  : `${Math.floor(elapsedSeconds / 60)}m ${String(elapsedSeconds % 60).padStart(2, "0")}s`;
+              const isRunning = state === "running";
+
+              return (
+                <div
+                  className={`run-status-cell ${isRunning ? "run-status-cell--running" : ""} ${state === "failed" ? "run-status-cell--failed" : ""}`}
+                >
+                  <Tooltip title={subtitle}>
+                    <Tag
+                      className={`run-status-chip run-status-chip--${state} ${isRunning ? "run-status-chip--running-strong" : ""}`}
+                    >
+                      <span className="run-status-chip__content">
+                        {isRunning && <span className="run-status-chip__pulse" />}
+                        <span>{state}</span>
+                      </span>
+                    </Tag>
+                  </Tooltip>
+                  {isRunning && (
+                    <span className="run-status-meta run-status-meta--live">
+                      Live refresh{elapsedLabel ? ` for ${elapsedLabel}` : ""}
+                    </span>
+                  )}
+                </div>
+              );
+            }}
+          />
+          <Table.Column
+            title="Actions"
+            dataIndex="actions"
+            render={(_, record: BaseRecord) => (
+              <Space className="entity-table-actions">
+                <EditButton hideText size="small" recordItemId={record.id} />
+                <ShowButton hideText size="small" recordItemId={record.id} />
+                <DeleteButton hideText size="small" recordItemId={record.id} />
+                <ProcessRunButton hideText buttonProps={{ size: "small", type: "primary" }} recordItemId={record.id} />
+              </Space>
+            )}
+          />
         </Table>
       </div>
     </List>

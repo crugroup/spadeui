@@ -61,24 +61,24 @@ export const Dashboard = () => {
   // --- fetch files & processes via React Query ---
   const { data: filesRaw, isLoading: filesLoading } = useQuery({
     queryKey: ["dashboard", "files"],
-    queryFn: () => axiosHelper.axiosInstance.get(`${API_URL}/files`).then(r => r.data),
+    queryFn: () => axiosHelper.axiosInstance.get(`${API_URL}/files`).then((r) => r.data),
     staleTime: 10 * 60_000,
     gcTime: 30 * 60_000,
   });
   const { data: processesRaw, isLoading: processesLoading } = useQuery({
     queryKey: ["dashboard", "processes"],
-    queryFn: () => axiosHelper.axiosInstance.get(`${API_URL}/processes`).then(r => r.data),
+    queryFn: () => axiosHelper.axiosInstance.get(`${API_URL}/processes`).then((r) => r.data),
     staleTime: 10 * 60_000,
     gcTime: 30 * 60_000,
   });
 
   const fileList = useMemo(() => {
     const data = filesRaw;
-    return Array.isArray(data) ? data : data?.results ?? null;
+    return Array.isArray(data) ? data : (data?.results ?? null);
   }, [filesRaw]);
   const processList = useMemo(() => {
     const data = processesRaw;
-    return Array.isArray(data) ? data : data?.results ?? [];
+    return Array.isArray(data) ? data : (data?.results ?? []);
   }, [processesRaw]);
   const isStatsLoading = filesLoading || processesLoading;
 
@@ -96,16 +96,22 @@ export const Dashboard = () => {
   }, [fileList, favoriteFileIds]);
 
   // --- latest runs for ALL processes (shared with processes page cache) ---
-  const processFavoriteIds = allFavorites
-    .filter((f) => f.resource === "processes")
-    .map((f) => f.id);
-  const allProcessIdsKey = processList.map((p: any) => p.id).filter(Boolean).join(",");
+  const processFavoriteIds = allFavorites.filter((f) => f.resource === "processes").map((f) => f.id);
+  const allProcessIdsKey = processList
+    .map((p: any) => p.id)
+    .filter(Boolean)
+    .join(",");
 
-  const { data: latestRunsRaw, isLoading: latestRunsLoading, isError: latestRunsError } = useQuery({
+  const {
+    data: latestRunsRaw,
+    isLoading: latestRunsLoading,
+    isError: latestRunsError,
+  } = useQuery({
     queryKey: ["dashboard", "latest_runs", "all", allProcessIdsKey],
-    queryFn: () => axiosHelper.axiosInstance
-      .get(`${API_URL}/processes/latest_runs`, { params: { ids: allProcessIdsKey } })
-      .then(r => r.data),
+    queryFn: () =>
+      axiosHelper.axiosInstance
+        .get(`${API_URL}/processes/latest_runs`, { params: { ids: allProcessIdsKey } })
+        .then((r) => r.data),
     enabled: !!allProcessIdsKey,
     staleTime: 3_000,
     placeholderData: (prev: any) => prev,
@@ -163,15 +169,41 @@ export const Dashboard = () => {
   /* ---------- render ---------- */
 
   const statCards = [
-    { title: "Files", value: fileList?.length ?? 0, icon: <FileOutlined />, color: "#30A4FD", bg: "rgba(48,164,253,0.10)" },
-    { title: "Processes", value: processList.length, icon: <NodeIndexOutlined />, color: "#8b5cf6", bg: "rgba(139,92,246,0.10)" },
-    { title: "Running", value: runningCount, icon: <SyncOutlined spin={runningCount > 0} />, color: runningCount > 0 ? "#cc8b1f" : undefined, bg: runningCount > 0 ? "rgba(204,139,31,0.10)" : undefined },
-    { title: "Failed", value: failedCount, icon: <CloseCircleOutlined />, color: failedCount > 0 ? "#d8484b" : undefined, bg: failedCount > 0 ? "rgba(216,72,75,0.10)" : undefined },
+    {
+      title: "Files",
+      value: fileList?.length ?? 0,
+      icon: <FileOutlined />,
+      color: "#30A4FD",
+      bg: "rgba(48,164,253,0.10)",
+    },
+    {
+      title: "Processes",
+      value: processList.length,
+      icon: <NodeIndexOutlined />,
+      color: "#8b5cf6",
+      bg: "rgba(139,92,246,0.10)",
+    },
+    {
+      title: "Running",
+      value: runningCount,
+      icon: <SyncOutlined spin={runningCount > 0} />,
+      color: runningCount > 0 ? "#cc8b1f" : undefined,
+      bg: runningCount > 0 ? "rgba(204,139,31,0.10)" : undefined,
+    },
+    {
+      title: "Failed",
+      value: failedCount,
+      icon: <CloseCircleOutlined />,
+      color: failedCount > 0 ? "#d8484b" : undefined,
+      bg: failedCount > 0 ? "rgba(216,72,75,0.10)" : undefined,
+    },
   ];
 
   return (
     <div style={{ padding: "0 0 24px" }}>
-      <Title level={4} style={{ marginBottom: 24 }}>Dashboard</Title>
+      <Title level={4} style={{ marginBottom: 24 }}>
+        Dashboard
+      </Title>
 
       {/* ---- Stats ---- */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
@@ -197,7 +229,12 @@ export const Dashboard = () => {
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} md={14}>
           <Card
-            title={<Space><StarFilled style={{ color: "#cc8b1f" }} />Favorites</Space>}
+            title={
+              <Space>
+                <StarFilled style={{ color: "#cc8b1f" }} />
+                Favorites
+              </Space>
+            }
             size="small"
             extra={allFavorites.length > 0 ? <Text type="secondary">{allFavorites.length} items</Text> : null}
           >
@@ -209,8 +246,16 @@ export const Dashboard = () => {
                   Star items in Files or Processes to see them here.
                 </Text>
                 <Space>
-                  <Link to="/files"><Button size="small" icon={<FileOutlined />}>Browse Files</Button></Link>
-                  <Link to="/processes"><Button size="small" icon={<NodeIndexOutlined />}>Browse Processes</Button></Link>
+                  <Link to="/files">
+                    <Button size="small" icon={<FileOutlined />}>
+                      Browse Files
+                    </Button>
+                  </Link>
+                  <Link to="/processes">
+                    <Button size="small" icon={<NodeIndexOutlined />}>
+                      Browse Processes
+                    </Button>
+                  </Link>
                 </Space>
               </div>
             ) : (
@@ -240,22 +285,24 @@ export const Dashboard = () => {
                         onClick={() => navigate(`/${fav.resource}/show/${fav.id}`)}
                       >
                         <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
-                          {isProcess
-                            ? <NodeIndexOutlined style={{ color: "var(--spade-muted)", fontSize: 16 }} />
-                            : <FileOutlined style={{ color: "var(--spade-muted)", fontSize: 16 }} />
-                          }
+                          {isProcess ? (
+                            <NodeIndexOutlined style={{ color: "var(--spade-muted)", fontSize: 16 }} />
+                          ) : (
+                            <FileOutlined style={{ color: "var(--spade-muted)", fontSize: 16 }} />
+                          )}
                           <div style={{ flex: 1, minWidth: 0 }}>
-                            <Text ellipsis style={{ fontWeight: 500, display: "block" }}>{fav.label}</Text>
+                            <Text ellipsis style={{ fontWeight: 500, display: "block" }}>
+                              {fav.label}
+                            </Text>
                           </div>
-                          {isProcess && (
-                            lr ? (
+                          {isProcess &&
+                            (lr ? (
                               <Tag className={`run-status-chip run-status-chip--${state}`}>{state}</Tag>
                             ) : (
                               <Text type="secondary" style={{ fontSize: 11, whiteSpace: "nowrap" }}>
                                 {latestRunsLoaded ? (latestRunsError ? "Unknown" : "Not run yet") : "Checking..."}
                               </Text>
-                            )
-                          )}
+                            ))}
                         </div>
                       </div>
                     );
@@ -276,14 +323,24 @@ export const Dashboard = () => {
         <Col xs={24} md={10}>
           <Card title="Quick Actions" size="small">
             <Space direction="vertical" style={{ width: "100%" }} size="middle">
-              <Button block size="large" icon={<UploadOutlined />} type="primary" onClick={() => setUploadModalOpen(true)}>
+              <Button
+                block
+                size="large"
+                icon={<UploadOutlined />}
+                type="primary"
+                onClick={() => setUploadModalOpen(true)}
+              >
                 Quick Upload
               </Button>
               <Link to="/files">
-                <Button block size="large" icon={<FileOutlined />}>Browse Files</Button>
+                <Button block size="large" icon={<FileOutlined />}>
+                  Browse Files
+                </Button>
               </Link>
               <Link to="/processes">
-                <Button block size="large" icon={<NodeIndexOutlined />}>Browse Processes</Button>
+                <Button block size="large" icon={<NodeIndexOutlined />}>
+                  Browse Processes
+                </Button>
               </Link>
             </Space>
           </Card>
@@ -292,7 +349,12 @@ export const Dashboard = () => {
 
       {/* ---- Recent Activity ---- */}
       <Card
-        title={<Space><ClockCircleOutlined style={{ color: "var(--spade-muted)" }} />Recent Activity</Space>}
+        title={
+          <Space>
+            <ClockCircleOutlined style={{ color: "var(--spade-muted)" }} />
+            Recent Activity
+          </Space>
+        }
         size="small"
       >
         {recentRunsLoading ? (
@@ -308,10 +370,15 @@ export const Dashboard = () => {
             {recentRuns.map((run: any, i: number) => {
               const state = getRunState(run);
               const stateIcon =
-                state === "success" ? <CheckCircleOutlined style={{ color: "#2b9d70" }} />
-                : state === "failed" ? <ExclamationCircleOutlined style={{ color: "#d8484b" }} />
-                : state === "running" ? <SyncOutlined spin style={{ color: "#cc8b1f" }} />
-                : <ClockCircleOutlined style={{ color: "var(--spade-muted)" }} />;
+                state === "success" ? (
+                  <CheckCircleOutlined style={{ color: "#2b9d70" }} />
+                ) : state === "failed" ? (
+                  <ExclamationCircleOutlined style={{ color: "#d8484b" }} />
+                ) : state === "running" ? (
+                  <SyncOutlined spin style={{ color: "#cc8b1f" }} />
+                ) : (
+                  <ClockCircleOutlined style={{ color: "var(--spade-muted)" }} />
+                );
 
               return (
                 <div
@@ -333,10 +400,15 @@ export const Dashboard = () => {
                   <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
                     {stateIcon}
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <Text ellipsis style={{ fontWeight: 500, display: "block" }}>{run.process_code}</Text>
+                      <Text ellipsis style={{ fontWeight: 500, display: "block" }}>
+                        {run.process_code}
+                      </Text>
                     </div>
                     <Tag className={`run-status-chip run-status-chip--${state}`}>{state}</Tag>
-                    <Text type="secondary" style={{ fontSize: 11, whiteSpace: "nowrap", minWidth: 50, textAlign: "right" }}>
+                    <Text
+                      type="secondary"
+                      style={{ fontSize: 11, whiteSpace: "nowrap", minWidth: 50, textAlign: "right" }}
+                    >
                       {relativeTime(run.created_at)}
                     </Text>
                   </div>
@@ -351,7 +423,10 @@ export const Dashboard = () => {
       <Modal
         title="Quick Upload"
         open={uploadModalOpen}
-        onCancel={() => { setUploadModalOpen(false); setSelectedFileId(null); }}
+        onCancel={() => {
+          setUploadModalOpen(false);
+          setSelectedFileId(null);
+        }}
         footer={null}
         width={600}
         className="quick-upload-modal"
@@ -373,10 +448,8 @@ export const Dashboard = () => {
         ) : (
           (() => {
             const q = quickUploadSearch.trim().toLowerCase();
-            const filtered = quickUploadFiles.filter((f: any) =>
-              !q ||
-              f.code?.toLowerCase().includes(q) ||
-              f.description?.toLowerCase().includes(q)
+            const filtered = quickUploadFiles.filter(
+              (f: any) => !q || f.code?.toLowerCase().includes(q) || f.description?.toLowerCase().includes(q)
             );
             const favFiles = filtered.filter((f: any) => favoriteFileIds.has(f.id));
             const otherFiles = filtered.filter((f: any) => !favoriteFileIds.has(f.id));
@@ -394,7 +467,11 @@ export const Dashboard = () => {
                     style={{ flex: 1 }}
                   />
                   <Text type="secondary" style={{ whiteSpace: "nowrap", fontSize: 12 }}>
-                    {fileList === null ? "Loading…" : searching ? `${filtered.length} result${filtered.length !== 1 ? "s" : ""}` : `${quickUploadFiles.length} files`}
+                    {fileList === null
+                      ? "Loading…"
+                      : searching
+                        ? `${filtered.length} result${filtered.length !== 1 ? "s" : ""}`
+                        : `${quickUploadFiles.length} files`}
                   </Text>
                 </div>
 
@@ -402,7 +479,11 @@ export const Dashboard = () => {
                   <div style={{ textAlign: "center", padding: "32px 0", color: "var(--spade-muted)" }}>
                     <SearchOutlined style={{ fontSize: 28, marginBottom: 8, display: "block" }} />
                     <Text type="secondary">
-                      {fileList === null ? "Loading files..." : searching ? `No files match "${q}"` : "No files available"}
+                      {fileList === null
+                        ? "Loading files..."
+                        : searching
+                          ? `No files match "${q}"`
+                          : "No files available"}
                     </Text>
                   </div>
                 ) : (
@@ -410,19 +491,31 @@ export const Dashboard = () => {
                     {/* Favorites section */}
                     {favFiles.length > 0 && (
                       <>
-                        <div style={{
-                          padding: "6px 12px 4px",
-                          marginBottom: 2,
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 6,
-                          borderBottom: "1px solid var(--spade-border)",
-                        }}>
+                        <div
+                          style={{
+                            padding: "6px 12px 4px",
+                            marginBottom: 2,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                            borderBottom: "1px solid var(--spade-border)",
+                          }}
+                        >
                           <StarFilled style={{ color: "#cc8b1f", fontSize: 12 }} />
-                          <Text strong style={{ fontSize: 12, color: "var(--spade-muted)", textTransform: "uppercase", letterSpacing: 0.5 }}>
+                          <Text
+                            strong
+                            style={{
+                              fontSize: 12,
+                              color: "var(--spade-muted)",
+                              textTransform: "uppercase",
+                              letterSpacing: 0.5,
+                            }}
+                          >
                             Favorites
                           </Text>
-                          <Text type="secondary" style={{ fontSize: 11 }}>({favFiles.length})</Text>
+                          <Text type="secondary" style={{ fontSize: 11 }}>
+                            ({favFiles.length})
+                          </Text>
                         </div>
                         {favFiles.map((file: any) => (
                           <div
@@ -443,7 +536,10 @@ export const Dashboard = () => {
                             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                             onFocus={(e) => (e.currentTarget.style.background = "rgba(48,164,253,0.06)")}
                             onBlur={(e) => (e.currentTarget.style.background = "transparent")}
-                            onClick={() => { setSelectedFileId(file.id); setQuickUploadSearch(""); }}
+                            onClick={() => {
+                              setSelectedFileId(file.id);
+                              setQuickUploadSearch("");
+                            }}
                             onKeyDown={(e) => {
                               if (e.key === "Enter" || e.key === " ") {
                                 e.preventDefault();
@@ -454,8 +550,14 @@ export const Dashboard = () => {
                           >
                             <StarFilled style={{ color: "#cc8b1f", fontSize: 14 }} />
                             <div style={{ flex: 1, minWidth: 0 }}>
-                              <Text ellipsis style={{ fontWeight: 500, display: "block" }}>{file.code}</Text>
-                              {file.description && <Text type="secondary" style={{ fontSize: 12 }} ellipsis>{file.description}</Text>}
+                              <Text ellipsis style={{ fontWeight: 500, display: "block" }}>
+                                {file.code}
+                              </Text>
+                              {file.description && (
+                                <Text type="secondary" style={{ fontSize: 12 }} ellipsis>
+                                  {file.description}
+                                </Text>
+                              )}
                             </div>
                           </div>
                         ))}
@@ -466,19 +568,31 @@ export const Dashboard = () => {
                     {otherFiles.length > 0 && (
                       <>
                         {favFiles.length > 0 && (
-                          <div style={{
-                            padding: "6px 12px 4px",
-                            margin: "4px 0 2px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 6,
-                            borderBottom: "1px solid var(--spade-border)",
-                          }}>
+                          <div
+                            style={{
+                              padding: "6px 12px 4px",
+                              margin: "4px 0 2px",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 6,
+                              borderBottom: "1px solid var(--spade-border)",
+                            }}
+                          >
                             <FileOutlined style={{ color: "var(--spade-muted)", fontSize: 12 }} />
-                            <Text strong style={{ fontSize: 12, color: "var(--spade-muted)", textTransform: "uppercase", letterSpacing: 0.5 }}>
+                            <Text
+                              strong
+                              style={{
+                                fontSize: 12,
+                                color: "var(--spade-muted)",
+                                textTransform: "uppercase",
+                                letterSpacing: 0.5,
+                              }}
+                            >
                               All files
                             </Text>
-                            <Text type="secondary" style={{ fontSize: 11 }}>({otherFiles.length})</Text>
+                            <Text type="secondary" style={{ fontSize: 11 }}>
+                              ({otherFiles.length})
+                            </Text>
                           </div>
                         )}
                         {otherFiles.map((file: any) => (
@@ -500,7 +614,10 @@ export const Dashboard = () => {
                             onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                             onFocus={(e) => (e.currentTarget.style.background = "rgba(48,164,253,0.06)")}
                             onBlur={(e) => (e.currentTarget.style.background = "transparent")}
-                            onClick={() => { setSelectedFileId(file.id); setQuickUploadSearch(""); }}
+                            onClick={() => {
+                              setSelectedFileId(file.id);
+                              setQuickUploadSearch("");
+                            }}
                             onKeyDown={(e) => {
                               if (e.key === "Enter" || e.key === " ") {
                                 e.preventDefault();
@@ -511,8 +628,14 @@ export const Dashboard = () => {
                           >
                             <FileOutlined style={{ color: "var(--spade-muted)", fontSize: 14 }} />
                             <div style={{ flex: 1, minWidth: 0 }}>
-                              <Text ellipsis style={{ fontWeight: 500, display: "block" }}>{file.code}</Text>
-                              {file.description && <Text type="secondary" style={{ fontSize: 12 }} ellipsis>{file.description}</Text>}
+                              <Text ellipsis style={{ fontWeight: 500, display: "block" }}>
+                                {file.code}
+                              </Text>
+                              {file.description && (
+                                <Text type="secondary" style={{ fontSize: 12 }} ellipsis>
+                                  {file.description}
+                                </Text>
+                              )}
                             </div>
                           </div>
                         ))}
@@ -521,14 +644,16 @@ export const Dashboard = () => {
 
                     {/* Scroll hint */}
                     {filtered.length > 8 && (
-                      <div style={{
-                        textAlign: "center",
-                        padding: "6px 0 2px",
-                        background: "linear-gradient(to top, var(--spade-surface), transparent)",
-                        position: "sticky",
-                        bottom: 0,
-                        pointerEvents: "none",
-                      }}>
+                      <div
+                        style={{
+                          textAlign: "center",
+                          padding: "6px 0 2px",
+                          background: "linear-gradient(to top, var(--spade-surface), transparent)",
+                          position: "sticky",
+                          bottom: 0,
+                          pointerEvents: "none",
+                        }}
+                      >
                         <Text type="secondary" style={{ fontSize: 11 }}>
                           Scroll for more · {filtered.length} files total
                         </Text>
