@@ -90,6 +90,25 @@ const spadeLogos: { [key: string]: { single: string; full: string } } = {
   },
 };
 
+// Rendered as a direct child of the sider's antd <Menu>, which clones its children
+// and injects menu-only props (`eventKey`, `warnKey`). Taking only `collapsed` keeps
+// them off the DOM.
+const SiderLinks = ({ collapsed }: { collapsed: boolean }) => (
+  <div className="icons-holder">
+    <Space direction={collapsed ? "vertical" : "horizontal"} align="center" size="middle">
+      <a href="https://crugroup.com" target="_blank" rel="noopener noreferrer">
+        <Image height={24} preview={false} src="/logos/cru.svg" />
+      </a>
+      <a href="https://exlabs.com" target="_blank" rel="noopener noreferrer">
+        <Image height={24} preview={false} src="/logos/exlabs.svg" />
+      </a>
+      <a href="https://github.com/crugroup/spadeui" target="_blank" rel="noopener noreferrer">
+        <Image height={24} preview={false} src="/logos/github.svg" />
+      </a>
+    </Space>
+  </div>
+);
+
 const CustomRoutes = () => {
   const navigate = useNavigate();
   const { mode } = useContext(ThemeProviderContext);
@@ -108,19 +127,7 @@ const CustomRoutes = () => {
                   render={(p) => (
                     <>
                       {p.items}
-                      <div className="icons-holder">
-                        <Space direction={p.collapsed ? "vertical" : "horizontal"} align="center" size="middle">
-                          <a href="https://crugroup.com" target="_blank" rel="noopener noreferrer">
-                            <Image height={24} preview={false} src="/logos/cru.svg" />
-                          </a>
-                          <a href="https://exlabs.com" target="_blank" rel="noopener noreferrer">
-                            <Image height={24} preview={false} src="/logos/exlabs.svg" />
-                          </a>
-                          <a href="https://github.com/crugroup/spadeui" target="_blank" rel="noopener noreferrer">
-                            <Image height={24} preview={false} src="/logos/github.svg" />
-                          </a>
-                        </Space>
-                      </div>
+                      <SiderLinks collapsed={p.collapsed} />
                     </>
                   )}
                 />
