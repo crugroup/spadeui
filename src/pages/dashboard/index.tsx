@@ -1,4 +1,4 @@
-import { Card, Col, Row, Statistic, Typography, Tag, Space, Button, Modal, List, Input } from "antd";
+import { Card, Col, Row, Statistic, Typography, Tag, Space, Button, Modal, Input } from "antd";
 import {
   FileOutlined,
   NodeIndexOutlined,
@@ -96,7 +96,6 @@ export const Dashboard = () => {
   }, [fileList, favoriteFileIds]);
 
   // --- latest runs for ALL processes (shared with processes page cache) ---
-  const processFavoriteIds = allFavorites.filter((f) => f.resource === "processes").map((f) => f.id);
   const allProcessIdsKey = processList
     .map((p: any) => p.id)
     .filter(Boolean)

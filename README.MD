@@ -78,7 +78,7 @@ VITE_BACKEND_BASE_URL=http://localhost:8081/api/v1
 ```bash
 yarn lint
 ```
-Checks for ESLint and TypeScript errors.
+Runs ESLint. Errors fail CI; warnings (mostly `no-explicit-any`) don't.
 
 #### Run unit tests
 ```bash
@@ -91,7 +91,7 @@ Runs the [Vitest](https://vitest.dev/) suite in a jsdom environment. The backend
 - To test code that calls the API, pass a fake HTTP client instead of the real axios instance (see `src/config/rest-data-provider/index.test.ts`). To test permission logic, seed `localStorage` with fake permissions (see `src/config/access-control-provider.test.ts`).
 - Render components with `@testing-library/react`.
 
-The `test` job in `.github/workflows/docker-image.yml` runs `yarn typecheck` and `yarn test` on every push and pull request. The Docker image is only built when the tests pass.
+The `test` job in `.github/workflows/docker-image.yml` runs `yarn lint`, `yarn typecheck` and `yarn test` on every push and pull request. The Docker image is only built when the tests pass.
 
 #### Type checking
 ```bash

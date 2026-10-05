@@ -1,6 +1,5 @@
 import { Edit } from "@refinedev/antd";
 import { Button, Form, Input } from "antd";
-import { ErrorNotifications } from "../../components/error-notifications";
 import { useCustomMutation } from "@refinedev/core";
 import { API_URL } from "../../config/constants";
 import formatAxiosErrors from "../../helpers/format-axios-errors";
