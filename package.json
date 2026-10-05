@@ -52,7 +52,7 @@
     "jsdom": "^30.1.2",
     "prettier": "^3.9.9",
     "typescript": "^5.9.3",
-    "vite": "^6.4.3",
+    "vite": "^8.3.2",
     "vitest": "^3.2.7"
   },
   "scripts": {
@@ -81,6 +81,6 @@
   },
   "packageManager": "yarn@4.6.0",
   "resolutions": {
-    "vite": "^6.4.3"
+    "vite": "^8.3.2"
   }
 }
