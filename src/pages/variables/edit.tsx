@@ -4,9 +4,9 @@ import { Form, Input, Switch } from "antd";
 import React from "react";
 
 export const VariableEdit: React.FC<IResourceComponentsProps> = () => {
-  const { formProps, saveButtonProps, queryResult } = useForm();
+  const { formProps, saveButtonProps, query } = useForm();
 
-  const variableData = queryResult?.data?.data;
+  const variableData = query?.data?.data;
 
   return (
     <Edit saveButtonProps={saveButtonProps}>

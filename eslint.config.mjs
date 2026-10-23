@@ -32,15 +32,6 @@ export default [
                     jsx: true
                 }
             },
-            // Manually specify common browser globals
-            globals: {
-                window: true,
-                document: true,
-                navigator: true,
-                fetch: true,
-                console: true,
-                // Add other globals as needed
-            }
         },
         plugins: {
             "@typescript-eslint": tsPlugin,
@@ -52,7 +43,14 @@ export default [
         rules: {
             "react-refresh/only-export-components": "warn",
             "react/react-in-jsx-scope": "off",
-            "@typescript-eslint/no-explicit-any": "warn"
+            "@typescript-eslint/no-explicit-any": "warn",
+            // TypeScript already reports undefined identifiers, and the core rule
+            // doesn't understand types or browser globals in .ts files.
+            // https://typescript-eslint.io/troubleshooting/faqs/eslint#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
+            "no-undef": "off",
+            // The core rule flags parameter names in type signatures.
+            "no-unused-vars": "off",
+            "@typescript-eslint/no-unused-vars": "error"
         }
     }
 ];

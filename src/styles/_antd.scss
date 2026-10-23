@@ -4,6 +4,16 @@ $smallDevice: 576px;
   border-top: none;
 }
 
+.ant-layout-sider {
+  border-right: 1px solid rgba(151, 170, 198, 0.26);
+  box-shadow: none;
+}
+
+.ant-layout-sider .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+}
+
 .ant-menu-sub:not(.ant-menu-vertical) {
   margin-left: -5px;
 }
@@ -11,15 +21,33 @@ $smallDevice: 576px;
 .ant-menu-root {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 
   .icons-holder {
     margin-top: auto;
+    border-top: 1px solid rgba(151, 170, 198, 0.35);
+    padding: 12px 8px 14px;
 
     > .ant-space {
       justify-content: center;
       width: 100%;
     }
   }
+}
+
+.ant-menu-light,
+.ant-menu-dark {
+  background: transparent;
+}
+
+.ant-menu .ant-menu-item,
+.ant-menu .ant-menu-submenu-title {
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.ant-menu .ant-menu-item-selected {
+  box-shadow: inset 0 0 0 1px rgba(55, 136, 211, 0.18);
 }
 
 .ant-layout-has-sider > .ant-btn-icon-only {
@@ -31,14 +59,16 @@ $smallDevice: 576px;
 }
 
 .ant-layout-header {
-  padding: 0 24px;
+  padding: 0 18px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   height: 64px;
   position: sticky;
   top: 0;
-  z-index: 1;
+  z-index: 10;
+  border-bottom: 1px solid rgba(151, 170, 198, 0.24);
+  backdrop-filter: blur(8px);
 
   @media (max-width: $smallDevice) {
     padding: 0;
@@ -57,4 +87,55 @@ $smallDevice: 576px;
 
 .ant-table .copy-to-clipboard-container {
   position: absolute;
+}
+
+.ant-card {
+  border-radius: 10px;
+  box-shadow: none;
+  border: 1px solid rgba(151, 170, 198, 0.24);
+}
+
+.ant-card .ant-card-head {
+  border-bottom: 1px solid rgba(151, 170, 198, 0.2);
+}
+
+.ant-table-wrapper,
+.ant-table-container,
+.ant-table {
+  border-radius: 12px;
+}
+
+.ant-table-wrapper .ant-table {
+  border: 1px solid rgba(151, 170, 198, 0.24);
+}
+
+.ant-table-thead > tr > th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--spade-muted);
+}
+
+.ant-form-item-label > label {
+  font-weight: 700;
+  color: var(--spade-text);
+}
+
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-input-number,
+.ant-select-selector,
+.ant-picker,
+.ant-btn {
+  border-radius: 10px;
+}
+
+.ant-btn-primary {
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(46, 138, 222, 0.24);
+}
+
+.ant-page-header,
+.ant-typography {
+  color: var(--spade-text);
 }

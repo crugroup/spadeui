@@ -1,6 +1,5 @@
-import { Edit, useForm } from "@refinedev/antd";
-import { Form, Input } from "antd";
-import { ErrorNotifications } from "../../components/error-notifications";
+import { Edit } from "@refinedev/antd";
+import { Button, Form, Input } from "antd";
 import { useCustomMutation } from "@refinedev/core";
 import { API_URL } from "../../config/constants";
 import formatAxiosErrors from "../../helpers/format-axios-errors";
@@ -11,7 +10,7 @@ interface FormValues {
 }
 
 export const UpdatePasswordLoggedIn = () => {
-  const { formProps, saveButtonProps } = useForm<FormValues>({ submitOnEnter: true, warnWhenUnsavedChanges: false });
+  const [form] = Form.useForm<FormValues>();
   const { mutate } = useCustomMutation();
 
   const onSubmit = ({ new_password1, new_password2 }: FormValues) => {
@@ -37,16 +36,22 @@ export const UpdatePasswordLoggedIn = () => {
       },
       {
         onSuccess: () => {
-          formProps.form?.resetFields();
+          form.resetFields();
         },
       }
     );
   };
 
   return (
-    <Edit title="Update password" saveButtonProps={saveButtonProps}>
-      <Form {...formProps} onFinish={onSubmit as () => void} layout="vertical">
-        <ErrorNotifications formProps={formProps} />
+    <Edit
+      title="Update password"
+      headerButtons={() => (
+        <Button type="primary" onClick={() => form.submit()}>
+          Save
+        </Button>
+      )}
+    >
+      <Form form={form} onFinish={onSubmit as () => void} layout="vertical" className="entity-form">
         <Form.Item
           label="New password"
           name="new_password1"

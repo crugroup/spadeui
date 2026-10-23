@@ -1,4 +1,4 @@
-import { AuthBindings } from "@refinedev/core";
+import { AuthProvider } from "@refinedev/core";
 import { notification } from "antd";
 import { AxiosError } from "axios";
 import formatAxiosErrors from "../helpers/format-axios-errors";
@@ -20,7 +20,7 @@ export type UserData = {
   email: string;
 };
 
-export const authProvider: AuthBindings = {
+export const authProvider: AuthProvider = {
   login: async ({ email, password }) => {
     if (email && password) {
       try {
@@ -244,7 +244,6 @@ export const authProvider: AuthBindings = {
     return null;
   },
   onError: async (error) => {
-    console.error(error);
     return { error };
   },
 };
