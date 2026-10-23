@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@ant-design/icons": "^5.6.1",
+    "@ant-design/icons": "^6.3.4",
     "@microlink/react-json-view": "^1.31.39",
     "@refinedev/antd": "^6.0.3",
     "@refinedev/cli": "^2.16.52",
