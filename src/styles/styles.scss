@@ -461,6 +461,12 @@ body {
   box-shadow: 0 0 0 2px rgba(var(--spade-running-rgb), 0.16);
 }
 
+.run-status-chip--idle {
+  color: var(--spade-muted);
+  border-color: rgba(128, 128, 128, 0.3);
+  background: rgba(128, 128, 128, 0.08);
+}
+
 .entity-table-row--running td {
   background: rgba(var(--spade-running-rgb), 0.09) !important;
 }
