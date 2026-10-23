@@ -9185,7 +9185,7 @@ __metadata:
     react-router: "npm:^8.4.0"
     sass: "npm:^1.105.1"
     typescript: "npm:^5.9.3"
-    vite: "npm:^8.3.2"
+    vite: "npm:^8.3.4"
     vitest: "npm:^5.0.3"
   languageName: unknown
   linkType: soft
