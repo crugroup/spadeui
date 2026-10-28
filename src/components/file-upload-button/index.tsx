@@ -1,8 +1,8 @@
 import { UploadOutlined } from "@ant-design/icons";
-import { BaseKey, useCan, useInvalidate, useOne, useResource } from "@refinedev/core";
+import { BaseKey, useCan, useInvalidate, useOne, useParsed } from "@refinedev/core";
 import validator from "@rjsf/validator-ajv8";
 import type { GetProp } from "antd";
-import { Button, Modal, Space, Typography, Upload, UploadFile, UploadProps, notification } from "antd";
+import { Button, Modal, Space, Typography, Upload, UploadFile, UploadProps, App } from "antd";
 import { ButtonProps } from "antd/lib";
 import axios from "axios";
 import prettyBytes from "pretty-bytes";
@@ -19,22 +19,26 @@ type FileUploadButtonProps = {
 };
 
 const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId, hideText }) => {
-  const { id } = useResource();
+  const { notification } = App.useApp();
+  const { id } = useParsed();
   const invalidate = useInvalidate();
+  const targetId = recordItemId ?? id;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<UploadFile | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { data: fileData } = useOne({
+  const { result: fileData } = useOne({
     resource: "files",
-    id: recordItemId ?? id,
+    id: targetId,
+    queryOptions: {
+      enabled: isModalOpen && !!targetId,
+    },
   });
 
   const { data: permissionData } = useCan({
     action: "create",
     resource: "fileuploads",
   });
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<UploadFile | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(false);
 
   const uploadFileName = useMemo(
     () => selectedFile?.name ?? `File uploaded at ${new Date().toISOString()}`,
@@ -55,7 +59,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
     form.append("params", JSON.stringify(formData));
 
     try {
-      const resp = await axios.post(`${API_URL}/files/${recordItemId ?? id}/upload`, form, {
+      const resp = await axios.post(`${API_URL}/files/${targetId}/upload`, form, {
         headers: {
           authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN_KEY)}`,
           "Content-Disposition": `attachment; filename="${uploadFileName}"`,
@@ -77,6 +81,10 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
     invalidate({
       resource: "fileuploads",
       invalidates: ["list"],
+    });
+    invalidate({
+      resource: "files",
+      invalidates: ["list", "detail"],
     });
     setIsLoading(false);
   };
@@ -101,7 +109,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
           setSelectedFile(undefined);
         }}
         footer={<></>}
-        className="file-upload-button__modal"
+        className="file-upload-button__modal workflow-modal"
       >
         <Upload
           showUploadList={false}
@@ -125,8 +133,8 @@ const FileUploadButton: FC<FileUploadButtonProps> = ({ buttonProps, recordItemId
           </Space>
         </Upload>
         {selectedFile && (
-          <RjsfForm schema={fileData?.data?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
-            <Space align="start">
+          <RjsfForm schema={fileData?.user_params ?? {}} validator={validator} onSubmit={onSubmit}>
+            <Space align="start" className="workflow-modal__actions">
               <Button disabled={isLoading} htmlType="submit" type="primary">
                 Submit
               </Button>

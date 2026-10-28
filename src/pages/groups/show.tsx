@@ -12,13 +12,14 @@ export const GroupShow: React.FC<IResourceComponentsProps> = () => {
   const record = data?.data;
 
   // Fetch permissions
-  const { data: permissionsData } = useList({
+  const { result: permissionsResult } = useList({
     resource: "permissions",
   });
+  const permissionsData = permissionsResult?.data;
 
   // Map permission IDs to names
   const permissionNames = record?.permissions?.map((permissionId: string) => {
-    const permission = permissionsData?.data.find((p: any) => p.id === permissionId);
+    const permission = permissionsData?.find((p: any) => p.id === permissionId);
     return permission ? permission.name : permissionId;
   });
 
@@ -30,7 +31,7 @@ export const GroupShow: React.FC<IResourceComponentsProps> = () => {
       <AntList
         header={<div>Permissions</div>}
         dataSource={permissionNames || []}
-        renderItem={(permissionName) => <AntList.Item>{permissionName}</AntList.Item>}
+        renderItem={(permissionName: string) => <AntList.Item>{permissionName}</AntList.Item>}
         bordered
       />
     </Show>
