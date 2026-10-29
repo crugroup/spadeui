@@ -24,6 +24,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
   const invalidate = useInvalidate();
   const queryClient = useQueryClient();
   const targetId = recordItemId ?? id;
+  const formId = `process-run-form-${targetId}`;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { result: processData } = useOne({
@@ -135,7 +136,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
   };
 
   return (
-    <>
+    <span onClick={(e) => e.stopPropagation()}>
       <Button
         {...buttonProps}
         onClick={() => setIsModalOpen(true)}
@@ -163,7 +164,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
               icon={<PlayCircleOutlined />}
               loading={isRunning}
               htmlType="submit"
-              form="process-run-form"
+              form={formId}
             >
               Run process
             </Button>
@@ -178,7 +179,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
           </Text>
         )}
         <RjsfForm
-          id="process-run-form"
+          id={formId}
           schema={processData?.user_params ?? {}}
           validator={validator}
           onSubmit={onSubmit}
@@ -189,7 +190,7 @@ const ProcessRunButton: FC<ProcessRunButtonProps> = ({ buttonProps, recordItemId
           </div>
         </RjsfForm>
       </Modal>
-    </>
+    </span>
   );
 };
 
