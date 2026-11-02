@@ -1009,9 +1009,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microlink/react-json-view@npm:^1.31.42":
-  version: 1.31.42
-  resolution: "@microlink/react-json-view@npm:1.31.42"
+"@microlink/react-json-view@npm:^1.31.43":
+  version: 1.31.43
+  resolution: "@microlink/react-json-view@npm:1.31.43"
   dependencies:
     react-base16-styling: "npm:~0.10.0"
     react-lifecycles-compat: "npm:~3.0.4"
@@ -1019,7 +1019,7 @@ __metadata:
   peerDependencies:
     react: ">= 15"
     react-dom: ">= 15"
-  checksum: 10c0/248275f7086bbc2fe3411a1ee5b8ad4408d44bfe33ff3452274568d3d7c641defdb3ff37102492a116da90197ab5c5ab8f7b82dca61ed2e83cbd5ecb58f8a56b
+  checksum: 10c0/8b848e1703210daf6e8a45ab9502b24649ceb9514cffadafd87eaa9d4767307549b9fa3d8f9790e878867a3a4a89744828b7d5981be2a1832d1adf983326a0c2
   languageName: node
   linkType: hard
 
@@ -8890,7 +8890,7 @@ __metadata:
   dependencies:
     "@ant-design/icons": "npm:^6.3.4"
     "@eslint/js": "npm:^10.0.1"
-    "@microlink/react-json-view": "npm:^1.31.42"
+    "@microlink/react-json-view": "npm:^1.31.43"
     "@refinedev/antd": "npm:^6.0.3"
     "@refinedev/cli": "npm:^2.16.52"
     "@refinedev/core": "npm:^5.0.12"
