@@ -1,0 +1,30 @@
+name: Clean up untagged images
+
+on:
+  schedule:
+    - cron: "0 3 * * 0" # Sundays 03:00 UTC
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: "Only list what would be deleted"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      # Multi-arch images keep their per-platform manifests and attestations as
+      # untagged versions; this action keeps those that a tagged image references.
+      - name: Delete untagged images
+        uses: dataaxiom/ghcr-cleanup-action@v1
+        with:
+          owner: crugroup
+          package: spadeui
+          delete-untagged: true
+          dry-run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry-run || false }}
+          token: ${{ secrets.GITHUB_TOKEN }}
