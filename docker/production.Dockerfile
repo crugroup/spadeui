@@ -1,7 +1,7 @@
-FROM --platform=$BUILDPLATFORM node:24-alpine AS build
+FROM --platform=$BUILDPLATFORM node:26-alpine AS build
 COPY . /app
 WORKDIR /app
-RUN corepack enable && yarn install && yarn run build
+RUN npm install -g corepack && corepack enable && yarn install && yarn run build
 
 FROM nginx:latest
 COPY --from=build /app/dist /etc/nginx/html
