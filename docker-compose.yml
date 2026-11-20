@@ -1,6 +1,6 @@
 services:
   spadeui:
-    image: node:24
+    image: node:26
     container_name: spadeui
     ports:
       - "3000:3000"
