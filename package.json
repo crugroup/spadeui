@@ -15,7 +15,7 @@
     "@refinedev/kbar": "^2.0.1",
     "@refinedev/react-router": "^2.0.4",
     "@refinedev/simple-rest": "^6.0.1",
-    "@rjsf/antd": "^6.11.0",
+    "@rjsf/antd": "^6.11.1",
     "@rjsf/core": "^6.11.0",
     "@rjsf/utils": "^6.11.0",
     "@rjsf/validator-ajv8": "^6.11.0",
