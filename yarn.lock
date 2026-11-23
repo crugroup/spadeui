@@ -2511,15 +2511,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rjsf/core@npm:^6.11.0":
-  version: 6.11.0
-  resolution: "@rjsf/core@npm:6.11.0"
+"@rjsf/core@npm:^6.11.1":
+  version: 6.11.1
+  resolution: "@rjsf/core@npm:6.11.1"
   dependencies:
-    markdown-to-jsx: "npm:^9.8.2"
+    markdown-to-jsx: "npm:^9.10.3"
   peerDependencies:
-    "@rjsf/utils": ^6.11.0
+    "@rjsf/utils": ^6.11.1
     react: ">=18"
-  checksum: 10c0/a4bba78949c1a514c74a35e7db362a5f81256e9bc18ea5b076b0378173e4742b3981d3d60b7c1cde07aa041f01d5f811928a13cfde71b7c9f079ed1825cf9d84
+  checksum: 10c0/fefbcf452541f287c486f0a04ab4b7c9be3893342f3d69188033095670491c271f3ef96bc615c6a58cedac547b22c3036c315fbb16819d6324047df28c4c7af6
   languageName: node
   linkType: hard
 
@@ -7040,9 +7040,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"markdown-to-jsx@npm:^9.8.2":
-  version: 9.10.3
-  resolution: "markdown-to-jsx@npm:9.10.3"
+"markdown-to-jsx@npm:^9.10.3":
+  version: 9.10.6
+  resolution: "markdown-to-jsx@npm:9.10.6"
   peerDependencies:
     react: ">= 16.0.0"
     solid-js: ">=1.0.0"
@@ -7056,7 +7056,7 @@ __metadata:
       optional: true
     vue:
       optional: true
-  checksum: 10c0/c1d9db8cca16a72b56751e041396f7d475bbd9faa35e9b0f427046c5bc4e123690290d097b48d86ae1361fc5ed123fee568b2053c806dfa5d6e4c09bb35e9474
+  checksum: 10c0/a67b12068baa1aa9aa23319100cf954856a768436f59ec22b6b632928a87644ed0a9fcdd9860c75b9f29c2fa43a3b70679eff0b48dc6c321923df9163be5bb8c
   languageName: node
   linkType: hard
 
@@ -9759,7 +9759,7 @@ __metadata:
     "@refinedev/react-router": "npm:^2.0.4"
     "@refinedev/simple-rest": "npm:^6.0.1"
     "@rjsf/antd": "npm:^6.11.0"
-    "@rjsf/core": "npm:^6.11.0"
+    "@rjsf/core": "npm:^6.11.1"
     "@rjsf/utils": "npm:^6.11.0"
     "@rjsf/validator-ajv8": "npm:^6.11.0"
     "@tanstack/react-query": "npm:^5.105.0"
