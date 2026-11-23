@@ -2495,19 +2495,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rjsf/antd@npm:^6.11.0":
-  version: 6.11.0
-  resolution: "@rjsf/antd@npm:6.11.0"
+"@rjsf/antd@npm:^6.11.1":
+  version: 6.11.1
+  resolution: "@rjsf/antd@npm:6.11.1"
   dependencies:
     classnames: "npm:^2.5.1"
   peerDependencies:
     "@ant-design/icons": ^6.0.0
-    "@rjsf/core": ^6.11.0
-    "@rjsf/utils": ^6.11.0
+    "@rjsf/core": ^6.11.1
+    "@rjsf/utils": ^6.11.1
     antd: ^5 || >6.3.5
     dayjs: ^1.8.0
     react: ">=18"
-  checksum: 10c0/454c62283ca15d0138ab7951accb27608ce598b1a0778e2861e76af035daa32367da5a008c9db521f53b70849a1ae133e1bde7873ca2cc5deac7215ec835266d
+  checksum: 10c0/c42c27f467708bac0faafd61dd708a3f57a42c3971bfa8fdb157702b32542e49c91042e45dc534eb6db67b00c5060382689c6225f42a306ae271a43e9316fb09
   languageName: node
   linkType: hard
 
@@ -9758,7 +9758,7 @@ __metadata:
     "@refinedev/kbar": "npm:^2.0.1"
     "@refinedev/react-router": "npm:^2.0.4"
     "@refinedev/simple-rest": "npm:^6.0.1"
-    "@rjsf/antd": "npm:^6.11.0"
+    "@rjsf/antd": "npm:^6.11.1"
     "@rjsf/core": "npm:^6.11.0"
     "@rjsf/utils": "npm:^6.11.0"
     "@rjsf/validator-ajv8": "npm:^6.11.0"
